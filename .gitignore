@@ -1,0 +1,12 @@
+*~
+*.egg-info/
+*.pyc
+.DS_Store
+__pycache__/
+env/
+var/
+starter_files/
+*.db
+*.log
+.vagrant/
+.idea/
