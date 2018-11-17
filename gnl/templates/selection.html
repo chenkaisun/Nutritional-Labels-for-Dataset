@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset=utf-8 />
+	<title>Selection</title>``
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="front_pages_style.css">
+	<!-- <link rel="stylesheet" type="text/css" href="/static/css/front_pages_style.css"> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type ="text/javascript">
+  $(function(){
+    var options=""; //store the dynamic options
+$("#gender").on('change',function(){ //add a change event handler to gender select
+  var s = $('<select/>');
+var o = [1, 2, 3];
+for (var i in o) {
+    s.append($('<option/>').html(o[i]));
+}
+$('body').append(s);
+
+
+    var value=$(this).val(); //get its selected value
+    options="<option>Select Your Name</option>"
+    if(value=="Male") //value ==Male then set male required options
+    {
+        options+="<option value='Male1'>Male 1</option>"
+                +"<option value='Male2'>Male 2</option>";
+        $("#name").html(options);
+    }
+    else if(value=="Female") //else set female required options
+    {
+
+        options+='<option value="female1">Female 1</option>'
+                 +'<option value="female2">Female 2</option>';
+        $("#name").html(options);
+    }
+    else
+        $("#name").find('option').remove() //if first default text option is selected empty the select
+});
+  });
+
+</script>
+
+</head>
+<body>
+  <p id="demo"></p>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <select id="gender">
+          <option>Select Your Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+  </select>
+
+
+  <form action="" method="Post" enctype="multipart/form-data">
+    <div class="scontainer"></div>
+    <div class="container">
+      <h1>Manual Entries</h1>
+      <p>Please provide authenticity information for the label if you are the original dataset owner</p>
+      <hr>
+      <hr>
+      <button type="submit" name="submit" class="registerbtn">Generate Label</button>
+    </div>
+    <div class="scontainer"></div>
+  </form>
+</body>
+
+</html>

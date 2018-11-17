@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Upload</title>
+
+  <meta charset=utf-8 />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/front_pages_style.css">
+
+	 <!-- <link rel="stylesheet" type="text/css" href="front_pages_style.css"> -->
+   <!--[if IE]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+</head>
+  <body>
+      <form action="" method="POST" enctype="multipart/form-data">
+
+
+        <div class="scontainer"></div>
+
+        <div class="container">
+
+        <div class="temp">
+          <span class="ltitle" >Generic Nutritional Label System</span>
+        </div>
+
+        <hr>
+
+        <div class="stitle" >
+          Upload your file
+        </div>
+        <label for="file-upload" class="custom-file-upload">
+          <i class="fa fa-cloud-upload"></i> Upload File &nbsp;
+          <!--  <span ><input type="checkbox" name="owner" value="owner" > I am the original owner of the dataset </span>-->
+        </label>
+        <input id="file-upload" name='filee' type="file" style="display:none;" required >
+
+        <br></br>
+
+        <div class="stitle" >
+          Task to be performed
+        </div>
+        <div>
+          <button class="span_tag">Classification</button>&nbsp;
+          <button class="span_tag">Regression</button>&nbsp;
+          <button class="span_tag">Clustering</button>&nbsp;
+          <button class="span_tag">Anomaly detection</button>&nbsp;
+          <button class="span_tag">Time Series Analysis</button>&nbsp;
+          <button class="span_tag">Recommendation System </button>&nbsp;
+          <!-- <button class="proceed"><input type="submit" name="submit" value=" Next: Manual Information &#x2192;"/></span>&nbsp; -->
+        </div>
+
+        <br>
+
+        <div class="stitle" >
+          Other Features...
+        </div>
+
+        <hr>
+
+        <button type="submit" name="submit" class="registerbtn">Next: Manual Information</button>
+        </div>
+
+        <div class="scontainer"></div>
+
+
+      </form>
+    <script>
+    $('#file-upload').change(function() {
+      var i = $(this).prev('label').clone();
+      var file = $('#file-upload')[0].files[0].name;
+      $(this).prev('label').text(file);
+    });
+    </script>
+  </body>
+</html>

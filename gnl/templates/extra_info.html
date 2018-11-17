@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Title of the document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		 <!-- <link rel="stylesheet" type="text/css" href="front_pages_style.css"> -->
+	 <link rel="stylesheet" type="text/css" href="/static/css/front_pages_style.css">
+
+</head>
+<body>
+
+<form action="" method="post" enctype="multipart/form-data">
+	<div class="scontainer"></div>
+	<div class="container">
+	<h1>Warnings</h1>
+	<hr>
+
+<!-- high_warnings -->
+  {%if high_warnings|length >0%}
+  	<div class="high_warnings warning_title">Warning: the following has perfect correlation with your selected protected attributes, select to ignore them in the label</div>
+	  {% for  key, match_colnames in high_warnings.items() %}
+		  {% for match_colname in match_colnames %}
+		    <div class="check">
+					<span class="high_warnings">{{key}}</span> and <span class="high_warnings">{{match_colname}}</span>  <input type="checkbox" name="checks" value="{{match_colname}}">
+				</div>
+			{% endfor %}
+	  {% endfor %}
+  {% endif %}
+  <br></br>
+  <br></br>
+
+	<!-- middle_warnings -->
+	{%if middle_warnings|length >0%}
+	  <div class="middle_warnings warning_title">Warning: the following has high correlation with your selected protected attributes, select to ignore them in the label</div>
+	  {% for  key, match_colnames in middle_warnings.items() %}
+		  {% for match_colname in match_colnames %}
+				<div class="check">
+			    <span class="middle_warnings">{{key}}</span> and <span class="middle_warnings">{{match_colname}}</span>  <input type="checkbox" name="checks" value="{{match_colname}}">
+				</div>
+			{% endfor %}
+	  {% endfor %}
+  {% endif %}
+
+	<hr>
+  <button type="submit" class="registerbtn">Done</button>
+</div>
+<div class="scontainer"></div>
+</form>
+</body>
+</html>

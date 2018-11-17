@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Title of the document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		 <link rel="stylesheet" type="text/css" href="front_pages_style.css">
+	 <!-- <link rel="stylesheet" type="text/css" href="/static/css/style.css"> -->
+	 <style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+    padding: 16px;
+    background-color: white;
+}
+
+.check{
+	width: 100%;
+padding: 10px;
+margin: 5px 0 5px 0;
+display: inline-block;
+border: none;
+background: #f1f1f1;
+}
+
+/* Overwrite default styles of hr */
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+/* Set a style for the submit button */
+.registerbtn {
+    background-color: #41a0f4;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+			font-size: 12pt;
+}
+
+.registerbtn:hover {
+    opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+    color: dodgerblue;
+}
+
+.high_warnings{
+  color: #ff5050;
+}
+.middle_warnings{
+  color: #ffd633;
+}
+.warning_title{
+  font-size: 16pt;
+}
+
+</style>
+</head>
+<body>
+
+
+<form action="{{url_for('extra_info')}}" method="post" enctype="multipart/form-data">
+	<div class="container">
+	<h1>Warnings</h1>
+	<hr>
+  <span>You entered protected attributes but none of them belongs to the uploaded dataset, do you want to go back or proceed?</span>
+	<hr>
+  <div>
+  <button type="goback" class="registerbtn">Go Back</button>
+  <button type="proceed" class="registerbtn">Generate Label</button>
+  </div>
+</div>
+</form>
+</body>
+</html>
