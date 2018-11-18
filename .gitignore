@@ -6,8 +6,7 @@
 .DS_Store
 __pycache__/
 env/
-.vagrant/
-var/
+.vagrant/
 node_modules/
 bundle.js
 cookies.txt
