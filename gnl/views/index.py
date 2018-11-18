@@ -16,10 +16,11 @@ from flask import request
 from flask import redirect
 from flask import url_for
 from flask import abort
+from flask import g
 from flask import render_template
 import arrow
 import gnl
-
+import numpy as np
 from gnl.views import helper
 from random import randint, uniform
 
@@ -31,6 +32,8 @@ def sha1sum(filename):
 
 @gnl.app.route('/', methods=['GET', 'POST'])
 def index():
+    g.a=np.random.randint(2, size=2)
+    print("g.aindex",g.a)
     session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
     # return redirect(url_for('selection'))
@@ -73,6 +76,8 @@ def index():
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
+
+    print("g.asel",g.a)
     print("sessions", session)
     print("\n**selection**\n")
     # if loaded, the refresh shouldn't do work
