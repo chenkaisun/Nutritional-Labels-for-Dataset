@@ -8,8 +8,8 @@ import os
 APPLICATION_ROOT = '/'
 
 # Secret key for encrypting cookies
-SECRET_KEY = b'\x90\xf4M\x16\xaa2\xa1\xe5\x18\x01\xc3\xc8n\xdb\xbd\xb8\x94vSf\x1a\xc4c\x8d'  # noqa: E501  pylint: disable=line-too-long
-SESSION_COOKIE_NAME = 'login'
+# SECRET_KEY = b'\x90\xf4M\x16\xaa2\xa1\xe5\x18\x01\xc3\xc8n\xdb\xbd\xb8\x94vSf\x1a\xc4c\x8d'  # noqa: E501  pylint: disable=line-too-long
+# SESSION_COOKIE_NAME = 'login'
 
 # File Upload to var/uploads/
 UPLOAD_FOLDER = os.path.join(

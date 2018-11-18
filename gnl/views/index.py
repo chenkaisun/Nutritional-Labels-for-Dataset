@@ -63,8 +63,9 @@ def index():
 
         shutil.move(temp_filename, hash_filename)
         gnl.app.logger.debug("Saved %s", hash_filename_basename)
+        print(hash_filename)
         gnl.app.config["CURRENT_FILE"] = hash_filename
-
+        gnl.app.config["CURRENT_LOADED"] = True
         print("\n**leaving index**\n")
         return redirect(url_for('selection'))
     return render_template("index.html", **context)
@@ -74,13 +75,10 @@ def index():
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
     print("\n**selection**\n")
-
-
     # if loaded, the refresh shouldn't do work
     # if "CURRENT_LOADED" in gnl.app.config and gnl.app.config["CURRENT_LOADED"]:
     #     return render_template("label.html")
 
-    gnl.app.config["CURRENT_LOADED"] = True
     print("config:", gnl.app.config)
     print("CURRENT_FILE: ", gnl.app.config["CURRENT_FILE"])
 
