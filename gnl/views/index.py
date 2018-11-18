@@ -24,6 +24,8 @@ import numpy as np
 from gnl.views import helper
 from random import randint, uniform
 
+cache={}
+
 def sha1sum(filename):
     """Return sha1 hash of file content, similar to UNIX sha1sum."""
     content = open(filename, 'rb').read()
@@ -32,8 +34,9 @@ def sha1sum(filename):
 
 @gnl.app.route('/', methods=['GET', 'POST'])
 def index():
-    g.a=np.random.randint(2, size=2)
-    print("g.aindex",g.a)
+    cache["a"]=np.random.randint(2, size=2)
+
+    print("cache index", cache['a'])
     session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
     # return redirect(url_for('selection'))
@@ -76,8 +79,8 @@ def index():
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
+    print("cache index", cache['a'])
 
-    print("g.asel",g.a)
     print("sessions", session)
     print("\n**selection**\n")
     # if loaded, the refresh shouldn't do work
