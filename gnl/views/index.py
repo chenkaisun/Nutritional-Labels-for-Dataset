@@ -37,7 +37,7 @@ def index():
     # cache["a"]=np.random.randint(2, size=2)
     cache.append(1)
     g.db = []
-    print("g", g)
+    print("g", g.db)
     g.db.append(1)
     print("cache index", cache)
     session["CURRENT_LOADED"] = True
@@ -84,7 +84,7 @@ def index():
 def selection():
     print("cache index", cache)
 
-    print("gsel", g)
+    print("gsel", g.db)
     print("sessions", session)
     print("\n**selection**\n")
     # if loaded, the refresh shouldn't do work
