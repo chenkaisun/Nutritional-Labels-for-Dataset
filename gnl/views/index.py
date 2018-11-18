@@ -15,7 +15,6 @@ from flask import session
 from flask import request
 from flask import redirect
 from flask import url_for
-from flask import abort
 from flask import g
 from flask import render_template
 import arrow
@@ -24,8 +23,8 @@ import numpy as np
 from gnl.views import helper
 from random import randint, uniform
 
-cache=[]
-
+# cache=[]
+# inc=0
 def sha1sum(filename):
     """Return sha1 hash of file content, similar to UNIX sha1sum."""
     content = open(filename, 'rb').read()
@@ -35,11 +34,11 @@ def sha1sum(filename):
 @gnl.app.route('/', methods=['GET', 'POST'])
 def index():
     # cache["a"]=np.random.randint(2, size=2)
-    cache.append(1)
-    g.db = []
-    print("g", g.db)
-    g.db.append(1)
-    print("cache index", cache)
+    # cache.append(1)
+    # print("cache index", cache)
+    # uid=request.cookies.get('YourSessionCookie')
+
+
     session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
     # return redirect(url_for('selection'))
@@ -82,16 +81,15 @@ def index():
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
-    print("cache index", cache)
+    # print("cache index", cache)
 
-    print("gsel", g.db)
-    print("sessions", session)
+    # print("sessions", session)
     print("\n**selection**\n")
     # if loaded, the refresh shouldn't do work
     # if "CURRENT_LOADED" in gnl.app.config and gnl.app.config["CURRENT_LOADED"]:
     #     return render_template("label.html")
 
-    print("config:", gnl.app.config)
+    # print("config:", gnl.app.config)
     print("CURRENT_FILE: ", gnl.app.config["CURRENT_FILE"])
 
     df=pd.read_csv(gnl.app.config["CURRENT_FILE"])
