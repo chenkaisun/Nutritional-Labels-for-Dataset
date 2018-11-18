@@ -1,12 +1,9 @@
 #!/bin/bash
-# gnl_run
+# gnl
 
-
-#if [ ! -e var/gnl.sqlite3 ] ; then
-#	./bin/gnl_db create
-#fi
-./node_modules/.bin/webpack
-export FLASK_DEBUG=True
-export FLASK_APP=gnl
-export GNL_SETTINGS=config.py
-flask run --host 0.0.0.0 --port 8000
+source env/bin/activate
+node_modules/.bin/webpack
+node_modules/.bin/javascript-obfuscator gnl/static/js/bundle.js
+mv gnl/static/js/bundle-obfuscated.js gnl/static/js/bundle.js
+pkill -f gunicorn
+gunicorn -b localhost:8000 -w 1 -t 150 gnl:app
