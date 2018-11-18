@@ -80,8 +80,10 @@ def selection():
     #     return render_template("label.html")
 
     gnl.app.config["CURRENT_LOADED"] = True
+    print("config:", gnl.app.config)
+    print("CURRENT_FILE: ", gnl.app.config["CURRENT_FILE"])
+
     df=pd.read_csv(gnl.app.config["CURRENT_FILE"])
-    print(gnl.app.config["CURRENT_FILE"])
     # standardize the column names
     helper.normalize_colnames(df)
 

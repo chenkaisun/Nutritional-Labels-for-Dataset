@@ -5,7 +5,6 @@ Andrew DeOrio <awdeorio@umich.edu>
 """
 
 import os
-import pandas as pd
 
 # Root of this application, useful if it doesn't occupy an entire domain
 APPLICATION_ROOT = '/'
@@ -25,16 +24,12 @@ COVERAGE_FOLDER = os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
     'CoverageJava'
 )
-# CURRENT_FILE=None
-CURRENT_FILE = os.path.join(
-    UPLOAD_FOLDER, 'RecidivismData_Original.csv'
-)
-# CURRENT_TEMP_FILE=""
+CURRENT_FILE = None
 CURRENT_TEMP_FILE = os.path.join(
     UPLOAD_FOLDER, 'tempdata.csv'
 )
-# CURRENT_DF=None
 CURRENT_DF=None
+
 CURRENT_DF_NAMES_DICT_WITH_IGNORED={}
 CURRENT_MANUAL_INFO={}
 CURRENT_IGNORED_COLUMNS=[]
@@ -42,6 +37,7 @@ CURRENT_SELECTION={}
 CURRENT_COLUMN_TYPES=None
 CURRENT_DF_WITH_IGNORED_COLUMNS=None
 CURRENT_LOADED=False
+
 PRELOADED=False
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'cvs'])
