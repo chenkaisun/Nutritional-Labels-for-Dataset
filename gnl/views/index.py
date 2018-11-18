@@ -19,6 +19,7 @@ from flask import abort
 from flask import render_template
 import arrow
 import gnl
+
 from gnl.views import helper
 from random import randint, uniform
 

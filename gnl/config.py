@@ -1,7 +1,5 @@
 """
-gnlg development configuration.
-
-Andrew DeOrio <awdeorio@umich.edu>
+gnl development configuration.
 """
 
 import os
