@@ -36,6 +36,9 @@ def sha1sum(filename):
 def index():
     # cache["a"]=np.random.randint(2, size=2)
     cache.append(1)
+    g.db = []
+    print("g", g)
+    g.db.append(1)
     print("cache index", cache)
     session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
@@ -81,6 +84,7 @@ def index():
 def selection():
     print("cache index", cache)
 
+    print("gsel", g)
     print("sessions", session)
     print("\n**selection**\n")
     # if loaded, the refresh shouldn't do work
