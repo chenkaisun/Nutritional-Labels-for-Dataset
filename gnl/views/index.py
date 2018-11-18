@@ -37,6 +37,13 @@ def index():
     # cache.append(1)
     # print("cache index", cache)
     # uid=request.cookies.get('YourSessionCookie')
+    gnl.app.config["CURRENT_FILE"]=None
+    gnl.app.config["CURRENT_IGNORED_COLUMNS"]=[]
+    gnl.app.config["CURRENT_SELECTION"]={}
+    gnl.app.config["CURRENT_DF"]=None
+    gnl.app.config["CURRENT_COLUMN_TYPES"]=None
+    gnl.app.config["CURRENT_MANUAL_INFO"]=None
+    gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]=None
 
 
     session["CURRENT_LOADED"] = True
