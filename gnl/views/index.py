@@ -31,8 +31,7 @@ def sha1sum(filename):
 
 @gnl.app.route('/', methods=['GET', 'POST'])
 def index():
-
-    gnl.app.config["CURRENT_LOADED"] = False
+    session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
     # return redirect(url_for('selection'))
     context = {}
@@ -74,6 +73,7 @@ def index():
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
+    print("sessions", session)
     print("\n**selection**\n")
     # if loaded, the refresh shouldn't do work
     # if "CURRENT_LOADED" in gnl.app.config and gnl.app.config["CURRENT_LOADED"]:
