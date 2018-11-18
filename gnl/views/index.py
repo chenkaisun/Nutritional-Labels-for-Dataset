@@ -24,7 +24,7 @@ import numpy as np
 from gnl.views import helper
 from random import randint, uniform
 
-cache={}
+cache=[]
 
 def sha1sum(filename):
     """Return sha1 hash of file content, similar to UNIX sha1sum."""
@@ -34,9 +34,9 @@ def sha1sum(filename):
 
 @gnl.app.route('/', methods=['GET', 'POST'])
 def index():
-    cache["a"]=np.random.randint(2, size=2)
-
-    print("cache index", cache['a'])
+    # cache["a"]=np.random.randint(2, size=2)
+    cache.append(1)
+    print("cache index", cache)
     session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
     # return redirect(url_for('selection'))
@@ -79,7 +79,7 @@ def index():
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
-    print("cache index", cache['a'])
+    print("cache index", cache)
 
     print("sessions", session)
     print("\n**selection**\n")
