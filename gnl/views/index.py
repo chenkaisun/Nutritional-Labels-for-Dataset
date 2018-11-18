@@ -107,22 +107,30 @@ def selection():
     helper.clean(df)
     gnl.app.config["CURRENT_DF"] = df
 
+
     # find types of each col for utility
     gnl.app.config["CURRENT_COLUMN_TYPES"] = helper.find_types_of_table(df)
+    print("types")
 
     # fill in null entries
     helper.fill_na(gnl.app.config['CURRENT_DF'])
+    print("fillna")
 
     # set column that should be ignored, s.a. empty columns and str columns (for numerical computing)
     dff=gnl.app.config["CURRENT_COLUMN_TYPES"]
     gnl.app.config["CURRENT_IGNORED_COLUMNS"] += [col for col in list(gnl.app.config["CURRENT_DF"])
                                                   if (dff[col][0] == "str" or dff[col][0] == "empty")]
 
+    print("+ignored")
+
     # CURRENT_DF_WITH_IGNORED_COLUMNS is for fd and ar
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]=gnl.app.config["CURRENT_DF"].copy()
+    print("copy")
+
 
     # drop ignored columns and use it for non fd and ar work
     gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
+    print("drop")
 
     print("\n**Leaving selection**\n")
     return render_template("label.html")
