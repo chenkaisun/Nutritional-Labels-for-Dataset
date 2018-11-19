@@ -22,6 +22,13 @@ setup(
         'Flask-Testing==0.6.2',
         'selenium==3.6.0',
         'requests==2.18.4',
-        'arrow==0.10.0'
+        'arrow==0.10.0',
+        'pandas==0.23.0',
+        'future==0.17.1',
+        'unidecode==1.0.23',
+        'dedupe==1.9.3',
+        'nltk==3.4',
+        
+
     ],
 )
