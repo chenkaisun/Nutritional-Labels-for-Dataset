@@ -77,6 +77,10 @@ def get_colnames():
     # context['numeric_colnames']=[col for col in list(cur_df)
     #                         if (gnl.app.config["CURRENT_COLUMN_TYPES"][col][0] != "str")]
     # print(context)
+    # JSON_OUT
+    gnl.app.config["JSON_OUT"].update(context)
+    with open(os.path.join(gnl.app.config["UPLOAD_FOLDER"], "sample_structure.json"), 'w') as outfile:
+        json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
 
@@ -139,6 +143,10 @@ def get_coverage():
     context = {'mups': uncovered_patterns}
     print("uncovered_patterns:",uncovered_patterns)
     # shutdownJVM()
+
+    gnl.app.config["JSON_OUT"].update(context)
+    with open(os.path.join(gnl.app.config["UPLOAD_FOLDER"], "sample_structure.json"), 'w') as outfile:
+        json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
     # dataset1 = dataset(gnl.app.config["COVERAGE_FOLDER"] + "/data/airbnb_100000.csv",
@@ -196,6 +204,11 @@ def get_multi_basic():
         for entry in df[col_name]:
             if helper.is_nan(entry):
                 context['num_missing'] += 1
+
+    gnl.app.config["JSON_OUT"].update(context)
+    with open(os.path.join(gnl.app.config["UPLOAD_FOLDER"], "sample_structure.json"), 'w') as outfile:
+        json.dump(gnl.app.config["JSON_OUT"], outfile)
+
     return jsonify(**context)
 
 
@@ -227,7 +240,10 @@ def get_multi_fd():
     output = wt.write_dependency_to_file(tne.ans)
 
     context['fds'] = [comb for comb in output if comb.split("=>")[1] in pattrs]
+    gnl.app.config["JSON_OUT"].update(context)
 
+    with open(os.path.join(gnl.app.config["UPLOAD_FOLDER"], "sample_structure.json"), 'w') as outfile:
+        json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
 
@@ -249,6 +265,9 @@ def get_multi_ar():
     a = apriori.Apriori(gnl.app.config["CURRENT_TEMP_FILE"], 0.25, -1)
     a.run()
     context["ars"] = a.true_associations
+    gnl.app.config["JSON_OUT"].update(context)
+    with open(os.path.join(gnl.app.config["UPLOAD_FOLDER"], "sample_structure.json"), 'w') as outfile:
+        json.dump(gnl.app.config["JSON_OUT"], outfile)
 
     return jsonify(**context)
 
@@ -276,7 +295,9 @@ def get_correlation():
     context["correlations"] = helper.get_corr_ranking(df,
                                                       list(set(attribute_currentValues) - set(protected_currentValues)),
                                                       protected_currentValues)
-
+    gnl.app.config["JSON_OUT"].update(context)
+    with open(os.path.join(gnl.app.config["UPLOAD_FOLDER"], "sample_structure.json"), 'w') as outfile:
+        json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
 # @gnl.app.route('/api/numeric_colnames/', methods=['GET'])

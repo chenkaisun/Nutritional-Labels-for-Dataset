@@ -4,10 +4,15 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="3">
+          <list size="8">
             <item index="0" class="java.lang.String" itemvalue="pylint" />
             <item index="1" class="java.lang.String" itemvalue="pycodestyle" />
             <item index="2" class="java.lang.String" itemvalue="Flask" />
+            <item index="3" class="java.lang.String" itemvalue="pandas" />
+            <item index="4" class="java.lang.String" itemvalue="dedupe" />
+            <item index="5" class="java.lang.String" itemvalue="future" />
+            <item index="6" class="java.lang.String" itemvalue="unidecode" />
+            <item index="7" class="java.lang.String" itemvalue="nltk" />
           </list>
         </value>
       </option>
