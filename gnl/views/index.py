@@ -8,23 +8,16 @@ import os
 import shutil
 import hashlib
 import tempfile
-import uuid
 import flask
 import pandas as pd
-from flask import session
 from flask import request
 from flask import redirect
 from flask import url_for
-from flask import g
 from flask import render_template
-import arrow
 import gnl
-import numpy as np
 from gnl.views import helper
-from random import randint, uniform
 
-# cache=[]
-# inc=0
+
 def sha1sum(filename):
     """Return sha1 hash of file content, similar to UNIX sha1sum."""
     content = open(filename, 'rb').read()
@@ -84,8 +77,6 @@ def index():
         print("\n**leaving index**\n")
         return redirect(url_for('selection'))
     return render_template("index.html", **context)
-
-
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
