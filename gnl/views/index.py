@@ -74,6 +74,7 @@ def index():
 
         # Move temp file to permanent location
         print("start moving")
+        print(temp_filename, hash_filename)
 
         shutil.move(temp_filename, hash_filename)
         gnl.app.logger.debug("Saved %s", hash_filename_basename)
