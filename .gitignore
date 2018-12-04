@@ -5,9 +5,11 @@
 *.pyc
 .DS_Store
 __pycache__/
+build/
 env/
-var/
-.vagrant/
+.vagrant/
+dist/
+jpype/
 node_modules/
 bundle.js
 cookies.txt
