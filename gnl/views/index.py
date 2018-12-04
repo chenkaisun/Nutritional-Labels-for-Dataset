@@ -46,7 +46,7 @@ def index():
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]=None
 
 
-    session["CURRENT_LOADED"] = True
+    # session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
     # return redirect(url_for('selection'))
     context = {}
@@ -76,8 +76,7 @@ def index():
         print("start moving")
         print(temp_filename, hash_filename)
 
-        shutil.copy(temp_filename, hash_filename)
-        
+        shutil.move(temp_filename, hash_filename)
         gnl.app.logger.debug("Saved %s", hash_filename_basename)
         print(hash_filename)
         gnl.app.config["CURRENT_FILE"] = hash_filename
