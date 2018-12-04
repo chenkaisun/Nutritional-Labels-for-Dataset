@@ -1,6 +1,5 @@
 """
 gnl index (main) view.
-
 URLs include:
 /
 """
@@ -8,16 +7,23 @@ import os
 import shutil
 import hashlib
 import tempfile
+import uuid
 import flask
 import pandas as pd
+from flask import session
 from flask import request
 from flask import redirect
 from flask import url_for
+from flask import g
 from flask import render_template
+import arrow
 import gnl
+import numpy as np
 from gnl.views import helper
+from random import randint, uniform
 
-
+# cache=[]
+# inc=0
 def sha1sum(filename):
     """Return sha1 hash of file content, similar to UNIX sha1sum."""
     content = open(filename, 'rb').read()
@@ -39,7 +45,7 @@ def index():
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]=None
 
 
-    # session["CURRENT_LOADED"] = True
+    session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
     # return redirect(url_for('selection'))
     context = {}
@@ -67,7 +73,6 @@ def index():
 
         # Move temp file to permanent location
         print("start moving")
-        print(temp_filename, hash_filename)
 
         shutil.move(temp_filename, hash_filename)
         gnl.app.logger.debug("Saved %s", hash_filename_basename)
@@ -77,6 +82,8 @@ def index():
         print("\n**leaving index**\n")
         return redirect(url_for('selection'))
     return render_template("index.html", **context)
+
+
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():

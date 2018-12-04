@@ -3,6 +3,7 @@ from unidecode import unidecode
 from difflib import SequenceMatcher
 import pandas as pd
 import csv
+import re
 import numpy as np
 import dedupe
 import os
@@ -10,6 +11,7 @@ import logging
 import optparse
 import gnl
 import re
+import math
 _float_regexp = re.compile(r"^[-+]?(?:\b[0-9]+(?:\.[0-9]*)?|\.[0-9]+\b)(?:[eE][-+]?[0-9]+\b)?$").match
 
 # nltk.download('stopwords')
