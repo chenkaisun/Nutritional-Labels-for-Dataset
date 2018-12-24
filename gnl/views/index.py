@@ -36,6 +36,10 @@ def index():
     # cache.append(1)
     # print("cache index", cache)
     # uid=request.cookies.get('YourSessionCookie')
+    context = {"options":[{ "label": "1","value": "Alabama"}, { "label": "2","value": "Alabama"}]}
+
+    return render_template("selection.html", **context)
+
     gnl.app.config["CURRENT_FILE"]=None
     gnl.app.config["CURRENT_IGNORED_COLUMNS"]=[]
     gnl.app.config["CURRENT_SELECTION"]={}
@@ -47,8 +51,13 @@ def index():
 
     session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
-    # return redirect(url_for('selection'))
-    context = {}
+
+    gnl.app.config["CURRENT_FILE"] = os.path.join(
+            gnl.app.config["UPLOAD_FOLDER"],
+            "RecidivismData_Original.csv"
+        )
+
+    return redirect(url_for('selection'))
     print("\n**index**\n")
 
     if request.method == "POST":
@@ -83,10 +92,21 @@ def index():
         return redirect(url_for('selection'))
     return render_template("index.html", **context)
 
+@gnl.app.route('/redirection/', methods=['GET', 'POST'])
+def redirection():
+    print("here redirection")
 
+    return redirect(url_for('index'))
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
+
+    #########
+    gnl.app.config["CURRENT_FILE"] = os.path.join(
+        gnl.app.config["UPLOAD_FOLDER"],
+        "RecidivismData_Original.csv"
+    )
+    ##########
     # print("cache index", cache)
 
     # print("sessions", session)
@@ -106,7 +126,7 @@ def selection():
     helper.clean(df)
     gnl.app.config["CURRENT_DF"] = df
 
-
+    context={}
     # find types of each col for utility
     gnl.app.config["CURRENT_COLUMN_TYPES"] = helper.find_types_of_table(df)
     print("types")
@@ -132,7 +152,7 @@ def selection():
     print("drop")
 
     print("\n**Leaving selection**\n")
-    return render_template("label.html")
+    return render_template("selection.html",**context)
 
 
 

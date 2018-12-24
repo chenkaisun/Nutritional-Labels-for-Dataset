@@ -11,13 +11,6 @@ hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 5px;
 }
-select{
-  width: inherit;
-}
-
-.sel{
-  width: inherit;
-}
 
 .card_down{
   display: inline-block;
@@ -55,13 +48,12 @@ width: 10%;
     background-color: #41a0f4;
     color: white;
     padding: 16px 20px;
-    margin: 0 auto;
+    margin: 8px 0;
     border: none;
     cursor: pointer;
     width: 100%;
     opacity: 0.8;
 		font-size: 12pt;
-    display: block;
 }
 
 .registerbtn:hover {

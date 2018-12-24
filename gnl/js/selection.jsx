@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import Label from './label';
+import Redirection from './redirection';
 import Select from 'react-select';
 import { Link } from 'react-router-3';
 import { Redirect } from 'react-router';
@@ -108,7 +109,7 @@ export default class Selection extends React.Component {
     this.setState(tmp);
     // history.push('/label');
     history.push({
-      pathname: '/label',
+      pathname: '/redirection',
       state: this.state
     })
   }
@@ -139,8 +140,9 @@ export default class Selection extends React.Component {
       const { from } = this.props.location.state || '/';
       return (
         <div>
+
           {this.state.redirect && (
-            <Redirect to={'/label'}/>
+            <Redirect to={'/redirection'}/>
           )}
         </div>
       )
@@ -253,7 +255,6 @@ export default class Selection extends React.Component {
 
                               <hr/>
                   </div> :""}
-
 
 
               {!this.state.is_single_column?<div>
@@ -415,7 +416,6 @@ export default class Selection extends React.Component {
                   )}
                   </div>
                 </div> :""}
-
               <br/>
               <br/>
               <br/>

@@ -12,7 +12,7 @@ import Coverage from './coverage';
 
 export default class Label extends React.Component {
   constructor(props) {
-  // Runs when an instance is created.
+  // Runs when an instance is creazted.
   // Initialize mutable state here
   // Initialize mutable state
     super(props);
