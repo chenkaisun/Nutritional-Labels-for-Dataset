@@ -17,6 +17,7 @@ export default class Selection extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleCheckbox= this.toggleCheckbox.bind(this);
     this.state = {
+      redirect:true,
       setted:false,
       attribute_options:[],
       widget_options:[
@@ -44,6 +45,10 @@ export default class Selection extends React.Component {
 
       has_fd:true,
     }
+    history.push({
+      pathname: '/label',
+      state: this.state
+    })
   }
   componentDidMount(){
     fetch('/api/get_colnames/', { credentials: 'same-origin' })
@@ -109,7 +114,7 @@ export default class Selection extends React.Component {
     this.setState(tmp);
     // history.push('/label');
     history.push({
-      pathname: '/redirection',
+      pathname: '/label',
       state: this.state
     })
   }
@@ -129,9 +134,6 @@ export default class Selection extends React.Component {
     }else if(name=="is_multi_column"){
       tmp["is_single_column"]=!tmp["is_single_column"]
     }
-
-    console.log(tmp);
-
     this.setState(tmp);
   }
 
@@ -140,9 +142,8 @@ export default class Selection extends React.Component {
       const { from } = this.props.location.state || '/';
       return (
         <div>
-
           {this.state.redirect && (
-            <Redirect to={'/redirection'}/>
+            <Redirect to={'/label'}/>
           )}
         </div>
       )

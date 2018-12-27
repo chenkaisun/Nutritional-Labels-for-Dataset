@@ -13,44 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gnl/api/likes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="27" selection-start-line="27" selection-end-line="27" />
-              <folding>
-                <element signature="e#26#38#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gnl/views/apriori.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
-              <folding>
-                <element signature="e#612#623#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/setup.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gnl/views/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="38" column="23" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="23" />
+            <state relative-caret-position="285">
+              <caret line="181" column="29" lean-forward="true" selection-start-line="181" selection-start-column="29" selection-end-line="181" selection-end-column="29" />
               <folding>
                 <element signature="e#47#56#0" expanded="true" />
               </folding>
@@ -59,34 +26,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gnl/views/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="7" selection-start-line="7" selection-end-line="7" />
-              <folding>
-                <element signature="e#41#74#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gnl/api/__init__.py">
+        <entry file="file://$PROJECT_DIR$/gnl/api/likes.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="76">
-              <caret line="4" column="38" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
+              <caret line="112" column="56" selection-start-line="112" selection-start-column="25" selection-end-line="112" selection-end-column="56" />
               <folding>
-                <element signature="e#26#67#0" expanded="true" />
+                <element signature="e#26#38#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gnl/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -94,11 +40,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gnl/views/helper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
+            <state relative-caret-position="221">
+              <caret line="466" column="4" selection-start-line="466" selection-start-column="4" selection-end-line="466" selection-end-column="4" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gnl/config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="19" column="26" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -110,11 +65,19 @@
       <find>with open</find>
       <find>json_out</find>
       <find>upda</find>
-      <find>json</find>
       <find>stopwords</find>
       <find>is_stopword</find>
       <find>start</find>
       <find>render_</find>
+      <find>json</find>
+      <find>sample</find>
+      <find>cover</find>
+      <find>covera</find>
+      <find>to_csv</find>
+      <find>camel</find>
+      <find>norm</find>
+      <find>keyw</find>
+      <find>unca</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -124,18 +87,19 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/gnl/__init__.py" />
-        <option value="$PROJECT_DIR$/gnl/config.py" />
         <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/gnl/views/__init__.py" />
+        <option value="$PROJECT_DIR$/gnl/views/testing.py" />
+        <option value="$PROJECT_DIR$/gnl/config.py" />
         <option value="$PROJECT_DIR$/gnl/views/helper.py" />
         <option value="$PROJECT_DIR$/gnl/api/likes.py" />
-        <option value="$PROJECT_DIR$/gnl/views/__init__.py" />
         <option value="$PROJECT_DIR$/gnl/views/index.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-10" />
-    <option name="width" value="980" />
+    <option name="x" value="-8" />
+    <option name="width" value="977" />
     <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -144,7 +108,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -167,6 +130,13 @@
               <item name="Nutritional-Labels-for-Dataset" type="b2602c69:ProjectViewProjectNode" />
               <item name="Nutritional-Labels-for-Dataset" type="462c0819:PsiDirectoryNode" />
               <item name="gnl" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+              <item name="likes.py" type="8704e2dd:PyFileNode" />
+            </path>
+            <path>
+              <item name="Nutritional-Labels-for-Dataset" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Nutritional-Labels-for-Dataset" type="462c0819:PsiDirectoryNode" />
+              <item name="gnl" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -180,6 +150,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -212,6 +183,15 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="848" extended-state="6" />
     <editor active="true" />
@@ -223,7 +203,7 @@
       <window_info id="DB Browser" order="4" />
       <window_info id="Job Explorer" order="5" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.32960895" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32960895" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -232,9 +212,9 @@
       <window_info anchor="bottom" id="Console" order="7" />
       <window_info anchor="bottom" id="DB Execution Console" order="8" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32960895" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50033045" side_tool="true" weight="0.15363128" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50165236" side_tool="true" weight="0.26675978" />
       <window_info anchor="bottom" id="Version Control" order="11" weight="0.32960895" />
-      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49966952" weight="0.15363128" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49834764" weight="0.26675978" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -287,13 +267,6 @@
     <entry file="file://$PROJECT_DIR$/var/uploads/aea3807bef0890f9dab355be7e32b119a563c67a.csv" />
     <entry file="file://$PROJECT_DIR$/gnl/model.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gnl/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gnl/views/fd/main.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -348,6 +321,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/gnl/views/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+          <folding>
+            <element signature="e#41#74#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gnl/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gnl/views/testing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="20" lean-forward="true" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -355,12 +355,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gnl/views/helper.py">
+    <entry file="file://$PROJECT_DIR$/gnl/api/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
+        <state relative-caret-position="76">
+          <caret line="4" column="38" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
           <folding>
-            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#26#67#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -375,37 +375,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gnl/api/__init__.py">
+    <entry file="file://$PROJECT_DIR$/gnl/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="38" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
-          <folding>
-            <element signature="e#26#67#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="190">
+          <caret line="19" column="26" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gnl/__init__.py">
+    <entry file="file://$PROJECT_DIR$/gnl/views/helper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gnl/views/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="221">
+          <caret line="466" column="4" selection-start-line="466" selection-start-column="4" selection-end-line="466" selection-end-column="4" />
           <folding>
-            <element signature="e#41#74#0" expanded="true" />
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gnl/api/likes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        <state relative-caret-position="76">
+          <caret line="112" column="56" selection-start-line="112" selection-start-column="25" selection-end-line="112" selection-end-column="56" />
           <folding>
             <element signature="e#26#38#0" expanded="true" />
           </folding>
@@ -414,8 +404,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gnl/views/index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="38" column="23" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="23" />
+        <state relative-caret-position="285">
+          <caret line="181" column="29" lean-forward="true" selection-start-line="181" selection-start-column="29" selection-end-line="181" selection-end-column="29" />
           <folding>
             <element signature="e#47#56#0" expanded="true" />
           </folding>

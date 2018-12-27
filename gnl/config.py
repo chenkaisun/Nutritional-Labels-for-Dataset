@@ -17,6 +17,11 @@ UPLOAD_FOLDER = os.path.join(
     'var', 'uploads'
 )
 
+DATA_FOLDER = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
+    'gnl', 'static', 'data'
+)
+
 
 COVERAGE_FOLDER = os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
@@ -26,6 +31,8 @@ CURRENT_FILE = None
 CURRENT_TEMP_FILE = os.path.join(
     UPLOAD_FOLDER, 'tempdata.csv'
 )
+OUTPUT=None
+MUPS=None
 CURRENT_DF=None
 JSON_OUT={}
 CURRENT_DF_NAMES_DICT_WITH_IGNORED={}

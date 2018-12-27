@@ -19,6 +19,7 @@ from flask import render_template
 import arrow
 import gnl
 import numpy as np
+from gnl.api import likes
 from gnl.views import helper
 from random import randint, uniform
 
@@ -38,7 +39,7 @@ def index():
     # uid=request.cookies.get('YourSessionCookie')
     context = {"options":[{ "label": "1","value": "Alabama"}, { "label": "2","value": "Alabama"}]}
 
-    return render_template("selection.html", **context)
+    return redirect(url_for('selection'))
 
     gnl.app.config["CURRENT_FILE"]=None
     gnl.app.config["CURRENT_IGNORED_COLUMNS"]=[]
@@ -55,7 +56,7 @@ def index():
     gnl.app.config["CURRENT_FILE"] = os.path.join(
             gnl.app.config["UPLOAD_FOLDER"],
             "RecidivismData_Original.csv"
-        )
+    )
 
     return redirect(url_for('selection'))
     print("\n**index**\n")
@@ -86,6 +87,14 @@ def index():
         shutil.move(temp_filename, hash_filename)
         gnl.app.logger.debug("Saved %s", hash_filename_basename)
         print(hash_filename)
+
+        # ###move csv to data folder
+        # shutil.move(temp_filename, os.path.join(
+        #     gnl.app.config["DATA_FOLDER"],
+        #     hash_filename_basename
+        # ))
+        # ###
+
         gnl.app.config["CURRENT_FILE"] = hash_filename
         gnl.app.config["CURRENT_LOADED"] = True
         print("\n**leaving index**\n")
@@ -100,59 +109,81 @@ def redirection():
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
-
-    #########
-    gnl.app.config["CURRENT_FILE"] = os.path.join(
-        gnl.app.config["UPLOAD_FOLDER"],
-        "RecidivismData_Original.csv"
-    )
-    ##########
-    # print("cache index", cache)
-
-    # print("sessions", session)
     print("\n**selection**\n")
-    # if loaded, the refresh shouldn't do work
-    # if "CURRENT_LOADED" in gnl.app.config and gnl.app.config["CURRENT_LOADED"]:
-    #     return render_template("label.html")
+    # return render_template("label.html")
+    #########
+    # gnl.app.config["CURRENT_FILE"] = os.path.join(
+    #     gnl.app.config["UPLOAD_FOLDER"],
+    #     "complete.csv"
+    # )
 
-    # print("config:", gnl.app.config)
-    print("CURRENT_FILE: ", gnl.app.config["CURRENT_FILE"])
-
-    df=pd.read_csv(gnl.app.config["CURRENT_FILE"])
-    # standardize the column names
-    helper.normalize_colnames(df)
-
-    # clean the strings that are actually numbers and also invalid string such as those with comma and special chars
-    helper.clean(df)
-    gnl.app.config["CURRENT_DF"] = df
+    gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
+        gnl.app.config["DATA_FOLDER"],
+        "numeric.csv"))
+    gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"] = pd.read_csv(os.path.join(
+        gnl.app.config["DATA_FOLDER"],
+        "complete.csv"))
+    gnl.app.config["CURRENT_COLUMN_TYPES"] = helper.find_types_of_table(gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"])
+    ##########
 
     context={}
-    # find types of each col for utility
-    gnl.app.config["CURRENT_COLUMN_TYPES"] = helper.find_types_of_table(df)
-    print("types")
-
-    # fill in null entries
-    helper.fill_na(gnl.app.config['CURRENT_DF'])
-    print("fillna")
-
-    # set column that should be ignored, s.a. empty columns and str columns (for numerical computing)
-    dff=gnl.app.config["CURRENT_COLUMN_TYPES"]
-    gnl.app.config["CURRENT_IGNORED_COLUMNS"] += [col for col in list(gnl.app.config["CURRENT_DF"])
-                                                  if (dff[col][0] == "str" or dff[col][0] == "empty")]
-
-    print("+ignored")
-
-    # CURRENT_DF_WITH_IGNORED_COLUMNS is for fd and ar
-    gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]=gnl.app.config["CURRENT_DF"].copy()
-    print("copy")
 
 
-    # drop ignored columns and use it for non fd and ar work
-    gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
-    print("drop")
+#     df=pd.read_csv(gnl.app.config["CURRENT_FILE"])
+#
+#     # standardize the column names
+#     helper.normalize_colnames(df)
+#
+#     # clean the strings that are actually numbers and also invalid string such as those with comma and special chars, or $
+#     helper.clean(df)
+#     gnl.app.config["CURRENT_DF"] = df
+#
+#     # find types of each col for convenience
+#     gnl.app.config["CURRENT_COLUMN_TYPES"] = helper.find_types_of_table(df)
+#
+#
+# ###
+#     likes.get_multi_basic()
+# ###
+#
+#     # fill in null entries
+#     gnl.app.config['CURRENT_DF']=helper.fill_na(gnl.app.config['CURRENT_DF'])
+#
+#     # set column that should be ignored, s.a. empty columns and str columns (for numerical computing)
+#     dff=gnl.app.config["CURRENT_COLUMN_TYPES"]
+#     gnl.app.config["CURRENT_IGNORED_COLUMNS"] += [col for col in list(gnl.app.config["CURRENT_DF"])
+#                                                   if (dff[col][0] == "str" or dff[col][0] == "empty")]
+#
+#     # CURRENT_DF_WITH_IGNORED_COLUMNS is for fd and ar
+#     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]=gnl.app.config["CURRENT_DF"].copy()
+#
+#     # drop ignored columns and use it for non fd and ar work
+#     gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
+#
+
 
     print("\n**Leaving selection**\n")
-    return render_template("selection.html",**context)
+
+    gnl.app.config["OUTPUT"]="output.json"
+    gnl.app.config["MUPS"]="mups.json"
+    gnl.app.config["CURRENT_SELECTION"]={'is_whole':False,
+                                         'attribute_currentValues':[{"label":"violence_score"},{"label":"decile_score"},
+                                                                    {"label":"juv_fel_count"},{"label":"v_decile_score"},
+                                                                    {"label":"name"},{"label":"juv_fel_count"},{"label":"c_charge_degree"}],
+                                         'protected_currentValues':[{"label":"v_decile_score"},{"label":"violence_score"},{"label":"decile_score"}]}
+
+    # gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
+
+    ##
+    # gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"), index=False)
+    # gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].to_csv(
+    #     os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"), index=False)
+    ##
+    # likes.get_correlation()
+    # likes.get_coverage()
+    # likes.get_multi_fd()
+    # likes.get_multi_ar()
+    return render_template("label.html",**context)
 
 
 

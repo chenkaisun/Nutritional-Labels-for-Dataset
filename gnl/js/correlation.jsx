@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import ReactTable from "react-table";
 import matchSorter from 'match-sorter';
+import HeatMap from 'react-heatmap-grid';
+import * as d3 from "d3";
 import {
   withScreenSize,
 } from '@data-ui/histogram';
@@ -24,9 +26,13 @@ export default class Correlation extends React.Component {
       .then((data) => {
           console.log('correlations get data');
           this.setState({
+            xlabs:data.xlabs,
+            ylabs:data.ylabs,
             correlations:data.correlations,
+
             setted:true,
           });
+          console.log(data.correlations);
         }
       )
       .catch(error => console.log(error));// eslint-disable-line no-console
@@ -36,43 +42,40 @@ export default class Correlation extends React.Component {
       return("");
     }
     console.log("correlations render");
-    let data = this.state.correlations.map((item) =>{
-        let sp=item.split("=>");
-        return(
-          {cola:sp[0], colb:sp[1]}
-        );
-      }
-    );
-    let columns = [{
-      Header: "attribute --- protected attribute",
-             id: "cola",
-             accessor: d => d.cola,
-             filterMethod: (filter, rows) =>
-               matchSorter(rows, filter.value, { keys: ["cola"] }),
-             filterAll: true
-     },
-     {
-       Header: "Correlation coefficient",
-              id: "colb",
-              accessor: d => d.colb,
-              filterMethod: (filter, rows) =>
-                matchSorter(rows, filter.value, { keys: ["colb"] }),
-              filterAll: true
-     },
-   ];
+   //  let data = this.state.correlations.map((item) =>{
+   //      let sp=item.split("=>");
+   //      return(
+   //        {cola:sp[0], colb:sp[1]}
+   //      );
+   //    }
+   //  );
+   //  let columns = [{
+   //    Header: "attribute --- protected attribute",
+   //           id: "cola",
+   //           accessor: d => d.cola,
+   //           filterMethod: (filter, rows) =>
+   //             matchSorter(rows, filter.value, { keys: ["cola"] }),
+   //           filterAll: true
+   //   },
+   //   {
+   //     Header: "Correlation coefficient",
+   //            id: "colb",
+   //            accessor: d => d.colb,
+   //            filterMethod: (filter, rows) =>
+   //              matchSorter(rows, filter.value, { keys: ["colb"] }),
+   //            filterAll: true
+   //   },
+   // ];
     return(
       <div className="entry">
-        <div><strong> Top-k correlations to protected attributes (Other --- Protected)</strong>: </div>
-          <ReactTable
-              data={data}
-              columns={columns}
-              defaultPageSize={5}
-              filterable
-              defaultFilterMethod={(filter, row) =>
-                  String(row[filter.id]) === filter.value}
-
-              className="-striped -highlight"
-            />
+        <HeatMap
+    xLabels={this.state.xlabs}
+    yLabels={this.state.ylabs}
+     xLabelsLocation={"bottom"}
+     xLabelWidth={10}
+     squares
+    data={this.state.correlations}
+  />
       </div>
     )
 

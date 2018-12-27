@@ -27,7 +27,6 @@ export default class AssociationRule extends React.Component {
             ars:data.ars,
             setted:true,
           });
-
         }
       )
       .catch(error => console.log(error));// eslint-disable-line no-console

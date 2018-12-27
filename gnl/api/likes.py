@@ -15,6 +15,7 @@ import pandas as pd
 import os
 import json
 import pprint
+import pandas as pd
 from jpype import *
 
 """you might end up refactoring parts of this code later 
@@ -22,18 +23,30 @@ to avoid copy-pasted code shared between the REST API and
 server-side template views."""
 
 
+@gnl.app.route('/api/file/', methods=['GET', 'POST'])
+def get_file():
+    print("access test")
+    # context = {"original":"RecidivismData_Original.csv", "mups":"mups.json", "output":"result.json"}
+    context = {"cols":list(range(len(list(gnl.app.config["CURRENT_DF"]))))}
+
+    # , "output": gnl.app.config["OUTPUT"],
+    # "cols": list(range(len(list(pd.read_csv(os.path.join(
+    #     gnl.app.config["DATA_FOLDER"],
+    #     "RecidivismData_Original.csv"
+    # ), index_col=False)))))
+    return jsonify(**context)
+
 @gnl.app.route('/api/form_submit/', methods=['GET', 'POST'])
 def form_submit():
+    # here do stuff and save json
+
     context = {}
-
-    print("\n**form_submit**\n")
-    pprint.pprint(request.json)
-
     if not request.json:
         flask.abort(400)
     gnl.app.config["CURRENT_SELECTION"] = request.json
     sel = gnl.app.config["CURRENT_SELECTION"]
 
+    print("sel\n",sel)
     # range query
     query_cols = sel["query_currentValues"]
     query_ranges = sel["query_rangeValues"]
@@ -77,6 +90,9 @@ def get_colnames():
     # context['numeric_colnames']=[col for col in list(cur_df)
     #                         if (gnl.app.config["CURRENT_COLUMN_TYPES"][col][0] != "str")]
     # print(context)
+    # gnl.app.config["JSON_OUT"].update(context)
+    # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "output.json"), 'w') as outfile:
+    #     json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
 
@@ -86,8 +102,8 @@ def get_coverage():
 
     # get classes
     cpopt = "-Djava.class.path=%s" % (gnl.app.config["COVERAGE_FOLDER"] + "/target/classes")
-    startJVM(getDefaultJVMPath(), "-ea", cpopt)
-    # print(getDefaultJVMPath())
+    if not isJVMStarted():
+        startJVM(getDefaultJVMPath(), "-ea", cpopt)
     print("classpath:", cpopt)
 
     dataset = JClass('io.DataSet')
@@ -129,23 +145,80 @@ def get_coverage():
 
     hybrid1 = hybrid(dataset1)
     a = hybrid1.findMaxUncoveredPatternSet(500, 3)
+
+
     mups = [i.getStr() for i in a]
 
+    ###
+    # shutdown
+
+    # shutdownJVM()
+    ###
+
     uncovered_patterns = []
+    val_cnt = {}
+    pattern_lists=[]
     for i, mup in enumerate(mups):
         print("mup:",mup)
-        uncovered_patterns.append(" ".join([categories[j][ord(char)-ord('0')] for j, char in enumerate(mup) if char!='x']))
+        tmp_list=[]
+        for j, char in enumerate(mup):
+            if char != 'x':
+                tmp_list.append(categories[j][ord(char)-ord('0')])
+                if categories[j][ord(char)-ord('0')] not in val_cnt:
+                    val_cnt[categories[j][ord(char) - ord('0')]] = 0
+                    val_cnt[categories[j][ord(char)-ord('0')]]+=1
+        pattern_lists.append(tmp_list)
+        uncovered_patterns.append(" ".join(tmp_list))
+        # uncovered_patterns.append(" ".join([categories[j][ord(char)-ord('0')] for j, char in enumerate(mup) if char!='x']))
 
-    context = {'mups': uncovered_patterns}
+    # generate tree
+    tree=[{"node":"mups", "children":[]}]
+    ptrs=[tree[0]]*len(pattern_lists)
+    for i in range(len(ptrs)):
+        ptrs[i]=tree[0]
+    pos, cur = 0, tree[0]
+    while True:
+        found_at_least_one = False
+
+        # each pattern
+        for i, pattern_list in enumerate(pattern_lists):
+
+            # sort the pattern values according to count, to minimize horizontal distance
+            pattern_lists[i]=sorted(pattern_list, key=lambda x: -val_cnt.get(x))
+
+            # if current position is still not passing the end
+            if pos<len(pattern_list):
+                found_at_least_one=True
+                exist_node=False
+
+                # check whether the current is already a child from the last ptr
+                for j, child in enumerate(ptrs[i]["children"]):
+                    if child["node"]==pattern_list[pos]:
+                        exist_node=True
+                        ptrs[i]=ptrs[i]["children"][j]
+                        break
+                if not exist_node:
+                    ptrs[i]["children"].append({"node":pattern_list[pos], "children":[]})
+                    ptrs[i]=ptrs[i]["children"][-1]
+        pos+=1
+
+        # if pos passed the end of all pattern lists, then stop
+        if not found_at_least_one:
+            break
+
+    # to mup.json
+    context={}
+    # context = {'mups': uncovered_patterns, tree: tree}
     print("uncovered_patterns:",uncovered_patterns)
-    # shutdownJVM()
-    return jsonify(**context)
 
-    # dataset1 = dataset(gnl.app.config["COVERAGE_FOLDER"] + "/data/airbnb_100000.csv",
-    #                    [3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    #                     2, 2, 2, 2, 2, 2, 2, 2, 2, 2][0:15], [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-    #                                                           17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30][
-    #                                                          0:15], 100000)
+
+    # gnl.app.config["JSON_OUT"].update(context)
+    # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
+    #     json.dump(gnl.app.config["JSON_OUT"], outfile)
+    with open(os.path.join(gnl.app.config["DATA_FOLDER"], "mups.json"), 'w') as outfile:
+        json.dump(tree, outfile)
+
+    return jsonify(**context)
 
 @gnl.app.route('/api/single_column/', methods=['GET', 'POST'])
 def get_single_column():
@@ -185,8 +258,10 @@ def get_single_column():
 def get_multi_basic():
     print("\n***get_multi_basic\n")
     context = {}
-    df = gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]
+    #todo
 
+    # df = gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]
+    df = gnl.app.config["CURRENT_DF"]
     context['keywords'] = helper.get_keywords(df)
     context['num_rows'] = df.shape[0]
     context['num_cols'] = df.shape[1]
@@ -196,6 +271,9 @@ def get_multi_basic():
         for entry in df[col_name]:
             if helper.is_nan(entry):
                 context['num_missing'] += 1
+    gnl.app.config["JSON_OUT"].update(context)
+    with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
+        json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
 
@@ -228,6 +306,9 @@ def get_multi_fd():
 
     context['fds'] = [comb for comb in output if comb.split("=>")[1] in pattrs]
 
+    gnl.app.config["JSON_OUT"].update(context)
+    with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
+        json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
 
@@ -250,6 +331,9 @@ def get_multi_ar():
     a.run()
     context["ars"] = a.true_associations
 
+    # gnl.app.config["JSON_OUT"].update(context)
+    # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
+    #     json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
 
@@ -273,10 +357,18 @@ def get_correlation():
     # print("attribute_currentValues ",attribute_currentValues )
     # print("protected_currentValues ",protected_currentValues )
     # print("list(set(attribute_currentValues)-set(protected_currentValues))", list(set(attribute_currentValues)-set(protected_currentValues)))
+    other_attribute_currentValues=list(set(attribute_currentValues) - set(protected_currentValues))
     context["correlations"] = helper.get_corr_ranking(df,
-                                                      list(set(attribute_currentValues) - set(protected_currentValues)),
+                                                      other_attribute_currentValues,
                                                       protected_currentValues)
 
+    context["xlabs"]=other_attribute_currentValues
+    context["ylabs"]=protected_currentValues
+    print("labs", context["xlabs"])
+
+    gnl.app.config["JSON_OUT"].update(context)
+    with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
+        json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
 # @gnl.app.route('/api/numeric_colnames/', methods=['GET'])

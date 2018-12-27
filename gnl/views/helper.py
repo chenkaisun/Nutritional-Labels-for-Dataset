@@ -12,6 +12,7 @@ import optparse
 import gnl
 import re
 import math
+from copy import deepcopy
 _float_regexp = re.compile(r"^[-+]?(?:\b[0-9]+(?:\.[0-9]*)?|\.[0-9]+\b)(?:[eE][-+]?[0-9]+\b)?$").match
 
 # nltk.download('stopwords')
@@ -314,7 +315,11 @@ def normalize_colnames(df):
     col_names = list(df)
     tmp = {}
     for col_name in col_names:
-        tmp_col_name = col_name.strip().replace(" ", "_").replace(",", "_").lower()
+        # tmp_col_name = uncamelize(col_name).strip().replace(" ", "_").replace(",", "_").replace(".", "_").lower()
+        tmp_str=deepcopy(col_name)
+        if "_" not in tmp_str:
+            tmp_str = uncamelize(tmp_str)
+        tmp_col_name=tmp_str.strip().replace(" ", "_").replace(",", "_").replace(".", "_").lower()
         tmp[col_name] = tmp_col_name
     df.rename(columns=tmp, inplace=True)
 
@@ -434,20 +439,27 @@ def get_corr_ranking(df, other_attribute_currentValues, protected_currentValues)
     # dff=gnl.app.config["CURRENT_COLUMN_TYPES"]
     print("corr rank", df)
     d = {}
+
+    res=[]
     # col_names=other_attribute_currentValues
     for i in range(len(other_attribute_currentValues)):
+        tmp_list=[]
         for j in range(len(protected_currentValues)):
             try:
-                temp=df[other_attribute_currentValues[i]].corr(df[protected_currentValues[j]])
-                if not pd.isna(temp):
-                    d[' --- '.join([other_attribute_currentValues[i], protected_currentValues[j]])] = temp
+                cor=df[other_attribute_currentValues[i]].corr(df[protected_currentValues[j]])
+                tmp_list.append(cor if not pd.isna(cor) else 101)
+                # if not pd.isna(cor):
+                #     d[' --- '.join([other_attribute_currentValues[i], protected_currentValues[j]])] = cor
             except:
                 print("no good corr")
                 print(other_attribute_currentValues[i],"|",protected_currentValues[j])
                 exit(0)
+        res.append(tmp_list)
     #             (k, d[k])
     #top 10
-    return [str(k)+"=>"+str(d[k]) for k in sorted(d, key=lambda dict_key: abs(d[dict_key]), reverse=True)]
+    return res
+
+    # return [str(k)+"=>"+str(d[k]) for k in sorted(d, key=lambda dict_key: abs(d[dict_key]), reverse=True)]
 
     # return [ str(k)+"=>"+str(d[k]) for k in sorted(d, key=d.get, reverse=True)[0:10]]
 #if dff[col_names[i]][0]!="str" and dff[protected_currentValues[i]][0]!="str" and\
