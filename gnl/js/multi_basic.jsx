@@ -34,20 +34,25 @@ export default class MultiBasic extends React.Component {
   render(){
     if(this.state.setted){
       return(
-        <div className="entry">
-          <strong>Number of rows</strong>: {this.state.num_rows} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <strong>Number of columns</strong>: {this.state.num_cols} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <strong>Number of missing entries</strong>: {this.state.num_missing}
-          <div></div>
-          <strong>  Keywords  (sorted descendingly by frequency)</strong>: {this.state.keywords.map((keyword,i) =>
-            {
-              if(i==this.state.keywords.length-1){
-                return (`${keyword}`)
-              } else{
-                return (`${keyword}, `)
-              }
-            }
-          )}
+        <div>
+          <div className="ov_row_head">
+            <span className="ov_cell">Cardinality</span>
+            <span className="ov_cell">Feature Dimension</span>
+            <span className="ov_cell">Number of Missing Entries</span>
+            <span className="ov_cell">Keywords (sorted descendingly by frequency)</span>
+          </div>
+          <div className="ov_row">
+            <span className="ov_cell">{this.state.num_rows}</span>
+            <span className="ov_cell">{this.state.num_cols}</span>
+            <span className="ov_cell">{this.state.num_missing}</span>
+            <span className="ov_cell">{this.state.keywords.map((keyword,i) =>{
+                if(i==this.state.keywords.length-1){
+                  return (`${keyword}`)
+                } else{
+                  return (`${keyword}, `)
+                }
+              })}</span>
+          </div>
         </div>
     );
 

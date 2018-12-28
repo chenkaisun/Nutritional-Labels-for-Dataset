@@ -36,8 +36,8 @@ function drawTree(data){
 		.attr("height", height + margin.top + margin.bottom)
 	  .append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    console.log("-------");
-console.log(data);
+    //console.log("-------");
+//console.log(data);
 
 	root = data[0];
 	root.x0 = height / 2;
@@ -52,8 +52,8 @@ console.log(data);
 	  // Compute the new tree layout.
 	  var nodes = tree.nodes(root).reverse(),
 		  links = tree.links(nodes);
-		console.log(nodes);
-		console.log(links);
+		//console.log(nodes);
+		//console.log(links);
 
 	  // Normalize for fixed-depth.
 	  nodes.forEach(function(d) { d.y = d.depth * 180;});

@@ -169,7 +169,7 @@ def selection():
     gnl.app.config["CURRENT_SELECTION"]={'is_whole':False,
                                          'attribute_currentValues':[{"label":"violence_score"},{"label":"decile_score"},
                                                                     {"label":"juv_fel_count"},{"label":"v_decile_score"},
-                                                                    {"label":"name"},{"label":"juv_fel_count"},{"label":"c_charge_degree"}],
+                                                                    {"label":"name"},{"label":"c_charge_degree"}],
                                          'protected_currentValues':[{"label":"v_decile_score"},{"label":"violence_score"},{"label":"decile_score"}]}
 
     # gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)

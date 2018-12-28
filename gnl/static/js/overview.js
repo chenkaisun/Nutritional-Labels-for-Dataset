@@ -32,7 +32,7 @@ function loadOVData(fileName) {
        cols.push(v)
      }
    });
-   console.log(cols);
+   //console.log(cols);
    cols.forEach(element => {
      drawRow(ovData, element);
      drawHistogram(ovData, element);
@@ -246,7 +246,7 @@ function drawRow(data, col) {
    .attr("class", "ov_cell uniq")
    .html(f(uniq_cnt));
 
- console.log("test");
+ //console.log("test");
  //console.log(uniq_group);
 }
 

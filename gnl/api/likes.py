@@ -317,23 +317,62 @@ def get_multi_ar():
     print("\n***get_multi_ar\n")
 
     context = {}
-    df = gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]
+    df = gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].copy()
     col_names = list(df)
 
     sel = gnl.app.config["CURRENT_SELECTION"]
     cols = [i['label'] for i in sel['attribute_currentValues']] if not sel['is_whole'] else col_names
 
+    ### modify so that each entry has it corresponding column name indicator
+    df=df[cols].astype(str)
+    # print("prev df", df)
+    for j, colname in enumerate(list(df)):
+        if colname=="juv_fel_count":
+            print(colname)
+            print(df[colname].astype(str))
+        df[colname]=colname+":"+df[colname].astype(str)
+
     # drop the spaces and commas
-    df[cols].to_csv(gnl.app.config["CURRENT_TEMP_FILE"], index=False)
+    df.to_csv(gnl.app.config["CURRENT_TEMP_FILE"], index=False)
+    # print("cur df", df)
+
+    ###
+
 
     # start apriori
     a = apriori.Apriori(gnl.app.config["CURRENT_TEMP_FILE"], 0.25, -1)
     a.run()
-    context["ars"] = a.true_associations
 
+    # context["ars"] =
+
+    node_set, link_set, nodes, links=set(),set(), [], []
+    for ar in a.true_associations:
+        l,r=ar.split("=>")
+        # l_list,r_list=l.split(","),r.split(",")
+        node_set.add(l)
+        node_set.add(r)
+        link_set.add((l, r))
+        # for i, l_item in enumerate(l_list):
+        #     for j, r_item in enumerate(r_list):
+        #         node_set.add(l_item)
+        #         node_set.add(r_item)
+        #         link_set.add((l_item, r_item))
+    for node in node_set:
+        nodes.append({"id":node})
+    for link in link_set:
+        links.append({ "source": link[0], "target": link[1] })
+
+
+    #todo
+    #column name of the value
+    context["nodes"]=nodes
+    context["links"]=links
+    print("context", context)
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
     #     json.dump(gnl.app.config["JSON_OUT"], outfile)
+
+
     return jsonify(**context)
 
 

@@ -36,7 +36,7 @@ function loadRawData() {
     rawDataFiltered = d;
     rawColumns = Object.keys(rawData[1]);
     rawColumnFiltered = Object.keys(rawData[1]);
-    console.log("running");
+    // console.log("running");
     // console.log('rawData', rawData);
     // console.log('rawColumns', rawColumns);
     loadAnalysisResult();
@@ -46,8 +46,8 @@ function loadRawData() {
 function loadAnalysisResult() {
   d3.json("/static/data/"+jsonFileName).then(function(d) {
     analysisResult = d;
-    console.log("analysisResult");
-    console.log(analysisResult);
+    //console.log("analysisResult");
+    //console.log(analysisResult);
     init();
     drawAll(true);
   });
@@ -121,7 +121,7 @@ function init(){
     //console.log(lst_of_values);
     var max=Math.max.apply(null,lst_of_values);
     var min=Math.min.apply(null,lst_of_values);
-    console.log(max,min);
+    //console.log(max,min);
 
   });
 
@@ -458,8 +458,8 @@ function drawDiagramFunctionalDep(init = false) {
 
     var sourceNodes = [],
         sourceLinks = [];
-    console.log("colnames");
-    console.log(analysisResult.colnames);
+    //console.log("colnames");
+    //console.log(analysisResult.colnames);
     analysisResult.colnames.forEach(function(v, i) {
       sourceNodes.push({
         'id' : v,
@@ -481,8 +481,8 @@ function drawDiagramFunctionalDep(init = false) {
             })
     });
 
-    console.log(sourceLinks);
-    console.log(sourceNodes);
+    //console.log(sourceLinks);
+    //console.log(sourceNodes);
 
     const links = sourceLinks.map(d => Object.create(d));
     const nodes = sourceNodes.map(d => Object.create(d));
