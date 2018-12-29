@@ -15,11 +15,9 @@ $(document).ready(function() {
   success : function(data)
   {
     cols_num=data.cols;
-    loadOVData("numeric.csv");
+    loadOVData("numeric_single.csv");
   }
 });
-
-
 });
 
 function loadOVData(fileName) {

@@ -90,13 +90,13 @@ export default class AssociationRule extends React.Component {
   links: this.state.links
     };
    return(
-     <div className="entry">
-       <div><strong> Association Rules</strong>: </div>
-        <Graph
-            id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
-            data={dat}
-            config={myConfig}
-        />;
+     <div>
+       <Graph
+           id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
+           data={dat}
+           config={myConfig}
+       />;
+
 
 
      </div>

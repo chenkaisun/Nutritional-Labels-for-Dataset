@@ -284,7 +284,8 @@ def fill_na(df):
         #replace with NaN
         if gnl.app.config["CURRENT_COLUMN_TYPES"][col_name][0] =="str":
             df[col_name] = df[col_name].replace(np.nan, 'NaN')
-
+        elif gnl.app.config["CURRENT_COLUMN_TYPES"][col_name][0] =="empty":
+            df[col_name] = df[col_name].astype(str).replace(np.nan, 'NaN')
         #replace with mean
         else:
             temp=df[col_name].mean()
@@ -303,7 +304,7 @@ def get_keywords(df):
         if "_" not in col_name:
             col_name = uncamelize(col_name)
         for i in col_name.split("_"):
-            if has_alp(i) and not is_stopword(i):
+            if has_alp(i) and not is_stopword(i) and len(i)!=1:
                 if i.title() not in keywords:
                     keywords[i.title()] = 1
                 else:
@@ -315,11 +316,13 @@ def normalize_colnames(df):
     col_names = list(df)
     tmp = {}
     for col_name in col_names:
-        # tmp_col_name = uncamelize(col_name).strip().replace(" ", "_").replace(",", "_").replace(".", "_").lower()
         tmp_str=deepcopy(col_name)
+
         if "_" not in tmp_str:
             tmp_str = uncamelize(tmp_str)
-        tmp_col_name=tmp_str.strip().replace(" ", "_").replace(",", "_").replace(".", "_").lower()
+        tmp_col_name=re.sub("[ ,.]", "_", tmp_str)
+        tmp_col_name=re.sub("_+", "_", tmp_col_name)
+        # tmp_col_name=tmp_str.strip().replace(" ", "_").replace(",", "_").replace(".", "_").replace("__", "_").lower()
         tmp[col_name] = tmp_col_name
     df.rename(columns=tmp, inplace=True)
 
@@ -483,5 +486,8 @@ def clean(df):
             for i, r in enumerate(df[c]):
                 if type(r) == str and ("\n" in r or '\r' in r or "," in r or " " in r):
                     # need edit
-                    df.at[i, c] = r.strip().replace(" ", "_").replace(",", "_").replace("\r\n", "\n").replace("\r\r\r", "\n").replace("\r\r", "\n").replace("\r", "\n"). \
-                        replace("\n\n\n", "\n").replace("\n\n", "\n").replace("\n", "***")
+                    df.at[i, c]=re.sub("[ ,]","_",r.strip())
+                    df.at[i, c]=re.sub("\r+","",df.at[i, c])
+                    df.at[i, c]=re.sub("\n+","***",df.at[i, c])
+                    # df.at[i, c] = r.strip().replace(" ", "_").replace(",", "_").replace("\r\n", "\n").replace("\r\r\r", "\n").replace("\r\r", "\n").replace("\r", "\n"). \
+                    #     replace("\n\n\n", "\n").replace("\n\n", "\n").replace("\n", "***")

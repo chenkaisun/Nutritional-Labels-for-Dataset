@@ -9,20 +9,14 @@ import SingleColumn from './single_column';
 import Coverage from './coverage';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
-
-// import Entry from './entry';
-// import InfiniteScroll from 'react-infinite-scroll-component'
-
 export default class Label extends React.Component {
   constructor(props) {
-  // Runs when an instance is creazted.
-  // Initialize mutable state here
-  // Initialize mutable state
     super(props);
     console.log("Label ctor");
     this.handleClick = this.handleClick.bind(this);
+    // this.handleRemove = this.handleRemove.bind(this);
     // let widget_currentValues=this.props["location"]["state"]['widget_currentValues'];
-    // let protected_currentValues=this.props["location"]["state"]['protected_currentValues'];
+    let protected_currentValues=this.props["location"]["state"]['protected_currentValues'];
     this.state={
       widget_options:[
         {label:"Top-K Correlations", value:1},
@@ -30,42 +24,54 @@ export default class Label extends React.Component {
         {label:"Association Rules", value:3},
         {label:"Maximal Uncovered Patterns", value:4},
       ],
-      cur_widget_names=["Top-K Correlations","Association Rules"],
-      cur_widgets=[],
+      // cur_widget_names=["Top-K Correlations","Association Rules"],
+      // cur_widgets=[],
       additional:[],
-        has_Correlation:true,
-        has_FunctionalDependency:false,
-        has_AssociationRule:true,
+      chose_numeric=false,
+        has_Correlation:false,
+        has_FunctionalDependency:true,
+        has_AssociationRule:false,
         has_Coverage:false,
-        has_SingleColumn: true,
+        has_SingleColumn: false,
         //this.props["location"]["state"]['is_single_column']
     }
-    // for (let i=0;i<widget_currentValues.length;++i){
-    //   if(widget_currentValues[i]['value']==1) {
-    //     this.state['has_Correlation']=true;
-    //   } else if(widget_currentValues[i]['value']==2) {
-    //     this.state['has_FunctionalDependency']=true;
-    //   } else if(widget_currentValues[i]['value']==3) {
-    //     this.state['has_AssociationRule']=true;
-    //   } else if(widget_currentValues[i]['value']==4) {
-    //     this.state['has_Coverage']=true;
-    //   }
-    // }
-    //
-    // if(!this.props["location"]["state"]["is_manually_widgets"]){
-    //   this.state={
-    //       has_Correlation:true,
-    //       has_FunctionalDependency:true,
-    //       has_AssociationRule:true,
-    //       has_Coverage:true,
-    //       has_SingleColumn:this.props["location"]["state"]['is_single_column'],
-    //   }
-    // }
-    // if(protected_currentValues.length==0){
-    //   this.state['has_Correlation']=false;
-    // }
 
+    for (let i=0;i<widget_currentValues.length;++i){
+      if(widget_currentValues[i]['value']==1) {
+        this.state['has_Correlation']=true;
+      } else if(widget_currentValues[i]['value']==2) {
+        this.state['has_FunctionalDependency']=true;
+      } else if(widget_currentValues[i]['value']==3) {
+        this.state['has_AssociationRule']=true;
+      } else if(widget_currentValues[i]['value']==4) {
+        this.state['has_Coverage']=true;
+      }
+    }
+
+    if(!this.props["location"]["state"]["is_manually_widgets"]){
+      this.state={
+          has_Correlation:true,
+          has_FunctionalDependency:true,
+          has_AssociationRule:true,
+          has_Coverage:true,
+          has_SingleColumn:this.props["location"]["state"]['is_single_column'],
+      }
+    }
+    if(protected_currentValues.length==0){
+      this.state['has_Correlation']=false;
+    }
+    if(this.state['has_SingleColumn']){
+      this.state['chose_numeric']=this.props["location"]["state"]['str_colnames'].indexOf(protected_currentValues[0]) > -1
+    }
   }
+
+  // handleRemove(label){
+  //   if(label=="cor"){
+  //     let tmp=this.state;
+  //     tmp["has_Correlation"]=false;
+  //     this.setState(tmp);
+  //   }
+  // }
 
   handleClick(e){
     e.preventDefault();
@@ -77,8 +83,9 @@ export default class Label extends React.Component {
     let added_ar=false;
     for(;i<tmp["widget_currentValues"].length;i++){
       if(tmp["widget_currentValues"][i]["label"]=="Top-K Correlations"){
+        if(!tmp['has_Correlation']) added_topk=true;
         tmp['has_Correlation']=true;
-        added_topk=true;
+
         // tmp.additional.push(
         //   <div id="correlation" className="vis">
         //     <h1><strong>Correlations</strong></h1>
@@ -92,8 +99,9 @@ export default class Label extends React.Component {
         // );
       }
       else if(tmp["widget_currentValues"][i]["label"]=="Functional Dependencies"){
+        if(!tmp['has_FunctionalDependency']) added_fd=true;
         tmp['has_FunctionalDependency']=true;
-        added_fd=true;
+
         // tmp.additional.push(
         //   <div id="fds" className="vis">
         //     <h1><strong>Functional Dependencies</strong></h1>
@@ -105,8 +113,9 @@ export default class Label extends React.Component {
         // );
       }
       else if(tmp["widget_currentValues"][i]["label"]=="Association Rules"){
+        if(!tmp['has_AssociationRule']) added_ar=true;
         tmp['has_AssociationRule']=true;
-        added_ar=true;
+
         // tmp.additional.push(
         //   <div id="ars" className="vis">
         //     <h1><strong>Association Rules</strong></h1>
@@ -120,8 +129,8 @@ export default class Label extends React.Component {
         // );
       }
       else {
+        if(!tmp['has_Coverage']) added_coverage=true;
         tmp['has_Coverage']=true;
-        added_coverage=true;
         // tmp.additional.push(
         //   <div id="mups" className="vis">
         //     <h1><strong>Uncovered Patterns</strong></h1>
@@ -134,12 +143,12 @@ export default class Label extends React.Component {
     }
     this.setState(tmp)
     console.log("set new widgets");
-    if(added_coverage){
+    if(!tmp["has_SingleColumn"]&&added_coverage){
       $(this.refs.reference).html(
         loadJson("mups.json")
       );
     }
-    if(added_fd||added_topk){
+    if(added_fd||!tmp["has_SingleColumn"]&&added_topk){
       $(this.refs.reference).html(
         loadRawData()
       );
@@ -165,36 +174,12 @@ export default class Label extends React.Component {
     return(
       <div ref="reference">
         <div className="left_column">
-          <div className="column_filter" id="filters">
-              <div id="nominal_group">
-                <div className="groupname">Nominal</div>
-                <a id="nominal_change" className="change">-</a>
-                <div id="nominal" style={{display:'block'}}></div>
-              </div>
-              <div id="quantitative_group">
-                <div className="groupname">Quantitative</div>
-                <a id="quantitative_change" className="change">-</a>
-                <div id="quantitative" style={{display:'block'}}></div>
-              </div>
-          </div>
 
           <div><a href="#overview" className="tab">Data Overview</a></div>
-          {
-            this.state.cur_widget_names.map((name, i)=>{
-              if(name=="Top-K Correlations") {
-                return(<div key={i}><a href="#correlation" className="tab">Correlations</a></div>)
-              }
-              else if(name=="Maximal Uncovered Patterns") {
-                return(<div  key={i}><a href="#mups" className="tab">Uncovered Patterns</a></div>)
-              }
-              else if(name=="Functional Dependencies") {
-                return(<div  key={i}><a href="#fds" className="tab">Functional Dependences</a></div>)
-              }
-              else if(name=="Association Rules") {
-                return(<div  key={i}><a href="#ars" className="tab">Association Rules</a></div>)
-              }
-            })
-          }
+          {!this.state.has_SingleColumn&&this.state.has_Correlation?<div key={0}><a href="#correlation" className="tab">Correlations</a></div>:""}
+          {!this.state.has_SingleColumn&&this.state.has_Coverage?<div><a href="#mups" className="tab">Uncovered Patterns</a></div>:""}
+          {this.state.has_FunctionalDependency?<div><a href="#fds" className="tab">Functional Dependences</a></div>:""}
+          {!this.state.has_SingleColumn&&this.state.has_AssociationRule?<div><a href="#ars" className="tab">Association Rules</a></div>:""}
         </div>
 
         <div className="right_column">
@@ -202,7 +187,7 @@ export default class Label extends React.Component {
             <h1><strong>Data Overview</strong></h1>
             <p>Here you can see all the columns in the dataset, and you can select
               columns you need to see more analysis about them</p>
-            <div className="frame" id="ov">
+            <div className="frame" id="">
               {this.state.has_SingleColumn?
                 <div className="ov_label_title">
                   <h2>Single Column Data Distribution</h2>
@@ -212,15 +197,18 @@ export default class Label extends React.Component {
                 </div>
               }
               {this.state.has_SingleColumn?
-                <div className="ov_row_head">
-                  <span className="ov_cell attr">Attribute Name</span>
-                  <span className="ov_cell hg">Histogram</span>
-                  <span className="ov_cell max">Max</span>
-                  <span className="ov_cell min">Min</span>
-                  <span className="ov_cell mean">Mean</span>
-                  <span className="ov_cell nul">Null Entries</span>
-                  <span className="ov_cell uniq">Unique Entries</span>
-                </div>:
+                {this.state.chose_numeric?
+                  <div className="ov_row_head">
+                    <span className="ov_cell attr">Attribute Name</span>
+                    <span className="ov_cell hg">Histogram</span>
+                    <span className="ov_cell max">Max</span>
+                    <span className="ov_cell min">Min</span>
+                    <span className="ov_cell mean">Mean</span>
+                    <span className="ov_cell nul">Null Entries</span>
+                    <span className="ov_cell uniq">Unique Entries</span>
+                  </div>:"Histogram not provided because a non-numeric column was chosen"
+                }
+                :
                 <div>
                   <MultiBasic key={0} />
                 </div>
@@ -229,7 +217,13 @@ export default class Label extends React.Component {
           </div>
           {!this.state.has_SingleColumn&&this.state.has_Correlation?
             (<div id="correlation" className="vis">
-              <h1><strong>Correlations</strong></h1>
+            <div><div style={{display: "inline-block", fontSize :"32px"}}><strong>Correlations</strong></div>&nbsp;&nbsp;&nbsp;
+              <div style={{display: "inline-block"}}><button className="rmv_button" onClick={(e) => {
+              e.preventDefault();
+              let tmp=this.state;
+              tmp["has_Correlation"]=false;
+              this.setState(tmp);
+            }}>Remove</button></div></div>
               <p>This shows correlation between selected attributes</p>
               <div className="frame">
                 <div id="diagramCorrelations" className='diagram'> </div>
@@ -240,7 +234,13 @@ export default class Label extends React.Component {
           }
           {!this.state.has_SingleColumn&&this.state.has_Coverage?
             (<div id="mups" className="vis">
-              <h1><strong>Uncovered Patterns</strong></h1>
+            <div><div style={{display: "inline-block", fontSize :"32px"}}><strong>Uncovered Patterns</strong></div>&nbsp;&nbsp;&nbsp;
+              <div style={{display: "inline-block"}}><button className="rmv_button" onClick={(e) => {
+              e.preventDefault();
+              let tmp=this.state;
+              tmp["has_Coverage"]=false;
+              this.setState(tmp);
+            }}>Remove</button></div></div>
               <div className="frame">
                 <div id="mups_vis"></div>
               </div>
@@ -248,7 +248,13 @@ export default class Label extends React.Component {
           }
           {!this.state.has_SingleColumn&&this.state.has_AssociationRule?
             (<div id="ars" className="vis">
-              <h1><strong>Association Rules</strong></h1>
+            <div><div style={{display: "inline-block", fontSize :"32px"}}><strong>Association Rules </strong></div>&nbsp;&nbsp;&nbsp;
+              <div style={{display: "inline-block"}}><button className="rmv_button" onClick={(e) => {
+              e.preventDefault();
+              let tmp=this.state;
+              tmp["has_AssociationRule"]=false;
+              this.setState(tmp);
+            }}>Remove</button></div></div>
               <div id="ars_vis" className="frame">
                   <div>
                     <AssociationRule key={3}   />
@@ -259,7 +265,14 @@ export default class Label extends React.Component {
           }
           {!this.state.has_SingleColumn&&this.state.has_FunctionalDependency?
             (<div id="fds" className="vis">
-              <h1><strong>Functional Dependencies</strong></h1>
+            <div><div style={{display: "inline-block", fontSize :"32px"}}><strong>Functional Dependency </strong></div>&nbsp;&nbsp;&nbsp;
+              <div style={{display: "inline-block"}}><button className="rmv_button" onClick={(e) => {
+              e.preventDefault();
+              let tmp=this.state;
+              tmp["has_FunctionalDependency"]=false;
+              this.setState(tmp);
+            }}>Remove</button></div>
+              </div>
               <p>Functional dependency is a relationship that exists when one attribute uniquely determines another attribute.</p>
               <p>Here you can see all functional dependencies observed in the dataset. You can drag the nodes apart to see relationships and patterns.</p>
               <div id="visFunctionalDep" className="frame">
@@ -267,9 +280,9 @@ export default class Label extends React.Component {
             </div>):""
           }
           <div id="additional_widgets" className="vis">
-            <h1><strong>Add More widgets</strong></h1>
-            <div className="frame">
-              <span>
+            <div style={{fontSize :"32px"}}><strong>Add More widgets</strong></div>
+            <div className="frame" >
+              <div style={{display: "inline-block", width:"95%"}}>
                   <Select
                     required
                     closeMenuOnSelect={false}
@@ -286,9 +299,9 @@ export default class Label extends React.Component {
                     }
                     simpleValue
                     options={this.state.widget_options} />
-                    <button onClick={this.handleClick}>+</button>
+                  </div>
+                  <div style={{display: "inline-block", width:"5%"}}><button className="add_button" onClick={this.handleClick}>+</button></div>
 
-              </span>
             </div>
           </div>
         </div>

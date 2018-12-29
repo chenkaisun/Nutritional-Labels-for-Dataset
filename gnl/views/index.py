@@ -96,50 +96,51 @@ def index():
         # ###
 
         gnl.app.config["CURRENT_FILE"] = hash_filename
-        gnl.app.config["CURRENT_LOADED"] = True
+
         print("\n**leaving index**\n")
         return redirect(url_for('selection'))
     return render_template("index.html", **context)
 
-@gnl.app.route('/redirection/', methods=['GET', 'POST'])
-def redirection():
-    print("here redirection")
-
-    return redirect(url_for('index'))
+# @gnl.app.route('/redirection/', methods=['GET', 'POST'])
+# def redirection():
+#     print("here redirection")
+#
+#     return redirect(url_for('index'))
 
 @gnl.app.route('/selection/', methods=['GET', 'POST'])
 def selection():
     print("\n**selection**\n")
+
+    if gnl.app.config["CURRENT_LOADED"]: return render_template("label.html")
     # return render_template("label.html")
     #########
-    # gnl.app.config["CURRENT_FILE"] = os.path.join(
-    #     gnl.app.config["UPLOAD_FOLDER"],
-    #     "complete.csv"
-    # )
+    gnl.app.config["CURRENT_FILE"] = os.path.join(
+        gnl.app.config["UPLOAD_FOLDER"],
+        "Carspecs.csv"
+    )
 
-    gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
-        gnl.app.config["DATA_FOLDER"],
-        "numeric.csv"))
-    gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"] = pd.read_csv(os.path.join(
-        gnl.app.config["DATA_FOLDER"],
-        "complete.csv"))
-    gnl.app.config["CURRENT_COLUMN_TYPES"] = helper.find_types_of_table(gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"])
+    # gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
+    #     gnl.app.config["DATA_FOLDER"],
+    #     "numeric.csv"))
+    # gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"] = pd.read_csv(os.path.join(
+    #     gnl.app.config["DATA_FOLDER"],
+    #     "complete.csv"))
     ##########
 
-    context={}
+    # context={}
 
+    df=pd.read_csv(gnl.app.config["CURRENT_FILE"])
 
-#     df=pd.read_csv(gnl.app.config["CURRENT_FILE"])
-#
-#     # standardize the column names
-#     helper.normalize_colnames(df)
-#
-#     # clean the strings that are actually numbers and also invalid string such as those with comma and special chars, or $
-#     helper.clean(df)
-#     gnl.app.config["CURRENT_DF"] = df
-#
-#     # find types of each col for convenience
-#     gnl.app.config["CURRENT_COLUMN_TYPES"] = helper.find_types_of_table(df)
+    # standardize the column names
+    helper.normalize_colnames(df)
+
+    # clean the strings that are actually numbers and also invalid string such as those with comma and special chars, or $
+    helper.clean(df)
+
+    gnl.app.config["CURRENT_DF"] = df
+
+    # find types of each col for convenience
+    gnl.app.config["CURRENT_COLUMN_TYPES"] = helper.find_types_of_table(df)
 #
 #
 # ###
@@ -164,13 +165,13 @@ def selection():
 
     print("\n**Leaving selection**\n")
 
-    gnl.app.config["OUTPUT"]="output.json"
-    gnl.app.config["MUPS"]="mups.json"
-    gnl.app.config["CURRENT_SELECTION"]={'is_whole':False,
-                                         'attribute_currentValues':[{"label":"violence_score"},{"label":"decile_score"},
-                                                                    {"label":"juv_fel_count"},{"label":"v_decile_score"},
-                                                                    {"label":"name"},{"label":"c_charge_degree"}],
-                                         'protected_currentValues':[{"label":"v_decile_score"},{"label":"violence_score"},{"label":"decile_score"}]}
+    # gnl.app.config["OUTPUT"]="output.json"
+    # gnl.app.config["MUPS"]="mups.json"
+    # gnl.app.config["CURRENT_SELECTION"]={'is_whole':False,
+    #                                      'attribute_currentValues':[{"label":"violence_score"},{"label":"decile_score"},
+    #                                                                 {"label":"juv_fel_count"},{"label":"v_decile_score"},
+    #                                                                 {"label":"name"},{"label":"c_charge_degree"}],
+    #                                      'protected_currentValues':[{"label":"v_decile_score"},{"label":"violence_score"},{"label":"decile_score"}]}
 
     # gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
 
@@ -183,7 +184,8 @@ def selection():
     # likes.get_coverage()
     # likes.get_multi_fd()
     # likes.get_multi_ar()
-    return render_template("label.html",**context)
+    gnl.app.config["CURRENT_LOADED"] = True
+    return render_template("label.html")
 
 
 

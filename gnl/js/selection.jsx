@@ -27,6 +27,8 @@ export default class Selection extends React.Component {
         {label:"Maximal Uncovered Patterns", value:4},
       ],
 
+      str_colnames:{},
+
       protected_currentValues: [],
       label_currentValues: [],
 
@@ -80,6 +82,9 @@ export default class Selection extends React.Component {
             for (let i = 0; i < data.colnames.length; i++) {
                 tmp.attribute_options.push({label:data.colnames[i], value:i});
             }
+            for (let i = 0; i < data.str_colnames.length; i++){
+              tmp["str_colnames"][data.str_colnames[i]]=0;
+            }
             console.log("setted");
             this.setState(tmp);
         }
@@ -99,9 +104,6 @@ export default class Selection extends React.Component {
     const checked = e.target.checked;
     let tmp=this.state;
     tmp[name]=!tmp[name]
-    console.log("name is ");
-    console.log(name);
-    console.log("POST");
     // console.log(JSON.stringify(this.state));
     fetch('/api/form_submit/', {
       credentials: 'same-origin',
@@ -151,10 +153,6 @@ export default class Selection extends React.Component {
     if(!this.state.setted) {
       return("");
     }
-    // if(this.state.redirect){
-    //   return(<div><Redirect to="/label" /></div>);
-    // }
-
     const CustomClearText = () => 'clear all';
     const ClearIndicator = (props) => {
       const { children = <CustomClearText/>, getStyles, innerProps: { ref, ...restInnerProps } } = props;
@@ -173,15 +171,15 @@ export default class Selection extends React.Component {
     });
 
     //pick attrs
-    let arr=[];
-    if(!this.state.is_single_column&&!this.state.is_multi_column){
-        arr.push(
-          <label className="checkbox">
-            <input type="checkbox" className="checkbox-control" name="is_single_column" checked={this.state.is_single_column} onChange={this.toggleCheckbox} />
-            <span className="checkbox-label">Pick single column attributes</span>
-          </label>
-        )
-    }
+    // let arr=[];
+    // if(!this.state.is_single_column&&!this.state.is_multi_column){
+    //     arr.push(
+    //       <label className="checkbox">
+    //         <input type="checkbox" className="checkbox-control" name="is_single_column" checked={this.state.is_single_column} onChange={this.toggleCheckbox} />
+    //         <span className="checkbox-label">Pick single column attributes</span>
+    //       </label>
+    //     )
+    // }
 
 
     return (
@@ -191,6 +189,7 @@ export default class Selection extends React.Component {
           <div className="scontainer"></div>
           <div className="container">
             <h1 data-tip="Specify what to be included in the label">Selections</h1>
+
 
               <span>
               <label className="checkbox">
@@ -204,6 +203,8 @@ export default class Selection extends React.Component {
     					</label>
               </span>
 
+
+
               {this.state.is_single_column?
                 <div>
                   <Select
@@ -215,19 +216,20 @@ export default class Selection extends React.Component {
                     onChange={(opt)=>{
                         let tmp=this.state;
                         tmp.attribute_currentValues=opt
-                        console.log("attribute_currentValues");
+                        console.log("protected_currentValues");
                         this.setState(tmp);
                       }
                     }
                     simpleValue
                     options={this.state.attribute_options} />
+                  <hr/>
                 </div> :""}
-                {this.state.is_multi_column?
+                {true?
                   <div>
                     <span>
                     <label className="checkbox">
                       <input type="radio" name="is_choose_attributes" checked={this.state.is_choose_attributes} onChange={this.toggleCheckbox} />
-                      <span className="checkbox-label">Pick your attributes</span>
+                      <span className="checkbox-label">Pick your non-protected attributes</span>
                     </label>
                     &nbsp;
                     <label className="checkbox">
@@ -253,8 +255,7 @@ export default class Selection extends React.Component {
                         options={this.state.attribute_options} />
                     </div>:""
                   }
-
-                              <hr/>
+                  <hr/>
                   </div> :""}
 
 
@@ -285,9 +286,7 @@ export default class Selection extends React.Component {
 
 
 
-
-
-            {!this.state.is_single_column?<div>
+            {true?<div>
               <label className="checkbox">
     						<input type="checkbox" className="checkbox-control" name="is_manually_widgets" checked={this.state.is_manually_widgets} onChange={this.toggleCheckbox} />
     						<span className="checkbox-label"  data-tip="Leave this
@@ -295,8 +294,8 @@ export default class Selection extends React.Component {
                     choose the widgets for your task">Pick your widgets</span>
     					</label>
             </div>:""
-
             }
+
             {!this.state.is_single_column&&this.state.is_manually_widgets?
               <div>
                 <Select
@@ -322,6 +321,32 @@ export default class Selection extends React.Component {
                   simpleValue
                   options={this.state.widget_options} />
               </div> :""}
+              {this.state.is_single_column&&this.state.is_manually_widgets?
+                <div>
+                  <Select
+                    required={this.state.is_single_column&&this.state.is_manually_widgets}
+                    closeMenuOnSelect={false}
+                    components={{ ClearIndicator }}
+                    styles={{ clearIndicator: ClearIndicatorStyles }}
+                    defaultValue={[]}
+                    isMulti
+                    onChange={(opt)=>{
+                        let tmp=this.state;
+                        tmp.widget_currentValues=opt
+                        console.log("widget_currentValues");
+                        for ( let i=0;i<opt.length;++i){
+                          if(opt[i]['label']=="Functional Dependencies"){
+                            tmp.has_fd=true;
+                            break;
+                          }
+                        }
+                        this.setState(tmp);
+                      }
+                    }
+                    simpleValue
+                    options={[{label:"Top-K Correlations", value:1},
+                    {label:"Functional Dependencies", value:2}]} />
+                </div> :""}
 
 
               <hr/>
@@ -368,7 +393,10 @@ export default class Selection extends React.Component {
                               }
                             }
                             if(!found){
-                              tmp.query_rangeValues[val2["label"]]=[Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER];
+                              if(val2["label"] in this.state.str_colnames){
+                                tmp.query_rangeValues[val2["label"]]="";
+                              }
+                              else tmp.query_rangeValues[val2["label"]]=[Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER];
                               tmp.query_currentValues=opt;
                               break;
                             }
@@ -376,44 +404,61 @@ export default class Selection extends React.Component {
                         }
                         console.log("query out");
                         this.setState(tmp);
-                        console.log(tmp.query_currentValues);
-                        console.log(tmp.query_rangeValues);
                       }
                     }
                     simpleValue
                     options={this.state.attribute_options} />
                   <div>
                   {
-                    Object.entries(this.state.query_rangeValues).map(([key, value]) =>
-                    <div>
-                      [&nbsp;
-                        <input
-                          type='number'
-                          step="0.1"
+                    Object.entries(this.state.query_rangeValues).map(([key, value]) =>{
+                      if(key in this.state.str_colnames){
+                        return(<div>{key}:<input
+                          type='text'
                           className='form-control'
-                          value={value[0]}
+                          value={value}
+                          placeholder="put a string value"
                           onChange= {(evt) => {
                               let tmp=this.state;
-                              this.state.query_rangeValues[key][0]=evt.target.value;
+                              this.state.query_rangeValues[key]=String(evt.target.value);
                               this.setState(tmp);
                             }
                           }
-                        />
-                      ,&nbsp;
-                        <input
-                          type='number'
-                          step="0.1"
-                          className='form-control'
-                          value={value[1]}
-                          onChange= {(evt) => {
-                              let tmp=this.state;
-                              this.state.query_rangeValues[key][1]=evt.target.value;
-                              this.setState(tmp);
-                            }
-                          }
-                        />
-                    &nbsp;]
-                    </div>
+                        /></div>)
+                      }
+                      return(
+                        <div>
+                          {key}: [&nbsp;
+                            <input
+                              type='number'
+                              step="0.1"
+                              placeholder="lower bound (inclusive)"
+                              className='form-control'
+                              value={value[0]}
+                              onChange= {(evt) => {
+                                  let tmp=this.state;
+                                  this.state.query_rangeValues[key][0]=evt.target.value;
+                                  this.setState(tmp);
+                                }
+                              }
+                            />
+                          ,&nbsp;
+                            <input
+                              type='number'
+                              step="0.1"
+                              placeholder="upper bound (inclusive)"
+                              className='form-control'
+                              value={value[1]}
+                              onChange= {(evt) => {
+                                  let tmp=this.state;
+                                  this.state.query_rangeValues[key][1]=evt.target.value;
+                                  this.setState(tmp);
+                                }
+                              }
+                            />
+                        &nbsp;]
+                        </div>
+                      )
+                    }
                   )}
                   </div>
                 </div> :""}

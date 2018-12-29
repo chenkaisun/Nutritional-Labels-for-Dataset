@@ -23,18 +23,18 @@ to avoid copy-pasted code shared between the REST API and
 server-side template views."""
 
 
-@gnl.app.route('/api/file/', methods=['GET', 'POST'])
-def get_file():
-    print("access test")
-    # context = {"original":"RecidivismData_Original.csv", "mups":"mups.json", "output":"result.json"}
-    context = {"cols":list(range(len(list(gnl.app.config["CURRENT_DF"]))))}
-
-    # , "output": gnl.app.config["OUTPUT"],
-    # "cols": list(range(len(list(pd.read_csv(os.path.join(
-    #     gnl.app.config["DATA_FOLDER"],
-    #     "RecidivismData_Original.csv"
-    # ), index_col=False)))))
-    return jsonify(**context)
+# @gnl.app.route('/api/file/', methods=['GET', 'POST'])
+# def get_file():
+#     print("access test")
+#     # context = {"original":"RecidivismData_Original.csv", "mups":"mups.json", "output":"result.json"}
+#     context = {"cols":list(range(len(list(gnl.app.config["CURRENT_DF"]))))}
+#
+#     # , "output": gnl.app.config["OUTPUT"],
+#     # "cols": list(range(len(list(pd.read_csv(os.path.join(
+#     #     gnl.app.config["DATA_FOLDER"],
+#     #     "RecidivismData_Original.csv"
+#     # ), index_col=False)))))
+#     return jsonify(**context)
 
 @gnl.app.route('/api/form_submit/', methods=['GET', 'POST'])
 def form_submit():
@@ -47,38 +47,60 @@ def form_submit():
     sel = gnl.app.config["CURRENT_SELECTION"]
 
     print("sel\n",sel)
-    # range query
-    query_cols = sel["query_currentValues"]
-    query_ranges = sel["query_rangeValues"]
 
+    # protected and non-protected attributes
+    col_names = list(gnl.app.config["CURRENT_DF"])
+
+    attribute_currentValues = [i['label'] for i in sel['attribute_currentValues']
+                               if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["str", "empty"]] \
+        if not sel['is_whole'] else col_names
+
+    protected_currentValues = [i['label'] for i in sel['protected_currentValues']
+                               if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["str", "empty"]]
+    all_values = list(set(attribute_currentValues + protected_currentValues))
+    gnl.app.config["CURRENT_DF"] = gnl.app.config["CURRENT_DF"][all_values]
+
+    # range query
+    # query_cols = sel["query_currentValues"]
+    query_ranges = sel["query_rangeValues"]
+    # select range
     if sel["is_query"]:
         for key in query_ranges:
 
             # check the key has an existing range
             if query_ranges[key]:
                 if gnl.app.config["CURRENT_COLUMN_TYPES"][key][0] != "str":
-                    gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"] = \
-                        gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"][
-                            gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"][key] \
-                                .between(float(query_ranges[key][0]), float(query_ranges[key][1]), inclusive=True)]
-
                     gnl.app.config["CURRENT_DF"] = \
                         gnl.app.config["CURRENT_DF"][
                             gnl.app.config["CURRENT_DF"][key] \
                                 .between(float(query_ranges[key][0]), float(query_ranges[key][1]), inclusive=True)]
-                # else:
-                #     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"] = \
-                #         gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"][
-                #             gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"][key] \
-                #                 .between(float(query_ranges[key][0]), float(query_ranges[key][1]), inclusive=True)]
-                #
-                #     gnl.app.config["CURRENT_DF"] = \
-                #         gnl.app.config["CURRENT_DF"][
-                #             gnl.app.config["CURRENT_DF"][key] \
-                #                 .between(float(query_ranges[key][0]), float(query_ranges[key][1]), inclusive=True)]
+                else:
+                    gnl.app.config["CURRENT_DF"] = \
+                        gnl.app.config["CURRENT_DF"][
+                            gnl.app.config["CURRENT_DF"][key]==query_ranges[key]]
+
+    # slicing completed
+    if not sel["is_single_column"]:
+        for col_name in list(gnl.app.config["CURRENT_DF"]):
+            for entry in gnl.app.config["CURRENT_DF"][col_name]:
+                if helper.is_nan(entry):
+                    gnl.app.config['NUM_MISSING'] += 1
+
+    gnl.app.config['CURRENT_DF'] = helper.fill_na(gnl.app.config['CURRENT_DF'])
+    dff = gnl.app.config["CURRENT_COLUMN_TYPES"]
+    gnl.app.config["CURRENT_IGNORED_COLUMNS"] += [col for col in list(gnl.app.config["CURRENT_DF"])
+                                                      if (dff[col][0] == "str" or dff[col][0] == "empty")]
+    gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"] = gnl.app.config["CURRENT_DF"].copy()
+    gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
+
+    if sel["is_single_column"] and sel['protected_currentValues'] and dff[sel['protected_currentValues'][0]] not in ["str", "empty"]:
+        gnl.app.config["CURRENT_DF"][sel['protected_currentValues'][0]].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single.csv"), index=False)
+
+    gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"), index=False)
+    gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].to_csv(
+        os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"), index=False)
 
     return jsonify(**context)
-
 
 @gnl.app.route('/api/get_colnames/', methods=['GET'])
 def get_colnames():
@@ -87,8 +109,8 @@ def get_colnames():
     # 'colnames': list(set(list(cur_df)) - set(gnl.app.config["CURRENT_IGNORED_COLUMNS"]))
     # print("context are", context)
     # todo
-    # context['numeric_colnames']=[col for col in list(cur_df)
-    #                         if (gnl.app.config["CURRENT_COLUMN_TYPES"][col][0] != "str")]
+    context['str_colnames']=[col for col in list(gnl.app.config["CURRENT_DF"])
+                            if (gnl.app.config["CURRENT_COLUMN_TYPES"][col][0] == "str")]
     # print(context)
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "output.json"), 'w') as outfile:
@@ -115,18 +137,13 @@ def get_coverage():
 
     # now only for str cols
     # todo
-    df.drop(columns=[col for col in list(df) if dff[col][0] == "empty"], inplace=True)
+    df=df.drop(columns=[col for col in list(df) if dff[col][0] == "empty"])
 
     valid_cols, valid_col_indices, cardinality, categories=[], [], [], []
-    print(df)
     for i, col in enumerate(list(df)):
 
         # restrict cardinality
         temp_set=set(list(df[col]))
-        # if "NaN" in temp_set:
-        #     temp_set.remove("NaN")
-        # if "nan" in temp_set:
-        #     temp_set.remove("nan")
 
         if len(temp_set)<=9 and len(temp_set)>=2:
             valid_cols.append(col)
@@ -146,12 +163,9 @@ def get_coverage():
     hybrid1 = hybrid(dataset1)
     a = hybrid1.findMaxUncoveredPatternSet(500, 3)
 
-
     mups = [i.getStr() for i in a]
 
     ###
-    # shutdown
-
     # shutdownJVM()
     ###
 
@@ -211,7 +225,6 @@ def get_coverage():
     # context = {'mups': uncovered_patterns, tree: tree}
     print("uncovered_patterns:",uncovered_patterns)
 
-
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
     #     json.dump(gnl.app.config["JSON_OUT"], outfile)
@@ -220,38 +233,38 @@ def get_coverage():
 
     return jsonify(**context)
 
-@gnl.app.route('/api/single_column/', methods=['GET', 'POST'])
-def get_single_column():
-    sel = gnl.app.config["CURRENT_SELECTION"]
-    colname = sel["attribute_currentValues"]['label']
-
-    cur_df = gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]
-    context = {}
-
-    # get rid of missing entries
-    col_type = gnl.app.config["CURRENT_COLUMN_TYPES"][colname][0]
-
-    # get rid of nan
-    clean_column = [entry for entry in cur_df[colname] if not helper.is_nan(entry)]
-    context['isnumeric'] = col_type != "str" and col_type != "empty"
-    context['number_of_nulls'] = len(cur_df[colname]) - len(clean_column)
-
-    # number of distinct value divided by num rows
-    context['uniqueness'] = float(len(set(clean_column))) / float(len(cur_df[colname])) if float(
-        len(cur_df[colname])) else 0
-    if col_type != "str":
-        context['Q1'] = np.percentile(clean_column, 25)
-        context['Median'] = np.percentile(clean_column, 50)
-        context['Q3'] = np.percentile(clean_column, 75)
-        context['isnumeric'] = True
-        context['max'] = max(clean_column)
-        context['min'] = min(clean_column)
-        context['mean'] = mean(clean_column)
-
-    # todo: need edit, it is like date, alphabetical, alphanumeric, etc.
-    context['basic_type'] = col_type
-    context['column'] = clean_column
-    return jsonify(**context)
+# @gnl.app.route('/api/single_column/', methods=['GET', 'POST'])
+# def get_single_column():
+#     sel = gnl.app.config["CURRENT_SELECTION"]
+#     colname = sel["attribute_currentValues"]['label']
+#
+#     cur_df = gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]
+#     context = {}
+#
+#     # get rid of missing entries
+#     col_type = gnl.app.config["CURRENT_COLUMN_TYPES"][colname][0]
+#
+#     # get rid of nan
+#     clean_column = [entry for entry in cur_df[colname] if not helper.is_nan(entry)]
+#     context['isnumeric'] = col_type != "str" and col_type != "empty"
+#     context['number_of_nulls'] = len(cur_df[colname]) - len(clean_column)
+#
+#     # number of distinct value divided by num rows
+#     context['uniqueness'] = float(len(set(clean_column))) / float(len(cur_df[colname])) if float(
+#         len(cur_df[colname])) else 0
+#     if col_type != "str":
+#         context['Q1'] = np.percentile(clean_column, 25)
+#         context['Median'] = np.percentile(clean_column, 50)
+#         context['Q3'] = np.percentile(clean_column, 75)
+#         context['isnumeric'] = True
+#         context['max'] = max(clean_column)
+#         context['min'] = min(clean_column)
+#         context['mean'] = mean(clean_column)
+#
+#     # todo: need edit, it is like date, alphabetical, alphanumeric, etc.
+#     context['basic_type'] = col_type
+#     context['column'] = clean_column
+#     return jsonify(**context)
 
 
 @gnl.app.route('/api/multi_basic/', methods=['GET', 'POST'])
@@ -265,15 +278,12 @@ def get_multi_basic():
     context['keywords'] = helper.get_keywords(df)
     context['num_rows'] = df.shape[0]
     context['num_cols'] = df.shape[1]
-    context['num_missing'] = 0
+    context['num_missing'] = gnl.app.config['NUM_MISSING']
 
-    for col_name in list(df):
-        for entry in df[col_name]:
-            if helper.is_nan(entry):
-                context['num_missing'] += 1
-    gnl.app.config["JSON_OUT"].update(context)
-    with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
-        json.dump(gnl.app.config["JSON_OUT"], outfile)
+
+    # gnl.app.config["JSON_OUT"].update(context)
+    # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
+    #     json.dump(gnl.app.config["JSON_OUT"], outfile)
     return jsonify(**context)
 
 
@@ -291,9 +301,6 @@ def get_multi_fd():
     for pattr in pattrs:
         if pattr not in cols:
             cols.append(pattr)
-
-    # print("*cols" ,df[cols])
-
     # drop the spaces and commas
     df[cols].to_csv(gnl.app.config["CURRENT_TEMP_FILE"], index=False)
 
@@ -304,7 +311,8 @@ def get_multi_fd():
     wt = writer.Writer(col_names)
     output = wt.write_dependency_to_file(tne.ans)
 
-    context['fds'] = [comb for comb in output if comb.split("=>")[1] in pattrs]
+
+    context['fds'] = [comb for comb in output if any([item in pattrs for item in comb.split("=>")[1].split(",")])]
 
     gnl.app.config["JSON_OUT"].update(context)
     with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
@@ -320,30 +328,21 @@ def get_multi_ar():
     df = gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].copy()
     col_names = list(df)
 
-    sel = gnl.app.config["CURRENT_SELECTION"]
-    cols = [i['label'] for i in sel['attribute_currentValues']] if not sel['is_whole'] else col_names
+    # sel = gnl.app.config["CURRENT_SELECTION"]
+    # cols = [i['label'] for i in sel['attribute_currentValues']] if not sel['is_whole'] else col_names
 
     ### modify so that each entry has it corresponding column name indicator
-    df=df[cols].astype(str)
+    df=df[col_names].astype(str)
     # print("prev df", df)
     for j, colname in enumerate(list(df)):
-        if colname=="juv_fel_count":
-            print(colname)
-            print(df[colname].astype(str))
         df[colname]=colname+":"+df[colname].astype(str)
 
     # drop the spaces and commas
     df.to_csv(gnl.app.config["CURRENT_TEMP_FILE"], index=False)
-    # print("cur df", df)
-
-    ###
-
 
     # start apriori
     a = apriori.Apriori(gnl.app.config["CURRENT_TEMP_FILE"], 0.25, -1)
     a.run()
-
-    # context["ars"] =
 
     node_set, link_set, nodes, links=set(),set(), [], []
     for ar in a.true_associations:
@@ -362,9 +361,6 @@ def get_multi_ar():
     for link in link_set:
         links.append({ "source": link[0], "target": link[1] })
 
-
-    #todo
-    #column name of the value
     context["nodes"]=nodes
     context["links"]=links
     print("context", context)
@@ -372,43 +368,42 @@ def get_multi_ar():
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
     #     json.dump(gnl.app.config["JSON_OUT"], outfile)
 
-
     return jsonify(**context)
 
 
-@gnl.app.route('/api/correlation/', methods=['GET', 'POST'])
-def get_correlation():
-    print("\n***get_correlation***\n")
-
-    context = {}
-
-    # current df ignores empty and string
-    df = gnl.app.config["CURRENT_DF"]
-    dff = gnl.app.config["CURRENT_COLUMN_TYPES"]
-    col_names = list(df)
-    sel = gnl.app.config["CURRENT_SELECTION"]
-    attribute_currentValues = [i['label'] for i in sel['attribute_currentValues'] if
-                               dff[i['label']][0] not in ["str", "empty"]] \
-        if not sel['is_whole'] else col_names
-    protected_currentValues = [i['label'] for i in sel['protected_currentValues'] if
-                               dff[i['label']][0] not in ["str", "empty"]]
-
-    # print("attribute_currentValues ",attribute_currentValues )
-    # print("protected_currentValues ",protected_currentValues )
-    # print("list(set(attribute_currentValues)-set(protected_currentValues))", list(set(attribute_currentValues)-set(protected_currentValues)))
-    other_attribute_currentValues=list(set(attribute_currentValues) - set(protected_currentValues))
-    context["correlations"] = helper.get_corr_ranking(df,
-                                                      other_attribute_currentValues,
-                                                      protected_currentValues)
-
-    context["xlabs"]=other_attribute_currentValues
-    context["ylabs"]=protected_currentValues
-    print("labs", context["xlabs"])
-
-    gnl.app.config["JSON_OUT"].update(context)
-    with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
-        json.dump(gnl.app.config["JSON_OUT"], outfile)
-    return jsonify(**context)
+# @gnl.app.route('/api/correlation/', methods=['GET', 'POST'])
+# def get_correlation():
+#     print("\n***get_correlation***\n")
+#
+#     context = {}
+#
+#     # current df ignores empty and string
+#     df = gnl.app.config["CURRENT_DF"]
+#     dff = gnl.app.config["CURRENT_COLUMN_TYPES"]
+#     col_names = list(df)
+#     sel = gnl.app.config["CURRENT_SELECTION"]
+#     attribute_currentValues = [i['label'] for i in sel['attribute_currentValues'] if
+#                                dff[i['label']][0] not in ["str", "empty"]] \
+#         if not sel['is_whole'] else col_names
+#     protected_currentValues = [i['label'] for i in sel['protected_currentValues'] if
+#                                dff[i['label']][0] not in ["str", "empty"]]
+#
+#     # print("attribute_currentValues ",attribute_currentValues )
+#     # print("protected_currentValues ",protected_currentValues )
+#     # print("list(set(attribute_currentValues)-set(protected_currentValues))", list(set(attribute_currentValues)-set(protected_currentValues)))
+#     other_attribute_currentValues=list(set(attribute_currentValues) - set(protected_currentValues))
+#     context["correlations"] = helper.get_corr_ranking(df,
+#                                                       other_attribute_currentValues,
+#                                                       protected_currentValues)
+#
+#     context["xlabs"]=other_attribute_currentValues
+#     context["ylabs"]=protected_currentValues
+#     print("labs", context["xlabs"])
+#
+#     gnl.app.config["JSON_OUT"].update(context)
+#     with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
+#         json.dump(gnl.app.config["JSON_OUT"], outfile)
+#     return jsonify(**context)
 
 # @gnl.app.route('/api/numeric_colnames/', methods=['GET'])
 # def get_numeric_colnames():

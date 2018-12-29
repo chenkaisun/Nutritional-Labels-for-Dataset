@@ -14065,9 +14065,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// import Entry from './entry';
-// import InfiniteScroll from 'react-infinite-scroll-component'
-
 var Label = function (_React$Component) {
   _inherits(Label, _React$Component);
 
@@ -14075,25 +14072,23 @@ var Label = function (_React$Component) {
     _classCallCheck(this, Label);
 
     var _this = _possibleConstructorReturn(this, (Label.__proto__ || Object.getPrototypeOf(Label)).call(this, props));
-    // Runs when an instance is creazted.
-    // Initialize mutable state here
-    // Initialize mutable state
-
 
     console.log("Label ctor");
     _this.handleClick = _this.handleClick.bind(_this);
-
+    _this.handleRemove = _this.handleRemove.bind(_this);
     // let widget_currentValues=this.props["location"]["state"]['widget_currentValues'];
     // let protected_currentValues=this.props["location"]["state"]['protected_currentValues'];
-    //
     _this.state = {
       widget_options: [{ label: "Top-K Correlations", value: 1 }, { label: "Functional Dependencies", value: 2 }, { label: "Association Rules", value: 3 }, { label: "Maximal Uncovered Patterns", value: 4 }],
-      additional: []
-      // has_Correlation:false,
-      // has_FunctionalDependency:false,
-      // has_AssociationRule:false,
-      // has_Coverage:false,
-      // has_SingleColumn: this.props["location"]["state"]['is_single_column'],
+      // cur_widget_names=["Top-K Correlations","Association Rules"],
+      // cur_widgets=[],
+      additional: [],
+      has_Correlation: false,
+      has_FunctionalDependency: true,
+      has_AssociationRule: false,
+      has_Coverage: false,
+      has_SingleColumn: false
+      //this.props["location"]["state"]['is_single_column']
 
       // for (let i=0;i<widget_currentValues.length;++i){
       //   if(widget_currentValues[i]['value']==1) {
@@ -14124,145 +14119,91 @@ var Label = function (_React$Component) {
   }
 
   _createClass(Label, [{
+    key: 'handleRemove',
+    value: function handleRemove(label) {
+
+      if (label == "cor") {
+        var tmp = this.state;
+        tmp["has_Correlation"] = false;
+        this.setState(tmp);
+      }
+    }
+  }, {
     key: 'handleClick',
     value: function handleClick(e) {
       e.preventDefault();
       var tmp = this.state;
       var i = 0;
+      var added_topk = false;
+      var added_coverage = false;
+      var added_fd = false;
+      var added_ar = false;
       for (; i < tmp["widget_currentValues"].length; i++) {
         if (tmp["widget_currentValues"][i]["label"] == "Top-K Correlations") {
-          tmp.additional.push(_react2.default.createElement(
-            'div',
-            { id: 'correlation', className: 'vis' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              _react2.default.createElement(
-                'strong',
-                null,
-                'Correlations'
-              )
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Here you can see all the columns in the dataset, and you can select columns you need to see more analysis about them'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'frame' },
-              _react2.default.createElement(
-                'div',
-                { id: 'diagramCorrelations', className: 'diagram' },
-                ' '
-              ),
-              _react2.default.createElement('h4', { id: 'diagramScatterPlotName', className: 'diagram' }),
-              _react2.default.createElement(
-                'div',
-                { id: 'diagramScatterPlot', className: 'diagram' },
-                ' '
-              )
-            )
-          ));
+          if (!tmp['has_Correlation']) added_topk = true;
+          tmp['has_Correlation'] = true;
+
+          // tmp.additional.push(
+          //   <div id="correlation" className="vis">
+          //     <h1><strong>Correlations</strong></h1>
+          //     <p>This shows correlation between selected attributes/p>
+          //     <div className="frame">
+          //       <div id="diagramCorrelations" className='diagram'> </div>
+          //       <h4 id="diagramScatterPlotName" className='diagram'></h4>
+          //       <div id="diagramScatterPlot" className='diagram'> </div>
+          //     </div>
+          //   </div>
+          // );
         } else if (tmp["widget_currentValues"][i]["label"] == "Functional Dependencies") {
-          tmp.additional.push(_react2.default.createElement(
-            'div',
-            { id: 'fds', className: 'vis' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              _react2.default.createElement(
-                'strong',
-                null,
-                'Functional Dependencies'
-              )
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Functional dependency is a relationship that exists when one attribute uniquely determines another attribute.'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Here you can see all functional dependencies observed in the dataset. You can drag the nodes apart to see relationships and patterns.'
-            ),
-            _react2.default.createElement('div', { id: 'visFunctionalDep', className: 'frame' })
-          ));
+          if (!tmp['has_FunctionalDependency']) added_fd = true;
+          tmp['has_FunctionalDependency'] = true;
+
+          // tmp.additional.push(
+          //   <div id="fds" className="vis">
+          //     <h1><strong>Functional Dependencies</strong></h1>
+          //     <p>Functional dependency is a relationship that exists when one attribute uniquely determines another attribute.</p>
+          //     <p>Here you can see all functional dependencies observed in the dataset. You can drag the nodes apart to see relationships and patterns.</p>
+          //     <div id="visFunctionalDep" className="frame">
+          //     </div>
+          //   </div>
+          // );
         } else if (tmp["widget_currentValues"][i]["label"] == "Association Rules") {
-          tmp.additional.push(_react2.default.createElement(
-            'div',
-            { id: 'ars', className: 'vis' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              _react2.default.createElement(
-                'strong',
-                null,
-                'Association Rules'
-              )
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Here you can see all the columns in the dataset, and you can select columns you need to see more analysis about them'
-            ),
-            _react2.default.createElement(
-              'div',
-              { id: 'ars_vis', className: 'frame' },
-              _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement(_association_rule2.default, { key: 3 }),
-                _react2.default.createElement('hr', null)
-              ),
-              _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement('img', { src: '/static/img/association-rules.png' })
-              )
-            )
-          ));
+          if (!tmp['has_AssociationRule']) added_ar = true;
+          tmp['has_AssociationRule'] = true;
+
+          // tmp.additional.push(
+          //   <div id="ars" className="vis">
+          //     <h1><strong>Association Rules</strong></h1>
+          //     <div id="ars_vis" className="frame">
+          //         <div>
+          //           <AssociationRule key={3}   />
+          //           <hr/>
+          //         </div>
+          //     </div>
+          //   </div>
+          // );
         } else {
-          tmp.additional.push(_react2.default.createElement(
-            'div',
-            { id: 'mups', className: 'vis' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              _react2.default.createElement(
-                'strong',
-                null,
-                'Uncovered Patterns'
-              )
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Here you can see all the columns in the dataset, and you can select columns you need to see more analysis about them'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'frame' },
-              _react2.default.createElement('div', { id: 'mups_vis' })
-            )
-          ));
+          if (!tmp['has_Coverage']) added_coverage = true;
+          tmp['has_Coverage'] = true;
+          // tmp.additional.push(
+          //   <div id="mups" className="vis">
+          //     <h1><strong>Uncovered Patterns</strong></h1>
+          //     <div className="frame">
+          //       <div id="mups_vis"></div>
+          //     </div>
+          //   </div>
+          // );
         }
       }
       this.setState(tmp);
       console.log("set new widgets");
-
-      $(this.refs.reference).html(loadRawData());
-      // loadRawData();
+      if (!tmp["has_SingleColumn"] && added_coverage) {
+        $(this.refs.reference).html(loadJson("mups.json"));
+      }
+      if (added_fd || !tmp["has_SingleColumn"] && added_topk) {
+        $(this.refs.reference).html(loadRawData());
+      }
     }
-    // componentDidMount(){
-    //   // loadRawData();
-    //   $(this.refs.reference).html(
-    //     loadRawData()
-    //   );
-    // }
-
-
   }, {
     key: 'render',
     value: function render() {
@@ -14295,10 +14236,6 @@ var Label = function (_React$Component) {
           color: state.isFocused ? 'blue' : 'black'
         });
       };
-      // loadRawData();
-      // $(this.refs.reference).html(
-      //   loadRawData()
-      // );
       return _react2.default.createElement(
         'div',
         { ref: 'reference' },
@@ -14308,16 +14245,6 @@ var Label = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'column_filter', id: 'filters' },
-            _react2.default.createElement(
-              'div',
-              { className: 'filtertitle' },
-              'Columns'
-            ),
-            _react2.default.createElement(
-              'p',
-              { className: 'filename' },
-              'RecidivismData_Original.csv'
-            ),
             _react2.default.createElement(
               'div',
               { id: 'nominal_group' },
@@ -14332,21 +14259,6 @@ var Label = function (_React$Component) {
                 '-'
               ),
               _react2.default.createElement('div', { id: 'nominal', style: { display: 'block' } })
-            ),
-            _react2.default.createElement(
-              'div',
-              { id: 'ordinal_group' },
-              _react2.default.createElement(
-                'div',
-                { className: 'groupname' },
-                'Ordinal'
-              ),
-              _react2.default.createElement(
-                'a',
-                { id: 'ordinal_change', className: 'change' },
-                '-'
-              ),
-              _react2.default.createElement('div', { id: 'ordinal', style: { display: 'block' } })
             ),
             _react2.default.createElement(
               'div',
@@ -14373,25 +14285,16 @@ var Label = function (_React$Component) {
               'Data Overview'
             )
           ),
-          _react2.default.createElement(
+          !this.state.has_SingleColumn && this.state.has_Correlation ? _react2.default.createElement(
             'div',
-            null,
+            { key: 0 },
             _react2.default.createElement(
               'a',
               { href: '#correlation', className: 'tab' },
               'Correlations'
             )
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            _react2.default.createElement(
-              'a',
-              { href: '#fds', className: 'tab' },
-              'Functional Dependences'
-            )
-          ),
-          _react2.default.createElement(
+          ) : "",
+          !this.state.has_SingleColumn && this.state.has_Coverage ? _react2.default.createElement(
             'div',
             null,
             _react2.default.createElement(
@@ -14399,8 +14302,17 @@ var Label = function (_React$Component) {
               { href: '#mups', className: 'tab' },
               'Uncovered Patterns'
             )
-          ),
-          _react2.default.createElement(
+          ) : "",
+          this.state.has_FunctionalDependency ? _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'a',
+              { href: '#fds', className: 'tab' },
+              'Functional Dependences'
+            )
+          ) : "",
+          !this.state.has_SingleColumn && this.state.has_AssociationRule ? _react2.default.createElement(
             'div',
             null,
             _react2.default.createElement(
@@ -14408,7 +14320,7 @@ var Label = function (_React$Component) {
               { href: '#ars', className: 'tab' },
               'Association Rules'
             )
-          )
+          ) : ""
         ),
         _react2.default.createElement(
           'div',
@@ -14432,22 +14344,25 @@ var Label = function (_React$Component) {
             ),
             _react2.default.createElement(
               'div',
-              { className: 'frame', id: 'ov' },
-              _react2.default.createElement(
+              { className: 'frame', id: '' },
+              this.state.has_SingleColumn ? _react2.default.createElement(
                 'div',
                 { className: 'ov_label_title' },
                 _react2.default.createElement(
                   'h2',
                   null,
-                  'Quantitative Data Distribution'
-                ),
+                  'Single Column Data Distribution'
+                )
+              ) : _react2.default.createElement(
+                'div',
+                { className: 'ov_label_title' },
                 _react2.default.createElement(
-                  'p',
+                  'h2',
                   null,
-                  'Quantitative Attributes: 17'
+                  'Multi-Column Meta Information'
                 )
               ),
-              _react2.default.createElement(
+              this.state.has_SingleColumn ? _react2.default.createElement(
                 'div',
                 { className: 'ov_row_head' },
                 _react2.default.createElement(
@@ -14485,19 +14400,173 @@ var Label = function (_React$Component) {
                   { className: 'ov_cell uniq' },
                   'Unique Entries'
                 )
+              ) : _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(_multi_basic2.default, { key: 0 })
               )
             )
           ),
-          _react2.default.createElement(
+          !this.state.has_SingleColumn && this.state.has_Correlation ? _react2.default.createElement(
+            'div',
+            { id: 'correlation', className: 'vis' },
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'div',
+                { style: { display: "inline-block", fontSize: "32px" } },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  'Correlations'
+                )
+              ),
+              '\xA0\xA0\xA0',
+              _react2.default.createElement(
+                'div',
+                { style: { display: "inline-block" } },
+                _react2.default.createElement(
+                  'button',
+                  { className: 'rmv_button', onClick: function onClick(e) {
+                      e.preventDefault();
+                      var tmp = _this2.state;
+                      tmp["has_Correlation"] = false;
+                      _this2.setState(tmp);
+                    } },
+                  'Remove'
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'This shows correlation between selected attributes'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'frame' },
+              _react2.default.createElement(
+                'div',
+                { id: 'diagramCorrelations', className: 'diagram' },
+                ' '
+              ),
+              _react2.default.createElement('h4', { id: 'diagramScatterPlotName', className: 'diagram' }),
+              _react2.default.createElement(
+                'div',
+                { id: 'diagramScatterPlot', className: 'diagram' },
+                ' '
+              )
+            )
+          ) : "",
+          !this.state.has_SingleColumn && this.state.has_Coverage ? _react2.default.createElement(
+            'div',
+            { id: 'mups', className: 'vis' },
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'div',
+                { style: { display: "inline-block", fontSize: "32px" } },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  'Uncovered Patterns'
+                )
+              ),
+              '\xA0\xA0\xA0',
+              _react2.default.createElement(
+                'div',
+                { style: { display: "inline-block" } },
+                _react2.default.createElement(
+                  'button',
+                  { className: 'rmv_button', onClick: function onClick(e) {
+                      e.preventDefault();
+                      var tmp = _this2.state;
+                      tmp["has_Coverage"] = false;
+                      _this2.setState(tmp);
+                    } },
+                  'Remove'
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'frame' },
+              _react2.default.createElement('div', { id: 'mups_vis' })
+            )
+          ) : "",
+          !this.state.has_SingleColumn && this.state.has_AssociationRule ? _react2.default.createElement(
+            'div',
+            { id: 'ars', className: 'vis' },
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'div',
+                { style: { display: "inline-block", fontSize: "32px" } },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  'Association Rules '
+                )
+              ),
+              '\xA0\xA0\xA0',
+              _react2.default.createElement(
+                'div',
+                { style: { display: "inline-block" } },
+                _react2.default.createElement(
+                  'button',
+                  { className: 'rmv_button', onClick: function onClick(e) {
+                      e.preventDefault();
+                      var tmp = _this2.state;
+                      tmp["has_AssociationRule"] = false;
+                      _this2.setState(tmp);
+                    } },
+                  'Remove'
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { id: 'ars_vis', className: 'frame' },
+              _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(_association_rule2.default, { key: 3 }),
+                _react2.default.createElement('hr', null)
+              )
+            )
+          ) : "",
+          !this.state.has_SingleColumn && this.state.has_FunctionalDependency ? _react2.default.createElement(
             'div',
             { id: 'fds', className: 'vis' },
             _react2.default.createElement(
-              'h1',
+              'div',
               null,
               _react2.default.createElement(
-                'strong',
-                null,
-                'Functional Dependencies'
+                'div',
+                { style: { display: "inline-block", fontSize: "32px" } },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  'Functional Dependency '
+                )
+              ),
+              '\xA0\xA0\xA0',
+              _react2.default.createElement(
+                'div',
+                { style: { display: "inline-block" } },
+                _react2.default.createElement(
+                  'button',
+                  { className: 'rmv_button', onClick: function onClick(e) {
+                      e.preventDefault();
+                      var tmp = _this2.state;
+                      tmp["has_FunctionalDependency"] = false;
+                      _this2.setState(tmp);
+                    } },
+                  'Remove'
+                )
               )
             ),
             _react2.default.createElement(
@@ -14511,69 +14580,13 @@ var Label = function (_React$Component) {
               'Here you can see all functional dependencies observed in the dataset. You can drag the nodes apart to see relationships and patterns.'
             ),
             _react2.default.createElement('div', { id: 'visFunctionalDep', className: 'frame' })
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'mups', className: 'vis' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              _react2.default.createElement(
-                'strong',
-                null,
-                'Uncovered Patterns'
-              )
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Here you can see all the columns in the dataset, and you can select columns you need to see more analysis about them'
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'frame' },
-              _react2.default.createElement('div', { id: 'mups_vis' })
-            )
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'ars', className: 'vis' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              _react2.default.createElement(
-                'strong',
-                null,
-                'Association Rules'
-              )
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Here you can see all the columns in the dataset, and you can select columns you need to see more analysis about them'
-            ),
-            _react2.default.createElement(
-              'div',
-              { id: 'ars_vis', className: 'frame' },
-              _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement(_association_rule2.default, { key: 3 }),
-                _react2.default.createElement('hr', null)
-              )
-            )
-          ),
-          this.state.additional.length > 0 ? _react2.default.createElement(
-            'div',
-            null,
-            this.state.additional
           ) : "",
           _react2.default.createElement(
             'div',
             { id: 'additional_widgets', className: 'vis' },
             _react2.default.createElement(
-              'h1',
-              null,
+              'div',
+              { style: { fontSize: "32px" } },
               _react2.default.createElement(
                 'strong',
                 null,
@@ -14581,39 +14594,34 @@ var Label = function (_React$Component) {
               )
             ),
             _react2.default.createElement(
-              'p',
-              null,
-              'Add another widget'
-            ),
-            _react2.default.createElement(
               'div',
               { className: 'frame' },
               _react2.default.createElement(
                 'div',
-                { id: 'mups_vis' },
+                { style: { display: "inline-block", width: "95%" } },
+                _react2.default.createElement(_reactSelect2.default, {
+                  required: true,
+                  closeMenuOnSelect: false,
+                  components: { ClearIndicator: ClearIndicator },
+                  styles: { clearIndicator: ClearIndicatorStyles },
+                  defaultValue: [],
+                  isMulti: true,
+                  onChange: function onChange(opt) {
+                    var tmp = _this2.state;
+                    tmp["widget_currentValues"] = opt;
+                    console.log("widget_currentValues");
+                    _this2.setState(tmp);
+                  },
+                  simpleValue: true,
+                  options: this.state.widget_options })
+              ),
+              _react2.default.createElement(
+                'div',
+                { style: { display: "inline-block", width: "5%" } },
                 _react2.default.createElement(
-                  'span',
-                  null,
-                  _react2.default.createElement(
-                    'button',
-                    { onClick: this.handleClick },
-                    ' + '
-                  ),
-                  _react2.default.createElement(_reactSelect2.default, {
-                    required: true,
-                    closeMenuOnSelect: false,
-                    components: { ClearIndicator: ClearIndicator },
-                    styles: { clearIndicator: ClearIndicatorStyles },
-                    defaultValue: [],
-                    isMulti: true,
-                    onChange: function onChange(opt) {
-                      var tmp = _this2.state;
-                      tmp["widget_currentValues"] = opt;
-                      console.log("widget_currentValues");
-                      _this2.setState(tmp);
-                    },
-                    simpleValue: true,
-                    options: this.state.widget_options })
+                  'button',
+                  { className: 'add_button', onClick: this.handleClick },
+                  '+'
                 )
               )
             )
@@ -56132,44 +56140,61 @@ var MultiBasic = function (_React$Component) {
       if (this.state.setted) {
         return _react2.default.createElement(
           'div',
-          { className: 'entry' },
+          null,
           _react2.default.createElement(
-            'strong',
-            null,
-            'Number of rows'
+            'div',
+            { className: 'ov_row_head' },
+            _react2.default.createElement(
+              'span',
+              { className: 'ov_cell attr' },
+              'Cardinality'
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'ov_cell attr' },
+              'Feature Dimension'
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'ov_cell attr' },
+              '# Missing Entries'
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'ov_cell mean' },
+              'Keywords (sorted descendingly by frequency)'
+            )
           ),
-          ': ',
-          this.state.num_rows,
-          ' \xA0\xA0\xA0\xA0\xA0\xA0',
           _react2.default.createElement(
-            'strong',
-            null,
-            'Number of columns'
-          ),
-          ': ',
-          this.state.num_cols,
-          ' \xA0\xA0\xA0\xA0\xA0\xA0',
-          _react2.default.createElement(
-            'strong',
-            null,
-            'Number of missing entries'
-          ),
-          ': ',
-          this.state.num_missing,
-          _react2.default.createElement('div', null),
-          _react2.default.createElement(
-            'strong',
-            null,
-            '  Keywords  (sorted descendingly by frequency)'
-          ),
-          ': ',
-          this.state.keywords.map(function (keyword, i) {
-            if (i == _this3.state.keywords.length - 1) {
-              return '' + keyword;
-            } else {
-              return keyword + ', ';
-            }
-          })
+            'div',
+            { className: 'ov_row' },
+            _react2.default.createElement(
+              'span',
+              { className: 'ov_cell attr' },
+              this.state.num_rows
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'ov_cell attr' },
+              this.state.num_cols
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'ov_cell attr' },
+              this.state.num_missing
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'ov_cell mean' },
+              this.state.keywords.map(function (keyword, i) {
+                if (i == _this3.state.keywords.length - 1) {
+                  return '' + keyword;
+                } else {
+                  return keyword + ', ';
+                }
+              })
+            )
+          )
         );
       }
       return "";

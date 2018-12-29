@@ -20,6 +20,48 @@ h4{
     text-align: left;
 }
 
+/*  newly added */
+.rmv_button {
+	background-color:#d0451b;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border:1px solid #942911;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:12px;
+	padding:6px 17px;
+	text-decoration:none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rmv_button:hover {
+	background-color:#bc3315;
+}
+.rmv_button:active {
+}
+.add_button {
+	background-color:#77b55a;
+	border-radius:42px;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:6px 10px;
+	text-decoration:none;
+}
+.add_button:hover {
+	background-color:#72b352;
+}
+.add_button:active {
+	position:relative;
+	top:1px;
+}
+
+
 
 .note {
     font-size: 12px;
@@ -321,7 +363,7 @@ h2{
 }
 
 .attr {
-  width:20%;
+  width:17%;
 }
 
 .hg {
@@ -329,15 +371,15 @@ h2{
 }
 
 .max {
-  width:9%;
+  width:5%;
 }
 
 .min {
-  width:9%;
+  width:5%;
 }
 
 .mean {
-  width:9%;
+  width:49%;
 }
 
 .nul {
@@ -357,4 +399,3 @@ h2{
   background-color:none;
   transition: all 0.5s ease-in-out;
 }
-
