@@ -176,7 +176,7 @@ export default class Label extends React.Component {
     //     loadJson("mups.json")
     //   );
     // }
-    if(added_fd||!tmp["has_SingleColumn"]&&added_topk){
+    if(added_fd||added_topk){
       console.log("added cor");
       $(this.refs.reference).html(
         loadRawData()
@@ -209,7 +209,7 @@ export default class Label extends React.Component {
     // }
     if(tmp["has_SingleColumn"]){
       console.log("in mount single col");
-      loadOVData("numeric_single.csv")
+      loadOVData("numeric_single123.csv")
     }
     if(tmp["has_Correlation"]){
       console.log("in mount other");
