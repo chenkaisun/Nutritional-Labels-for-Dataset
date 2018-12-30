@@ -118,7 +118,7 @@ def form_submit():
         # gnl.app.config["CURRENT_DF"][sel['protected_currentValues'][0]['label']].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "toy.csv"))
 
     # numeric.csv and complete.csv
-    gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"), index=False)
+    gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["UPLOAD_FOLDER"], "numeric123.csv"), index=False)
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].to_csv(
         os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"), index=False)
 
