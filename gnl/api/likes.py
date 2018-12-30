@@ -122,7 +122,7 @@ def form_submit():
     if sel["is_single_column"] and sel['protected_currentValues'] and dff[sel['protected_currentValues'][0]['label']][0] not in ["str", "empty"]:
         print("in num single")
         print("gg", sel['protected_currentValues'][0]['label'])
-        os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv"))
+        # os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv"))
         gnl.app.config["CURRENT_DF"][[sel['protected_currentValues'][0]['label']]].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv"), index=False)
         # gnl.app.config["CURRENT_DF"][sel['protected_currentValues'][0]['label']].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "toy.csv"))
 
