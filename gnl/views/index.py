@@ -35,6 +35,7 @@ def sha1sum(filename):
 def index():
 
     print("cur dir", os.getcwd())
+    print("os path", gnl.app.config["UPLOAD_FOLDER"])
     # cache["a"]=np.random.randint(2, size=2)
     # cache.append(1)
     # print("cache index", cache)
