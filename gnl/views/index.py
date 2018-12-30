@@ -121,17 +121,17 @@ def index():
 def selection():
     print("\n**selection**\n")
 
-    if gnl.app.config["CURRENT_LOADED"]:
-        print("LOADED")
-        gnl.app.config["CURRENT_COLUMN_TYPES"] = pd.read_csv(os.path.join(
-            gnl.app.config["UPLOAD_FOLDER"],
-            "()types().csv"
-        ))
-        gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
-            gnl.app.config["UPLOAD_FOLDER"],
-            "()cleaned().csv"
-        ))
-        return render_template("label.html")
+    # if gnl.app.config["CURRENT_LOADED"]:
+    #     print("LOADED")
+    #     gnl.app.config["CURRENT_COLUMN_TYPES"] = pd.read_csv(os.path.join(
+    #         gnl.app.config["UPLOAD_FOLDER"],
+    #         "()types().csv"
+    #     ))
+    #     gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
+    #         gnl.app.config["UPLOAD_FOLDER"],
+    #         "()cleaned().csv"
+    #     ))
+    #     return render_template("label.html")
     ########
     # gnl.app.config["CURRENT_FILE"] = os.path.join(
     #     gnl.app.config["UPLOAD_FOLDER"],
