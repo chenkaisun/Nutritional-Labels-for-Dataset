@@ -28,7 +28,7 @@ class Writer:
         return slugify(left_side, ', ') + '=>' + str(right_side)
 
     def write_dependency_to_file(self, dependencies):
-        if dependencies and dependencies[1]==-1:
+        if dependencies and dependencies[0][1]==-1:
             print("here")
             return ["Timelimit=>Exceeded(because of too many columns)"]
 
