@@ -4,7 +4,7 @@ A module implementing TANE algorithm
 
 from itertools import combinations
 from gnl.views.fd.utils.slugify import slugify
-
+import time
 __author__ = 'Ma Zijun'
 __date__ = '2017-04-23'
 
@@ -27,6 +27,7 @@ class TANE(object):
         self.entire_attributes = None
         # record all the functional dependencies
         self.ans = list()
+        self.exceeded=False
 
     def group_by_attribute(self, attribute_ids):
         """
@@ -76,6 +77,10 @@ class TANE(object):
         """
         Apply the TANE algorithm to search for function dependencies
         """
+
+        # prevent from being too much time
+        start = time.clock()
+        #####
         # handle empty table
         if not self.table:
             return
@@ -97,11 +102,18 @@ class TANE(object):
         print("out")
         # level-wise algorithm
         for size in range(2, column_count + 1):
+            #
+            if self.exceeded or time.clock()-start>80:
+                self.exceeded=True
+                break
             # print('--------------------------------------------')
             # print('size = ', size)
             # enumerate all subsets whose size equals size
             combs = [set(x) for x in list(combinations(range(column_count), size))]
             for comb in combs:
+                if time.clock() - start > 80:
+                    self.exceeded = True
+                    break
                 # print(comb)
                 rhs_result, belonged = self.compute_rhs(comb)
                 # print('belonged = ', belonged)
@@ -125,8 +137,12 @@ class TANE(object):
 
                 if rhs_result:
                     self.rhs[slugify(comb, '-')] = rhs_result
+        if self.exceeded:
+            print("self ans exceeded", self.ans)
+            self.ans = [(-1,-1),-1]
+        else: self.ans.sort()
         # sorted all the functional dependencies
-        self.ans.sort()
+
 
 
 def chain_value(row, attribute_ids):

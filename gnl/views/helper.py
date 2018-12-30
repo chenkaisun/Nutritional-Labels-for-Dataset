@@ -285,7 +285,7 @@ def fill_na(df):
         if gnl.app.config["CURRENT_COLUMN_TYPES"][col_name][0] =="str":
             df[col_name] = df[col_name].replace(np.nan, 'NaN')
         elif gnl.app.config["CURRENT_COLUMN_TYPES"][col_name][0] =="empty":
-            df[col_name] = df[col_name].astype(str).replace(np.nan, 'NaN')
+            df[col_name] = df[col_name].astype(str).replace(np.nan, 'nan')
         #replace with mean
         else:
             temp=df[col_name].mean()

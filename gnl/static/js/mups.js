@@ -3,11 +3,32 @@ var color = d3v3.scale.category20();
 var column = 1;
 
 $(document).ready(function () {
-    loadJson("mups.json");
+    // loadJson("mups.json");
+
 });
 
+// function trying(){
+// 	  $.ajax(
+// 	{
+// 	  type : 'GET',
+// 	  url : "/api/coverage/",
+// 	  contentType: "application/json;charset=UTF-8",
+// 	  dataType:'json',
+// 	  success : function(data)
+// 	  {
+// 			console.log("received data ajax");
+//
+// 	    loadJson("mups.json")
+//
+// 	  }/*success : function() {}*/
+// 	});/*$.ajax*/
+// }
+
 function loadJson(fileName){
+	console.log("mups here");
 	d3v3.json("/static/data/" + fileName, function(error, data) {
+		console.log("data");
+			console.log(data);
 			drawTree(data);
 	});
 }

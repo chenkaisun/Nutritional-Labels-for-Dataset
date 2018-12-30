@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import ReactTable from "react-table";
 import matchSorter from 'match-sorter';
+import { Graph } from 'react-d3-graph';
 import {
   withScreenSize,
 } from '@data-ui/histogram';
@@ -24,7 +25,8 @@ export default class FunctionalDependency extends React.Component {
       .then((data) => {
           console.log('multi fd get data');
           this.setState({
-            fds:data.fds,
+            nodes:data.nodes,
+            links:data.links,
             setted:true,
           });
         }
@@ -36,53 +38,29 @@ export default class FunctionalDependency extends React.Component {
       return("");
     }
     console.log("multi fd render");
-    let data = this.state.fds.map((item) =>{
-        let sp=item.split("=>");
-        return(
-          {cola:sp[0],non:"", colb:sp[1]}
-        );
-      }
-    );
-    let columns = [{
-      Header: "Column A",
-             id: "cola",
-             accessor: d => d.cola,
-             filterMethod: (filter, rows) =>
-               matchSorter(rows, filter.value, { keys: ["cola"] }),
-             filterAll: true
-     },
-     {
-       Header: "=>",
-              id: "non",
-              accessor: d => d.non,
-              filterMethod: (filter, rows) =>
-                matchSorter(rows, filter.value, { keys: ["non"] }),
-              filterAll: true
-     },
-     {
-       Header: "Column B",
-              id: "colb",
-              accessor: d => d.colb,
-              filterMethod: (filter, rows) =>
-                matchSorter(rows, filter.value, { keys: ["colb"] }),
-              filterAll: true
-     },
-   ];
-
-   ///just pick1
+    const myConfig = {
+         nodeHighlightBehavior: true,
+         directed: true,
+         node: {
+             color: 'lightgreen',
+             size: 120,
+             highlightStrokeColor: 'blue'
+         },
+         link: {
+             highlightColor: 'lightblue'
+         }
+     };
+     const dat = {
+       nodes: this.state.nodes,
+   links: this.state.links
+     };
    return(
-     <div className="entry">
-       <div><strong> Functional Dependencies</strong>: </div>
-         <ReactTable
-             data={data}
-             columns={columns}
-             defaultPageSize={2}
-             filterable
-             defaultFilterMethod={(filter, row) =>
-                 String(row[filter.id]) === filter.value}
-
-             className="-striped -highlight"
-           />
+     <div>
+       <Graph
+           id="graph-id2" // id is mandatory, if no id is defined rd3g will throw an error
+           data={dat}
+           config={myConfig}
+       />;
      </div>
    )
 

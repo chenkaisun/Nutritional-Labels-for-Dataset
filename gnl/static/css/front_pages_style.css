@@ -37,7 +37,7 @@ width: 10%;
     padding: 3px;
     margin: 5px;
 }
-.container {
+.bcontainer {
     display: inline-block;
     width:60%;
     height: inherit;

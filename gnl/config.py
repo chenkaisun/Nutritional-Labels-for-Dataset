@@ -31,6 +31,7 @@ CURRENT_FILE = None
 CURRENT_TEMP_FILE = os.path.join(
     UPLOAD_FOLDER, 'tempdata.csv'
 )
+NUM_MISSING=0
 OUTPUT=None
 MUPS=None
 CURRENT_DF=None

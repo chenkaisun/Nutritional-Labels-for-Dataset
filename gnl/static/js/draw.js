@@ -13,44 +13,59 @@ var csvFileName = "numeric.csv";
 var jsonFileName = "result.json";
 
 $(document).ready(function() {
-  $.ajax(
-{
-  type : 'GET',
-  url : "/api/file/",
-  contentType: "application/json;charset=UTF-8",
-  dataType:'json',
-  success : function(data)
-  {
-    // csvFileName = "RecidivismData_Original.csv";
-    // jsonFileName = data.output;
-    categoryOfColumns.quantitative=data.cols;
-    loadRawData();
-  }/*success : function() {}*/
-});/*$.ajax*/
+//   $.ajax(
+// {
+//   type : 'GET',
+//   url : "/api/file/",
+//   contentType: "application/json;charset=UTF-8",
+//   dataType:'json',
+//   success : function(data)
+//   {
+//     // csvFileName = "RecidivismData_Original.csv";
+//     // jsonFileName = data.output;
+//     categoryOfColumns.quantitative=data.cols;
+//     loadRawData();
+//   }/*success : function() {}*/
+// });/*$.ajax*/
   // loadRawData();
 });
 
 function loadRawData() {
   d3.csv("/static/data/" + csvFileName).then(function (d) {
+    // $("#newly").empty()
+    // $("#newly").append("<div id='diagramCorrelations' className='diagram'> </div>")
+    // $("#newly").append("<h4 id='diagramScatterPlotName' className='diagram'></h4>")
+    // $("#newly").append("<div id='diagramScatterPlot' className='diagram'> </div>")
+    // console.log("d is ");
+    // console.log(d);
+    // console.log("called load data");
     rawData = d;
     rawDataFiltered = d;
     rawColumns = Object.keys(rawData[1]);
+    console.log("rawColumns");
+    console.log(rawColumns);
+    for (let i=0;i<rawColumns.length;++i){
+      categoryOfColumns.quantitative.push(i);
+    }
+    // console.log("cur quantitative");
+    // console.log(categoryOfColumns.quantitative);
     rawColumnFiltered = Object.keys(rawData[1]);
-    // console.log("running");
-    // console.log('rawData', rawData);
-    // console.log('rawColumns', rawColumns);
-    loadAnalysisResult();
+    analysisResult["colnames"]=rawColumns;
+    init();
+    drawAll(true);
+    // loadAnalysisResult();
   });
 }
 
 function loadAnalysisResult() {
-  d3.json("/static/data/"+jsonFileName).then(function(d) {
-    analysisResult = d;
-    //console.log("analysisResult");
-    //console.log(analysisResult);
-    init();
-    drawAll(true);
-  });
+
+  // d3.json("/static/data/"+jsonFileName).then(function(d) {
+  //   analysisResult = d;
+  //   //console.log("analysisResult");
+  //   //console.log(analysisResult);
+  //   init();
+  //   drawAll(true);
+  // });
 }
 
 ///////////////// by Meng /////////////////
@@ -144,7 +159,7 @@ function init(){
 
 function drawAll(initzer = false) {
   drawDiagramCorrelations(initzer);
-  drawDiagramFunctionalDep(initzer);
+  // drawDiagramFunctionalDep(initzer);
   // console.log('drawAll');
 }
 
@@ -358,6 +373,7 @@ function drawScatterPlot(quanColumnX, quanColumnY) {
               .attr("class", "yAxis")
               .call(d3.axisLeft(y));
 
+
   // Add the points!
   svg.selectAll(".point")
       .data(rawData)
@@ -366,7 +382,7 @@ function drawScatterPlot(quanColumnX, quanColumnY) {
       .attr("cx", function(d) { return x(d[Object.keys(d)[columnX]]); })
       .attr("cy", function(d) { return y(d[Object.keys(d)[columnY]]); })
       .style("opacity", 0.1)
-      .attr("r", 3);;
+      .attr("r", 3);
 
   var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
@@ -458,8 +474,8 @@ function drawDiagramFunctionalDep(init = false) {
 
     var sourceNodes = [],
         sourceLinks = [];
-    //console.log("colnames");
-    //console.log(analysisResult.colnames);
+    console.log("colnames");
+    console.log(analysisResult.colnames);
     analysisResult.colnames.forEach(function(v, i) {
       sourceNodes.push({
         'id' : v,

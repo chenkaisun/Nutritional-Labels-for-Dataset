@@ -6,23 +6,26 @@ var cols = [];
 // var cols = ["age", "decile_score", "priors_count", "c_days_from_compas", "v_decile_score", "Violence_score", "Recidivism_score"];
 
 $(document).ready(function() {
-  $.ajax(
-{
-  type : 'GET',
-  url : "/api/file/",
-  contentType: "application/json;charset=UTF-8",
-  dataType:'json',
-  success : function(data)
-  {
-    cols_num=data.cols;
-    loadOVData("numeric_single.csv");
-  }
+  // loadOVData("numeric_single.csv");
 });
-});
+
+window.onpopstate = function(event) {
+    window.location.reload();
+};
 
 function loadOVData(fileName) {
  d3.csv("/static/data/" + fileName).then( function (d) {
    ovData = d;
+   for (let i=0;i<Object.keys(ovData[1]).length;++i){
+     cols_num.push(i);
+   }
+   console.log("d");
+   console.log(d);
+   console.log("cols");
+   console.log(cols);
+   console.log("cols_num");
+   console.log(cols_num);
+
    //get all column names
    var colnames = d3.keys(ovData[0]);
    colnames.forEach(function(v, i) {

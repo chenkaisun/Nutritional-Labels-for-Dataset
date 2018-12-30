@@ -17,7 +17,8 @@ import json
 import pprint
 import pandas as pd
 from jpype import *
-
+from copy import deepcopy
+import random
 """you might end up refactoring parts of this code later 
 to avoid copy-pasted code shared between the REST API and 
 server-side template views."""
@@ -46,25 +47,30 @@ def form_submit():
     gnl.app.config["CURRENT_SELECTION"] = request.json
     sel = gnl.app.config["CURRENT_SELECTION"]
 
-    print("sel\n",sel)
+    print("sel\n")
+    pprint.pprint(sel)
 
     # protected and non-protected attributes
     col_names = list(gnl.app.config["CURRENT_DF"])
-
+    # print("col_names", col_names)
     attribute_currentValues = [i['label'] for i in sel['attribute_currentValues']
                                if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["str", "empty"]] \
         if not sel['is_whole'] else col_names
 
+    if sel['is_single_column']: sel['protected_currentValues']=[sel['protected_currentValues']] if sel['protected_currentValues'] else []
     protected_currentValues = [i['label'] for i in sel['protected_currentValues']
-                               if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["str", "empty"]]
+                                   if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["str", "empty"]]
+    # print("sel['protected_currentValues']", sel['protected_currentValues'])
+    # print("protected_currentValues", protected_currentValues)
     all_values = list(set(attribute_currentValues + protected_currentValues))
     gnl.app.config["CURRENT_DF"] = gnl.app.config["CURRENT_DF"][all_values]
 
     # range query
     # query_cols = sel["query_currentValues"]
-    query_ranges = sel["query_rangeValues"]
+
     # select range
     if sel["is_query"]:
+        query_ranges = sel["query_rangeValues"]
         for key in query_ranges:
 
             # check the key has an existing range
@@ -79,7 +85,7 @@ def form_submit():
                         gnl.app.config["CURRENT_DF"][
                             gnl.app.config["CURRENT_DF"][key]==query_ranges[key]]
 
-    # slicing completed
+    # slicing completed, count missing before fill in nan
     if not sel["is_single_column"]:
         for col_name in list(gnl.app.config["CURRENT_DF"]):
             for entry in gnl.app.config["CURRENT_DF"][col_name]:
@@ -88,18 +94,51 @@ def form_submit():
 
     gnl.app.config['CURRENT_DF'] = helper.fill_na(gnl.app.config['CURRENT_DF'])
     dff = gnl.app.config["CURRENT_COLUMN_TYPES"]
+    gnl.app.config["CURRENT_IGNORED_COLUMNS"]=[]
     gnl.app.config["CURRENT_IGNORED_COLUMNS"] += [col for col in list(gnl.app.config["CURRENT_DF"])
                                                       if (dff[col][0] == "str" or dff[col][0] == "empty")]
+
+    # print("gnl.app.config[CURRENT_IGNORED_COLUMNS]", gnl.app.config["CURRENT_IGNORED_COLUMNS"])
+    # keep full dataset
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"] = gnl.app.config["CURRENT_DF"].copy()
+    # print("cur df", gnl.app.config["CURRENT_DF"])
     gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
 
-    if sel["is_single_column"] and sel['protected_currentValues'] and dff[sel['protected_currentValues'][0]] not in ["str", "empty"]:
-        gnl.app.config["CURRENT_DF"][sel['protected_currentValues'][0]].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single.csv"), index=False)
+    # print("cur df:\n")
+    # pprint.pprint(gnl.app.config["CURRENT_DF"])
+    #
+    # for col in gnl.app.config["CURRENT_DF"]:
+    #     pprint.pprint(gnl.app.config["CURRENT_DF"][col])
 
+    # numeric single column
+    if sel["is_single_column"] and sel['protected_currentValues'] and dff[sel['protected_currentValues'][0]['label']][0] not in ["str", "empty"]:
+        print("in num single")
+        print("gg", sel['protected_currentValues'][0]['label'])
+        gnl.app.config["CURRENT_DF"][[sel['protected_currentValues'][0]['label']]].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single.csv"), index=False)
+        # gnl.app.config["CURRENT_DF"][sel['protected_currentValues'][0]['label']].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "toy.csv"))
+
+    # numeric.csv and complete.csv
     gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"), index=False)
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].to_csv(
         os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"), index=False)
 
+    # print("\n\n\n\ncur df colnames",list(gnl.app.config["CURRENT_DF"]), "\n\n\n\n")
+    # print(list(gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]))
+
+    widget_currentValues = [i['label'] for i in sel['widget_currentValues']]
+    # if((not widget_currentValues) or "Functional Dependencies" in widget_currentValues):
+    #     get_multi_fd()
+        # tmp_dict = {'colnames': list(gnl.app.config["CURRENT_COLUMN_TYPES"])}
+        # gnl.app.config["JSON_OUT"].update(tmp_dict)
+        # pprint.pprint(gnl.app.config["JSON_OUT"])
+        # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
+        #     json.dump(gnl.app.config["JSON_OUT"], outfile)
+
+    # if ((not sel["is_single_column"]) and ((not widget_currentValues) or "Maximal Uncovered Patterns" in widget_currentValues)):
+    #     print("yes")
+        # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "mups.json"), 'w') as outfile:
+        #     json.dump({"node":"mups", "children":[]}, outfile)
+        # get_coverage()
     return jsonify(**context)
 
 @gnl.app.route('/api/get_colnames/', methods=['GET'])
@@ -110,7 +149,7 @@ def get_colnames():
     # print("context are", context)
     # todo
     context['str_colnames']=[col for col in list(gnl.app.config["CURRENT_DF"])
-                            if (gnl.app.config["CURRENT_COLUMN_TYPES"][col][0] == "str")]
+                            if gnl.app.config["CURRENT_COLUMN_TYPES"][col][0] == "str"]
     # print(context)
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "output.json"), 'w') as outfile:
@@ -126,7 +165,7 @@ def get_coverage():
     cpopt = "-Djava.class.path=%s" % (gnl.app.config["COVERAGE_FOLDER"] + "/target/classes")
     if not isJVMStarted():
         startJVM(getDefaultJVMPath(), "-ea", cpopt)
-    print("classpath:", cpopt)
+    # print("classpath:", cpopt)
 
     dataset = JClass('io.DataSet')
     hybrid = JClass('search.HybridSearch')
@@ -173,7 +212,7 @@ def get_coverage():
     val_cnt = {}
     pattern_lists=[]
     for i, mup in enumerate(mups):
-        print("mup:",mup)
+        # print("mup:",mup)
         tmp_list=[]
         for j, char in enumerate(mup):
             if char != 'x':
@@ -186,7 +225,12 @@ def get_coverage():
         # uncovered_patterns.append(" ".join([categories[j][ord(char)-ord('0')] for j, char in enumerate(mup) if char!='x']))
 
     # generate tree
-    tree=[{"node":"mups", "children":[]}]
+    sprop={"width": 20,
+            "height": 20,
+            "x": -10,
+            "y": -10,
+            "fill": 'red'}
+    tree=[{"name":"mups", "children":[]}]
     ptrs=[tree[0]]*len(pattern_lists)
     for i in range(len(ptrs)):
         ptrs[i]=tree[0]
@@ -207,12 +251,13 @@ def get_coverage():
 
                 # check whether the current is already a child from the last ptr
                 for j, child in enumerate(ptrs[i]["children"]):
-                    if child["node"]==pattern_list[pos]:
+                    if child["name"]==pattern_list[pos]:
                         exist_node=True
                         ptrs[i]=ptrs[i]["children"][j]
                         break
                 if not exist_node:
-                    ptrs[i]["children"].append({"node":pattern_list[pos], "children":[]})
+                    sprop["fill"]=random.choice(["red", "blue", "green", "yellow", "purple"])
+                    ptrs[i]["children"].append({"name":pattern_list[pos], "children":[]})
                     ptrs[i]=ptrs[i]["children"][-1]
         pos+=1
 
@@ -221,15 +266,19 @@ def get_coverage():
             break
 
     # to mup.json
-    context={}
+    context={"tree":tree[0]}
     # context = {'mups': uncovered_patterns, tree: tree}
     print("uncovered_patterns:",uncovered_patterns)
-
+    # print("tree", tree)
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
     #     json.dump(gnl.app.config["JSON_OUT"], outfile)
-    with open(os.path.join(gnl.app.config["DATA_FOLDER"], "mups.json"), 'w') as outfile:
-        json.dump(tree, outfile)
+    # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "mups.json"), 'w') as outfile:
+    #     json.dump(tree, outfile)
+    # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "mups.json")) as infile:
+    #     data = json.load(infile)
+    #     print("data is ", data)
+    # print("data complete")
 
     return jsonify(**context)
 
@@ -301,8 +350,10 @@ def get_multi_fd():
     for pattr in pattrs:
         if pattr not in cols:
             cols.append(pattr)
+
+    # print("pattr", pattrs)
     # drop the spaces and commas
-    df[cols].to_csv(gnl.app.config["CURRENT_TEMP_FILE"], index=False)
+    df.to_csv(gnl.app.config["CURRENT_TEMP_FILE"], index=False)
 
     # start discovering
     table = reader.Reader.read_table_from_file(gnl.app.config["CURRENT_TEMP_FILE"], ",")
@@ -310,13 +361,27 @@ def get_multi_fd():
     tne.run()
     wt = writer.Writer(col_names)
     output = wt.write_dependency_to_file(tne.ans)
+    releveant_output = [comb for comb in output if any([item in pattrs for item in comb.split("=>")[1].split(",")])]
+    if output and output[0]=="Timelimit=>Exceeded(because of too many columns)":
+        releveant_output=output
 
 
-    context['fds'] = [comb for comb in output if any([item in pattrs for item in comb.split("=>")[1].split(",")])]
-
-    gnl.app.config["JSON_OUT"].update(context)
-    with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
-        json.dump(gnl.app.config["JSON_OUT"], outfile)
+    node_set, link_set, nodes, links = set(), set(), [], []
+    for fd in releveant_output:
+        l, r = fd.split("=>")
+        # l_list,r_list=l.split(","),r.split(",")
+        node_set.add(l)
+        node_set.add(r)
+        link_set.add((l, r))
+    for node in node_set:
+        nodes.append({"id": node})
+    for link in link_set:
+        links.append({"source": link[0], "target": link[1]})
+    if not nodes: nodes.append({"id": "NONE EXISTS"})
+    context["nodes"] = nodes
+    context["links"] = links
+    print("fd context")
+    print(context)
     return jsonify(**context)
 
 
@@ -361,9 +426,11 @@ def get_multi_ar():
     for link in link_set:
         links.append({ "source": link[0], "target": link[1] })
 
+    if not nodes: nodes.append({"id": "NO ASSOCIATION RULE EXISTS"})
     context["nodes"]=nodes
     context["links"]=links
-    print("context", context)
+    print("ar context")
+    print(context)
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
     #     json.dump(gnl.app.config["JSON_OUT"], outfile)

@@ -39,7 +39,6 @@ def index():
     # uid=request.cookies.get('YourSessionCookie')
     context = {"options":[{ "label": "1","value": "Alabama"}, { "label": "2","value": "Alabama"}]}
 
-    return redirect(url_for('selection'))
 
     gnl.app.config["CURRENT_FILE"]=None
     gnl.app.config["CURRENT_IGNORED_COLUMNS"]=[]
@@ -48,56 +47,64 @@ def index():
     gnl.app.config["CURRENT_COLUMN_TYPES"]=None
     gnl.app.config["CURRENT_MANUAL_INFO"]=None
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]=None
+    gnl.app.config["CURRENT_LOADED"]=False
 
+    # return redirect(url_for('selection'))
 
-    session["CURRENT_LOADED"] = True
+    # session["CURRENT_LOADED"] = True
     # return render_template("selection.html")
+    # gnl.app.config["CURRENT_FILE"] = os.path.join(
+    #         gnl.app.config["UPLOAD_FOLDER"],
+    #         "RecidivismData_Original.csv"
+    # )
 
-    gnl.app.config["CURRENT_FILE"] = os.path.join(
-            gnl.app.config["UPLOAD_FOLDER"],
-            "RecidivismData_Original.csv"
-    )
-
-    return redirect(url_for('selection'))
+    # return redirect(url_for('selection'))
     print("\n**index**\n")
 
     if request.method == "POST":
         print("\n**index post**\n")
+        # print("requests", flask.request)
+        # print("requests files", flask.request.files)
+        # print("request.form", request.form)
+        # print("sel", type(request.form.get('sel')))
+        if flask.request.files:
+            # Save POST request's file object to a temp file
+            dummy, temp_filename = tempfile.mkstemp()
+            # print("flask.request.files:", flask.request.files)
+            file_name = flask.request.files["filee"]
+            file_name.save(temp_filename)
+            print("file_name:",file_name)
+            # Compute filename with sha256 for encoding
+            hash_txt = sha1sum(temp_filename)
+            dummy, suffix = os.path.splitext(file_name.filename)
+            hash_filename_basename = hash_txt + suffix
+            hash_filename = os.path.join(
+                gnl.app.config["UPLOAD_FOLDER"],
+                hash_filename_basename
+            )
 
-        # Save POST request's file object to a temp file
-        dummy, temp_filename = tempfile.mkstemp()
-        print("flask.request.files:", flask.request.files)
-        file_name = flask.request.files["filee"]
-        file_name.save(temp_filename)
+            # Move temp file to permanent location
+            print("start moving")
 
-        print("file_name:",file_name)
+            shutil.move(temp_filename, hash_filename)
+            gnl.app.logger.debug("Saved %s", hash_filename_basename)
+            print(hash_filename)
 
-        # Compute filename with sha256 for encoding
-        hash_txt = sha1sum(temp_filename)
-        dummy, suffix = os.path.splitext(file_name.filename)
-        hash_filename_basename = hash_txt + suffix
-        hash_filename = os.path.join(
-            gnl.app.config["UPLOAD_FOLDER"],
-            hash_filename_basename
-        )
+            # ###move csv to data folder
+            # shutil.move(temp_filename, os.path.join(
+            #     gnl.app.config["DATA_FOLDER"],
+            #     hash_filename_basename
+            # ))
+            # ###
 
-        # Move temp file to permanent location
-        print("start moving")
+            gnl.app.config["CURRENT_FILE"] = hash_filename
 
-        shutil.move(temp_filename, hash_filename)
-        gnl.app.logger.debug("Saved %s", hash_filename_basename)
-        print(hash_filename)
-
-        # ###move csv to data folder
-        # shutil.move(temp_filename, os.path.join(
-        #     gnl.app.config["DATA_FOLDER"],
-        #     hash_filename_basename
-        # ))
-        # ###
-
-        gnl.app.config["CURRENT_FILE"] = hash_filename
-
-        print("\n**leaving index**\n")
+            print("\n**leaving index**\n")
+        else:
+            gnl.app.config["CURRENT_FILE"] = os.path.join(
+                gnl.app.config["UPLOAD_FOLDER"],
+                request.form.get('sel')
+            )
         return redirect(url_for('selection'))
     return render_template("index.html", **context)
 
@@ -111,13 +118,22 @@ def index():
 def selection():
     print("\n**selection**\n")
 
-    if gnl.app.config["CURRENT_LOADED"]: return render_template("label.html")
-    # return render_template("label.html")
-    #########
-    gnl.app.config["CURRENT_FILE"] = os.path.join(
-        gnl.app.config["UPLOAD_FOLDER"],
-        "Carspecs.csv"
-    )
+    if gnl.app.config["CURRENT_LOADED"]:
+        print("LOADED")
+        gnl.app.config["CURRENT_COLUMN_TYPES"] = pd.read_csv(os.path.join(
+            gnl.app.config["UPLOAD_FOLDER"],
+            "()types().csv"
+        ))
+        gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
+            gnl.app.config["UPLOAD_FOLDER"],
+            "()cleaned().csv"
+        ))
+        return render_template("label.html")
+    ########
+    # gnl.app.config["CURRENT_FILE"] = os.path.join(
+    #     gnl.app.config["UPLOAD_FOLDER"],
+    #     "RecidivismData_Original.csv"
+    # )
 
     # gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
     #     gnl.app.config["DATA_FOLDER"],
@@ -128,19 +144,28 @@ def selection():
     ##########
 
     # context={}
-
     df=pd.read_csv(gnl.app.config["CURRENT_FILE"])
-
-    # standardize the column names
+    #
+    # # standardize the column names
     helper.normalize_colnames(df)
-
-    # clean the strings that are actually numbers and also invalid string such as those with comma and special chars, or $
+    #
+    # # clean the strings that are actually numbers and also invalid string such as those with comma and special chars, or $
     helper.clean(df)
+    df.to_csv(os.path.join(
+        gnl.app.config["UPLOAD_FOLDER"],
+        "()cleaned().csv"
+    ), index=False)
+    # print("selelction")
+    # print("df", df)
 
     gnl.app.config["CURRENT_DF"] = df
 
     # find types of each col for convenience
     gnl.app.config["CURRENT_COLUMN_TYPES"] = helper.find_types_of_table(df)
+    gnl.app.config["CURRENT_COLUMN_TYPES"].to_csv(os.path.join(
+        gnl.app.config["UPLOAD_FOLDER"],
+        "()types().csv"
+    ), index=False)
 #
 #
 # ###

@@ -134,6 +134,8 @@ class Apriori:
             None
         ------------------------------------------------------------------
         """
+        start = time.clock()
+        exceeded=False
 
         #step1
         C1 = self.__createC1()
@@ -143,6 +145,9 @@ class Apriori:
         self.frequentItemsSupport = supports
         k = 2 # Second pass
         while (len(self.frequentItems[k-2]) > 0):
+            if time.clock()-start>80:
+                exceeded=True
+                break
             Ck = self.__createCk(self.frequentItems[k-2], k)
             if Ck != set([]):
                 Lk, supportK = self.__filterCk(Ck)
@@ -153,9 +158,11 @@ class Apriori:
                 break
             k += 1
 
+
         #step2
         threshold=0.8
         for each_len_sets in self.results:
+            if exceeded or time.clock()-start>100: break
             for item_set in each_len_sets:
                 temp_item_set=set(item_set)
                 frozen_item_set=frozenset(item_set)
@@ -166,7 +173,7 @@ class Apriori:
                             self.frequentItemsSupport[frozenset(comb)])
                         if confidence_score>threshold:
                             self.true_associations.append(",".join(list(comb))+"=>"+",".join(list(temp_item_set-set(comb)))) #str(i) for i in comb
-
+        if exceeded: self.true_associations=["Timelimit=>Exceeded(because of too many columns)"]
         return
 
     def printResults(self):

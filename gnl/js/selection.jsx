@@ -17,7 +17,7 @@ export default class Selection extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleCheckbox= this.toggleCheckbox.bind(this);
     this.state = {
-      redirect:true,
+      redirect:false,
       setted:false,
       attribute_options:[],
       widget_options:[
@@ -35,6 +35,8 @@ export default class Selection extends React.Component {
       is_manually_widgets: false,
       widget_currentValues: [],
 
+      chose_numeric:false,
+
       attribute_currentValues: [],
       is_single_column:false,
       is_multi_column:true,
@@ -47,10 +49,10 @@ export default class Selection extends React.Component {
 
       has_fd:true,
     }
-    history.push({
-      pathname: '/label',
-      state: this.state
-    })
+    // history.push({
+    //   pathname: '/label',
+    //   state: this.state
+    // })
   }
   componentDidMount(){
     fetch('/api/get_colnames/', { credentials: 'same-origin' })
@@ -85,6 +87,8 @@ export default class Selection extends React.Component {
             for (let i = 0; i < data.str_colnames.length; i++){
               tmp["str_colnames"][data.str_colnames[i]]=0;
             }
+            console.log("didmount");
+            console.log(tmp);
             console.log("setted");
             this.setState(tmp);
         }
@@ -99,11 +103,29 @@ export default class Selection extends React.Component {
   // }
 
   handleSubmit(e) {
+
     event.preventDefault();
     const name = e.target.name;
     const checked = e.target.checked;
     let tmp=this.state;
+    if(tmp["is_single_column"] && tmp["protected_currentValues"].length<=0) {
+      return (-1);
+    }
+    console.log("here");
     tmp[name]=!tmp[name]
+
+    // str column_name
+    if(tmp["is_single_column"]&&Object.keys(tmp["protected_currentValues"]).length>=1){
+      if(Object.keys(tmp["str_colnames"]).length === 0 || !(tmp["protected_currentValues"]['label'] in tmp["str_colnames"])){
+        console.log("here now");
+        tmp["chose_numeric"]=true;
+      }
+    }
+    // console.log("str colnames");
+    // console.log(tmp["str_colnames"]);
+    // console.log("pat");
+    // console.log(tmp["protected_currentValues"]['label']);
+
     // console.log(JSON.stringify(this.state));
     fetch('/api/form_submit/', {
       credentials: 'same-origin',
@@ -112,6 +134,8 @@ export default class Selection extends React.Component {
       body: JSON.stringify(this.state),
     });
     tmp["redirect"]=true;
+
+
     console.log("submit complete");
     this.setState(tmp);
     // history.push('/label');
@@ -187,9 +211,8 @@ export default class Selection extends React.Component {
         <ReactTooltip />
         <form onSubmit={this.handleSubmit}>
           <div className="scontainer"></div>
-          <div className="container">
-            <h1 data-tip="Specify what to be included in the label">Selections</h1>
-
+          <div className="bcontainer">
+            <h2 data-tip="Specify what to be included in the label">Selections</h2>
 
               <span>
               <label className="checkbox">
@@ -199,7 +222,7 @@ export default class Selection extends React.Component {
               &nbsp;
               <label className="checkbox">
     						<input type="radio" name="is_multi_column" checked={this.state.is_multi_column} onChange={this.toggleCheckbox} />
-    						<span className="checkbox-label" data-tip="Analysis on multiple attributes">Multi Column Analysis</span>
+    						<span className="checkbox-label" data-tip="Causion: select too many columns can make column wise operation (i.e. Functional Dependency) take long time">Multi Column Analysis</span>
     					</label>
               </span>
 
@@ -215,7 +238,7 @@ export default class Selection extends React.Component {
                     defaultValue={[]}
                     onChange={(opt)=>{
                         let tmp=this.state;
-                        tmp.attribute_currentValues=opt
+                        tmp.protected_currentValues=opt;
                         console.log("protected_currentValues");
                         this.setState(tmp);
                       }
@@ -232,7 +255,7 @@ export default class Selection extends React.Component {
                       <span className="checkbox-label">Pick your non-protected attributes</span>
                     </label>
                     &nbsp;
-                    <label className="checkbox">
+                    <label className="checkbox" data-tip="Causion: select too many columns can make column wise operation (i.e. Functional Dependency) take long time">
           						<input type="radio" name="is_whole" checked={this.state.is_whole} onChange={this.toggleCheckbox} />
           						<span className="checkbox-label">Use the whole dataset</span>
           					</label>
@@ -412,7 +435,7 @@ export default class Selection extends React.Component {
                   {
                     Object.entries(this.state.query_rangeValues).map(([key, value]) =>{
                       if(key in this.state.str_colnames){
-                        return(<div>{key}:<input
+                        return(<div key={key}>{key}:<input
                           type='text'
                           className='form-control'
                           value={value}

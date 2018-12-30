@@ -37,42 +37,6 @@ export default class AssociationRule extends React.Component {
     if(!this.state.setted) {
       return("");
     }
-
-
-   //  console.log("multi ar render");
-   //  let data=[];
-   //  for(let item of this.state.ars){
-   //    let sp=item.split("=>");
-   //    if (typeof sp[0] != 'undefined' && typeof sp[1] != 'undefined' &&sp[0]&&sp[1] && sp[0].trim()!="" && sp[1].trim()!="") {
-   //      console.log("pushed in");
-   //      data.push({cola:sp[0],non:"", colb:sp[1]})
-   //    }
-   //  }
-   //  let columns = [{
-   //    Header: "Entry A",
-   //           id: "cola",
-   //           accessor: d => d.cola,
-   //           filterMethod: (filter, rows) =>
-   //             matchSorter(rows, filter.value, { keys: ["cola"] }),
-   //           filterAll: true
-   //   },
-   //   {
-   //     Header: "=>",
-   //            id: "non",
-   //            accessor: d => d.non,
-   //            filterMethod: (filter, rows) =>
-   //              matchSorter(rows, filter.value, { keys: ["non"] }),
-   //            filterAll: true
-   //   },
-   //   {
-   //     Header: "Entry B",
-   //            id: "colb",
-   //            accessor: d => d.colb,
-   //            filterMethod: (filter, rows) =>
-   //              matchSorter(rows, filter.value, { keys: ["colb"] }),
-   //            filterAll: true
-   //   },
-   // ];
    const myConfig = {
         nodeHighlightBehavior: true,
         directed: true,
@@ -96,9 +60,6 @@ export default class AssociationRule extends React.Component {
            data={dat}
            config={myConfig}
        />;
-
-
-
      </div>
    );
 

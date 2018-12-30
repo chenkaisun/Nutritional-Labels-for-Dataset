@@ -6,68 +6,45 @@ import matchSorter from 'match-sorter';
 import {
   withScreenSize,
 } from '@data-ui/histogram';
-
+// import Tree from 'react-d3-tree';
+import Tree from 'react-tree-graph';
+// import 'react-tree-graph/dist/style.css'
+// import * as d3 from "d3";
+// import scaleBand from "d3-scale";
 
 export default class Coverage extends React.Component {
   constructor(props) {
     super(props);
     this.state={
       setted:false,
+      tree:{"name":"None", "children":[]}
     }
   }
   componentDidMount(){
+    console.log("send request");
     fetch('/api/coverage/', { credentials: 'same-origin' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
       .then((data) => {
-          console.log('multi coverage get data');
+        console.log("cov received data")
           this.setState({
-            mups:data.mups,
+            tree:data.tree,
             setted:true,
           });
+          // console.log(data.tree);
         }
       )
       .catch(error => console.log(error));// eslint-disable-line no-console
   }
   render(){
-    if(!this.state.setted) {
-      return("");
-    }
-    console.log("multi mups render");
-    let data = this.state.mups.map((item) =>{
-        return(
-          {cola:item}
-        );
-      }
-    );
-    let columns = [{
-      Header: "uncovered patterns",
-             id: "cola",
-             accessor: d => d.cola,
-             filterMethod: (filter, rows) =>
-               matchSorter(rows, filter.value, { keys: ["cola"] }),
-             filterAll: true
-     },
-   ];
-
+    console.log("cov render")
    return(
-     <div className="entry">
-       <div><strong> Coverage </strong>: </div>
-         <ReactTable
-             data={data}
-             columns={columns}
-             defaultPageSize={5}
-             filterable
-             defaultFilterMethod={(filter, row) =>
-                 String(row[filter.id]) === filter.value}
-
-             className="-striped -highlight"
-           />
+     <div className="frame">
+        <Tree data={this.state.tree}  height={400}
+     width={400}/>
      </div>
    )
-
-
   }
 }

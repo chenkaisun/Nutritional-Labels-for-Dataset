@@ -362,8 +362,16 @@ h2{
   text-align: left;
 }
 
-.attr {
+.mattr {
   width:17%;
+}
+
+.mmean {
+  width:49%;
+}
+
+.attr {
+  width:20%;
 }
 
 .hg {
@@ -371,15 +379,15 @@ h2{
 }
 
 .max {
-  width:5%;
+  width:9%;
 }
 
 .min {
-  width:5%;
+  width:9%;
 }
 
 .mean {
-  width:49%;
+  width:9%;
 }
 
 .nul {

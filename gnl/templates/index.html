@@ -6,10 +6,8 @@
   <meta charset=utf-8 />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<!-- <link rel="stylesheet" type="text/css" href="/static/css/front_pages_style.css"> -->
-
-    <title>Analyst</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/front_pages_style_2.css">
+<!-- <link rel="stylesheet" type="text/css" href="../static/css/style.css"> -->
 
 	 <!-- <link rel="stylesheet" type="text/css" href="front_pages_style.css"> -->
    <!--[if IE]>
@@ -18,44 +16,7 @@
 
 </head>
   <body>
-    <form action="" method="POST" enctype="multipart/form-data">
-    <div class="main_box">
-      <img src="/static/img/db_logo.png" alt="Database group">
-  <h1><strong>Analyst</strong></h1>
-  <p>Quick Analyst is a data analysis tool that help data analysts,
-    and people who do not have much experience with data science, to get a
-    quick overview and understanding about a dataset. When you upload a
-    dataset file, it will tell you the basic structor of the columns
-    attributes and the relationships between different attributes.
-    Given a task, you can quickly find the useful data for the task using
-    our tool. <br></br>
-
-  </p>
-
-  <p>Choose a sample dataset</p>
-  <div class="optional_datasets" style="display: inline-block;">
-    <select>
-      <option selected="selected">Select a dataset</option>
-      <option label="RecidivismData_Cleaned.csv" value="string:RecidivismData_Cleaned.csv">RecidivismData_Cleaned.csv</option>
-      <option label="Carspecs_cleaned.csv" value="string:Carspecs_cleaned.csv">Carspecs_cleaned.csv</option>
-    </select>
-  </div>
-  <div style="display: inline-block;">
-    <button>Select</button>
-  </div>
-
-
-  <p>Upload your file</p>
-  <label for="file-upload" class="custom-file-upload myBtn">
-    <i class="fa fa-cloud-upload myBtn"></i> Upload File &nbsp;
-  </label>
-  <input id="file-upload" name='filee' type="file" style="display:none;" required >
-  <!-- <button type="button" class="myBtn" onclick="upfile.click()">Upload Dataset</button> -->
-  <!-- <input type="file" id="upfile" class="myFile" onchange="window.location.href='visualization.html'"/> -->
-  <button type="submit" name="submit" class="registerbtn">Next: Manual Information</button>
-  </div>
-</form>
-      <!-- <form action="" method="POST" enctype="multipart/form-data">
+      <form action="" method="POST" enctype="multipart/form-data">
 
 
         <div class="scontainer"></div>
@@ -63,7 +24,7 @@
         <div class="container">
 
         <div class="temp">
-          <h2>Generic Nutritional Label System<h2>
+          <h1>Generic Nutritional Label System<h1>
         </div>
 
         <hr>
@@ -73,28 +34,46 @@
         </div>
         <label for="file-upload" class="custom-file-upload">
           <i class="fa fa-cloud-upload"></i> Upload File &nbsp;
+          <!--  <span ><input type="checkbox" name="owner" value="owner" > I am the original owner of the dataset </span>-->
         </label>
-        <input id="file-upload" name='filee' type="file" style="display:none;" required >
+        <input id="file-upload" name='filee' type="file" style="display:none;"  >
 
         <br></br>
 
-        <div class="stitle" >
-          Task to be performed
+        <div class="stitle">Choose a sample dataset</div>
+        <div class="optional_datasets" style="display: inline-block;">
+          <select name='sel'>
+            <option selected="selected" value="Auto.csv">Auto.csv</option>
+            <option label="Boston.csv" value="Boston.csv">Boston.csv</option>
+            <option label="salary.csv" value="salary.csv">salary.csv</option>
+            <option label="RecidivismData_Original.csv" value="RecidivismData_Original.csv">RecidivismData_Original.csv</option>
+            <option label="UBSprices.csv" value="UBSprices.csv">UBSprices.csv</option>
+            <option label="penn.csv" value="penn.csv">penn.csv</option>
+          </select>
+          <input type="submit" style="display:none;"  >
         </div>
-        <div>
+        <!-- <div style="display: inline-block;">
+          <button>Select</button>
+        </div> -->
+
+        <!-- <div class="stitle" >
+          Task to be performed
+        </div> -->
+        <!-- <div>
           <button class="span_tag">Classification</button>&nbsp;
           <button class="span_tag">Regression</button>&nbsp;
           <button class="span_tag">Clustering</button>&nbsp;
           <button class="span_tag">Anomaly detection</button>&nbsp;
           <button class="span_tag">Time Series Analysis</button>&nbsp;
-          <button class="span_tag">Recommendation System </button>&nbsp;
-          <button class="proceed"><input type="submit" name="submit" value=" Next: Manual Information &#x2192;"/></span>&nbsp;
-        </div>
+          <button class="span_tag">Recommendation System </button>&nbsp; -->
+          <!-- <button class="proceed"><input type="submit" name="submit" value=" Next: Manual Information &#x2192;"/></span>&nbsp; -->
+        <!-- </div> -->
 
         <br>
+                <br>
 
-        <div class="stitle" >
-          Other Features...
+        <div  >
+          Other features Coming up...
         </div>
 
         <hr>
@@ -106,13 +85,6 @@
 
 
       </form>
-    <script>
-    $('#file-upload').change(function() {
-      var i = $(this).prev('label').clone();
-      var file = $('#file-upload')[0].files[0].name;
-      $(this).prev('label').text(file);
-    });
-    </script> -->
     <script>
     $('#file-upload').change(function() {
       var i = $(this).prev('label').clone();
