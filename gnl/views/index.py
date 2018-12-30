@@ -33,6 +33,8 @@ def sha1sum(filename):
 
 @gnl.app.route('/', methods=['GET', 'POST'])
 def index():
+
+    print("cur dir", os.getcwd())
     # cache["a"]=np.random.randint(2, size=2)
     # cache.append(1)
     # print("cache index", cache)
