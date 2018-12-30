@@ -9,7 +9,6 @@ build/
 env/
 var/
 .vagrant/
-static/
 dist/
 jpype/
 node_modules/

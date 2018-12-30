@@ -120,7 +120,7 @@ def form_submit():
     # numeric.csv and complete.csv
     gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["UPLOAD_FOLDER"], "numeric123.csv"), index=False)
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].to_csv(
-        os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"), index=False)
+        os.path.join(gnl.app.config["UPLOAD_FOLDER"], "complete123.csv"), index=False)
 
     # print("\n\n\n\ncur df colnames",list(gnl.app.config["CURRENT_DF"]), "\n\n\n\n")
     # print(list(gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]))
