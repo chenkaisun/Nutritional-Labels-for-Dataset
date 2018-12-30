@@ -48,10 +48,12 @@ def form_submit():
     sel = gnl.app.config["CURRENT_SELECTION"]
 
     # remove
-
-    os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv"))
-    os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric123.csv"))
-    os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "complete123.csv"))
+    if os.path.exists(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv")):
+        os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv"))
+    if os.path.exists(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric123.csv")):
+        os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric123.csv"))
+    if os.path.exists(os.path.join(gnl.app.config["DATA_FOLDER"], "complete123.csv")):
+        os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "complete123.csv"))
 
     print("sel\n")
     pprint.pprint(sel)
