@@ -5,9 +5,6 @@ var cols_num = [];
 var cols = [];
 // var cols = ["age", "decile_score", "priors_count", "c_days_from_compas", "v_decile_score", "Violence_score", "Recidivism_score"];
 
-$(document).ready(function() {
-  // loadOVData("numeric_single.csv");
-});
 
 window.onpopstate = function(event) {
     window.location.reload();

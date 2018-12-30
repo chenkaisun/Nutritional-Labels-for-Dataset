@@ -12,24 +12,6 @@ var categoryOfColumns = {
 var csvFileName = "numeric123.csv";
 var jsonFileName = "result123.json";
 
-$(document).ready(function() {
-//   $.ajax(
-// {
-//   type : 'GET',
-//   url : "/api/file/",
-//   contentType: "application/json;charset=UTF-8",
-//   dataType:'json',
-//   success : function(data)
-//   {
-//     // csvFileName = "RecidivismData_Original.csv";
-//     // jsonFileName = data.output;
-//     categoryOfColumns.quantitative=data.cols;
-//     loadRawData();
-//   }/*success : function() {}*/
-// });/*$.ajax*/
-  // loadRawData();
-});
-
 function loadRawData() {
   d3.csv("/var/uploads/" + csvFileName).then(function (d) {
     // $("#newly").empty()
