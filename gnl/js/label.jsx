@@ -242,12 +242,12 @@ export default class Label extends React.Component {
       cursor: 'pointer',
       color: state.isFocused ? 'blue' : 'black',
     });
-    let tmp=this.state
-    if(!tmp["has_SingleColumn"]&&tmp["has_Coverage"]){
-      $(this.refs.reference).html(
-        loadJson("mups.json")
-      );
-    }
+    // let tmp=this.state
+    // if(!tmp["has_SingleColumn"]&&tmp["has_Coverage"]){
+    //   $(this.refs.reference).html(
+    //     loadJson("mups.json")
+    //   );
+    // }
     return(
       <div ref="reference">
         <div className="left_column">

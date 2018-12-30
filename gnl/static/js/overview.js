@@ -14,7 +14,7 @@ window.onpopstate = function(event) {
 };
 
 function loadOVData(fileName) {
- d3.csv("/static/data/" + fileName).then( function (d) {
+ d3.csv("../var/uploads/" + fileName).then( function (d) {
    ovData = d;
    for (let i=0;i<Object.keys(ovData[1]).length;++i){
      cols_num.push(i);
