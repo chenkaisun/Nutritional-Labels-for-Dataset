@@ -13,7 +13,7 @@ var csvFileName = "numeric123.csv";
 var jsonFileName = "result123.json";
 
 function loadRawData() {
-  d3.csv("/var/uploads/" + csvFileName).then(function (d) {
+  d3.csv("../var/uploads/" + csvFileName).then(function (d) {
     // $("#newly").empty()
     // $("#newly").append("<div id='diagramCorrelations' className='diagram'> </div>")
     // $("#newly").append("<h4 id='diagramScatterPlotName' className='diagram'></h4>")
