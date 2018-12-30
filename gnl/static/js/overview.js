@@ -5,13 +5,16 @@ var cols_num = [];
 var cols = [];
 // var cols = ["age", "decile_score", "priors_count", "c_days_from_compas", "v_decile_score", "Violence_score", "Recidivism_score"];
 
+$(document).ready(function() {
+  //
+});
 
 window.onpopstate = function(event) {
     window.location.reload();
 };
 
 function loadOVData(fileName) {
- d3.csv(fileName).then( function (d) {
+ d3.csv("/static/data/" + fileName).then( function (d) {
    ovData = d;
    for (let i=0;i<Object.keys(ovData[1]).length;++i){
      cols_num.push(i);

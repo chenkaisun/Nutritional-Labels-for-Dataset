@@ -9,18 +9,15 @@ var categoryOfColumns = {
   'quantitative': []
 }
 
-var csvFileName = "numeric123.csv";
-var jsonFileName = "result123.json";
+var csvFileName = "numeric.csv";
+var jsonFileName = "result.json";
+
+$(document).ready(function() {
+  //
+});
 
 function loadRawData() {
-  d3.csv("/gnl/" + csvFileName).then(function (d) {
-    // $("#newly").empty()
-    // $("#newly").append("<div id='diagramCorrelations' className='diagram'> </div>")
-    // $("#newly").append("<h4 id='diagramScatterPlotName' className='diagram'></h4>")
-    // $("#newly").append("<div id='diagramScatterPlot' className='diagram'> </div>")
-    // console.log("d is ");
-    // console.log(d);
-    // console.log("called load data");
+  d3.csv("/static/data/" + csvFileName).then(function (d) {
     rawData = d;
     rawDataFiltered = d;
     rawColumns = Object.keys(rawData[1]);
