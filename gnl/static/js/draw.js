@@ -9,7 +9,7 @@ var categoryOfColumns = {
   'quantitative': []
 }
 
-var csvFileName = "numeric.csv";
+var csvFileName = "numeric123.csv";
 var jsonFileName = "result.json";
 
 $(document).ready(function() {
@@ -18,6 +18,8 @@ $(document).ready(function() {
 
 function loadRawData() {
   d3.csv("/static/data/" + csvFileName).then(function (d) {
+    console.log("d");
+    console.log(d);
     rawData = d;
     rawDataFiltered = d;
     rawColumns = Object.keys(rawData[1]);

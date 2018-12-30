@@ -4,7 +4,6 @@ var column = 1;
 
 $(document).ready(function () {
     //
-
 });
 
 // function trying(){
@@ -26,7 +25,7 @@ $(document).ready(function () {
 
 function loadJson(fileName){
 	console.log("mups here");
-	d3v3.json("/var/upload/" + fileName, function(error, data) {
+	d3v3.json("/static/data/" + fileName, function(error, data) {
 		console.log("data");
 			console.log(data);
 			drawTree(data);
