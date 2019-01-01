@@ -10,58 +10,62 @@ var categoryOfColumns = {
 }
 
 var csvFileName = "numeric.csv";
-var jsonFileName = "result.json";
+// var jsonFileName = "result.json";
 
 $(document).ready(function () {
   // loadRawData()
 });
 
 function load_correlation() {
-    $.ajax({
-      type: 'GET',
-      url: "/api/file/",
-      contentType: "application/json;charset=UTF-8",
-      dataType: 'json',
-      success: function (dat) {
-          loadRawData()
-      }
-    });
-}
+  console.log("load cor");
 
-function loadRawData() {
-  var today = new Date();
-  console.log("\n cor\n ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
-  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  d3.csv("/static/data/" + csvFileName).then(function (d) {
-    console.log("d draw : ", d);
-    rawData = d;
-    rawDataFiltered = d;
-    rawColumns = Object.keys(rawData[1]);
-    console.log("rawColumns : ", rawColumns);
-    for (let i = 0; i < rawColumns.length; ++i) {
-      categoryOfColumns.quantitative.push(i);
+  $.ajax({
+    type: 'GET',
+    url: "/api/parse_multi/",
+    contentType: "application/json;charset=UTF-8",
+    dataType: 'json',
+    success: function (dat) {
+      console.log("dat", dat.re);
+
+      loadRawData(dat.re)
     }
-    console.log("quantitative : ", categoryOfColumns.quantitative);
-    rawColumnFiltered = Object.keys(rawData[1]);
-    analysisResult["colnames"] = rawColumns;
-    console.log("s drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
-    init();
-    drawAll(true);
-    console.log("e drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
-    // loadAnalysisResult();
   });
 }
 
-function loadAnalysisResult() {
-
-  // d3.json("/static/data/"+jsonFileName).then(function(d) {
-  //   analysisResult = d;
-  //   //console.log("analysisResult");
-  //   //console.log(analysisResult);
-  //   init();
-  //   drawAll(true);
+function loadRawData(d) {
+  var today = new Date();
+  console.log("\n cor\n ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  // d3.csv("/static/data/" + csvFileName).then(function (d) {
+  console.log("d draw : ", d);
+  rawData = d;
+  rawDataFiltered = d;
+  rawColumns = Object.keys(rawData[1]);
+  console.log("rawColumns : ", rawColumns);
+  for (let i = 0; i < rawColumns.length; ++i) {
+    categoryOfColumns.quantitative.push(i);
+  }
+  console.log("quantitative : ", categoryOfColumns.quantitative);
+  rawColumnFiltered = Object.keys(rawData[1]);
+  analysisResult["colnames"] = rawColumns;
+  console.log("s drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+  init();
+  drawAll(true);
+  console.log("e drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+  // loadAnalysisResult();
   // });
 }
+
+// function loadAnalysisResult() {
+
+// d3.json("/static/data/"+jsonFileName).then(function(d) {
+//   analysisResult = d;
+//   //console.log("analysisResult");
+//   //console.log(analysisResult);
+//   init();
+//   drawAll(true);
+// });
+// }
 
 ///////////////// by Meng /////////////////
 

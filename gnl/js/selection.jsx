@@ -117,15 +117,16 @@ export default class Selection extends React.Component {
         tmp["chose_numeric"]=true;
       }
     }
+    tmp["redirect"] = true;
     fetch('/api/form_submit/', {
       credentials: 'same-origin',
       headers: {'Content-Type': 'application/json'},
       method: ['POST'],
       body: JSON.stringify(this.state),
+    }).then((res) => {
+      
     })
     console.log("s fetch post");
-
-    tmp["redirect"] = true;
     this.setState(tmp);
     // history.push('/label');
     history.push({
@@ -133,8 +134,6 @@ export default class Selection extends React.Component {
       state: this.state
     })
     console.log("e fetch post");
-    
-    
   }
 
   toggleCheckbox(e) {

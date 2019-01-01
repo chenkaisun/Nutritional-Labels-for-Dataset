@@ -16,12 +16,13 @@ function load_single_meta() {
   var today = new Date();
   $.ajax({
     type: 'GET',
-    url: "/api/file/",
+    url: "/api/parse_single/",
     contentType: "application/json;charset=UTF-8",
     dataType: 'json',
+    async: false,
     success: function (dat) {
-      console.log("ajax back", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
-      console.log("data ", dat.re);
+      // console.log("ajax back", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+      // console.log("data ", dat.re);
       loadOVData(dat.re)
     }
   });
@@ -36,7 +37,7 @@ function loadOVData(d) {
   cols = [];
   // d3.csv("/static/data/" + "numeric_single.csv").then(function (d) {
   ovData = d
-  cols_num=[0]
+  cols_num = [0]
 
   //get all column names
   var colnames = d3.keys(ovData[0]);

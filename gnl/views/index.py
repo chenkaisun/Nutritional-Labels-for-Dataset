@@ -33,7 +33,7 @@ def sha1sum(filename):
 
 @gnl.app.route('/', methods=['GET', 'POST'])
 def index():
-    return redirect(url_for('selection'))
+    # return redirect(url_for('selection'))
     # print("cur dir", os.getcwd())
     # print("os path", gnl.app.config["UPLOAD_FOLDER"])
     # cache["a"]=np.random.randint(2, size=2)
@@ -42,7 +42,6 @@ def index():
     # uid=request.cookies.get('YourSessionCookie')
     context = {"options":[{ "label": "1","value": "Alabama"}, { "label": "2","value": "Alabama"}]}
 
-    
     gnl.app.config["CURRENT_FILE"]=None
     gnl.app.config["CURRENT_IGNORED_COLUMNS"]=[]
     gnl.app.config["CURRENT_SELECTION"]={}
@@ -121,22 +120,22 @@ def index():
 def selection():
     print("\n**selection**\n")
 
-    if gnl.app.config["CURRENT_LOADED"]:
-        print("LOADED")
-        gnl.app.config["CURRENT_COLUMN_TYPES"] = pd.read_csv(os.path.join(
-            gnl.app.config["UPLOAD_FOLDER"],
-            "()types().csv"
-        ))
-        gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
-            gnl.app.config["UPLOAD_FOLDER"],
-            "()cleaned().csv"
-        ))
-        return render_template("label.html")
+    # if gnl.app.config["CURRENT_LOADED"]:
+    #     print("LOADED")
+    #     gnl.app.config["CURRENT_COLUMN_TYPES"] = pd.read_csv(os.path.join(
+    #         gnl.app.config["UPLOAD_FOLDER"],
+    #         "()types().csv"
+    #     ))
+    #     gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
+    #         gnl.app.config["UPLOAD_FOLDER"],
+    #         "()cleaned().csv"
+    #     ))
+    #     return render_template("label.html")
     ########
-    gnl.app.config["CURRENT_FILE"] = os.path.join(
-        gnl.app.config["UPLOAD_FOLDER"],
-        "Boston.csv"
-    )
+    # gnl.app.config["CURRENT_FILE"] = os.path.join(
+    #     gnl.app.config["UPLOAD_FOLDER"],
+    #     "RecidivismData_Original.csv"
+    # )
 
     # gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
     #     gnl.app.config["DATA_FOLDER"],

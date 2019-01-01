@@ -41,6 +41,8 @@ export default class Label extends React.Component {
     }
     console.log("chose is ");
     console.log(this.state['chose_numeric']);
+    console.log("single is ", this.props["location"]["state"]['is_single_column']);
+
 
 
 
@@ -117,7 +119,6 @@ export default class Label extends React.Component {
         tmp['has_Coverage'] = true;
       }
     }
-    this.setState(tmp)
     console.log("set new widgets");
     // if (!tmp["has_SingleColumn"] && added_coverage) {
     //   $(this.refs.reference).html(
@@ -163,7 +164,6 @@ export default class Label extends React.Component {
     //     )
     //     .catch(error => console.log(error));// eslint-disable-line no-console
     // }
-    this.setState(tmp);
     if (tmp["has_SingleColumn"]) {
       console.log("in mount single col");
       $(this.refs.reference).html(
@@ -176,8 +176,8 @@ export default class Label extends React.Component {
         load_correlation()
       );
     }
+    this.setState(tmp);
     console.log("e label mount", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
-    
   }
   render() {
     var today = new Date();
@@ -211,36 +211,34 @@ export default class Label extends React.Component {
 
         <div className="right_column">
           <div id="overview" className="vis">
-            <h1><strong>Data Overview</strong></h1>
-            <p>Here you can see all the columns in the dataset, and you can select
-              columns you need to see more analysis about them</p>
-            <div className="frame" id="ov">
-              {this.state.has_SingleColumn ?
+
+            <div style={{ display: "inline-block", fontSize: "32px" }}><strong>Data Overview</strong></div>
+            {this.state.has_SingleColumn && this.state.chose_numeric ?
+              <div className="frame" id="ov">
                 <div className="ov_label_title">
                   <h2>Single Column Data Distribution</h2>
-                </div> :
-                <div className="ov_label_title">
-                  <h2>Multi-Column Meta Information</h2>
                 </div>
-              }
-              {this.state.has_SingleColumn ?
-                <div>{this.state.chose_numeric ?
-                  <div className="ov_row_head">
-                    <span className="ov_cell attr">Attribute Name</span>
-                    <span className="ov_cell hg">Histogram</span>
-                    <span className="ov_cell max">Max</span>
-                    <span className="ov_cell min">Min</span>
-                    <span className="ov_cell mean">Mean</span>
-                    <span className="ov_cell nul">Null Entries</span>
-                    <span className="ov_cell uniq">Unique Entries</span>
-                  </div> : "Histogram not provided because a non-numeric column was chosen"
-                }</div>
-                :
-                <div>
-                  <MultiBasic key={0} />
+                <div className="ov_row_head">
+                  <span className="ov_cell attr">Attribute Name</span>
+                  <span className="ov_cell hg">Histogram</span>
+                  <span className="ov_cell max">Max</span>
+                  <span className="ov_cell min">Min</span>
+                  <span className="ov_cell mean">Mean</span>
+                  <span className="ov_cell nul">Null Entries</span>
+                  <span className="ov_cell uniq">Unique Entries</span>
                 </div>
-              }
-            </div>
+              </div> :
+              ""
+            }
+            {this.state.has_SingleColumn && !this.state.chose_numeric ?
+              <div><i>Histogram not provided because a non-numeric column was chosen</i></div> : ""
+            }
+            {!this.state.has_SingleColumn ?
+              <div className="ov_label_title">
+                <h2>Multi-Column Meta Information</h2>
+                <MultiBasic key={0} />
+              </div> : ""
+            }
           </div>
           {this.state.has_Correlation ?
             (<div id="correlation" className="vis">

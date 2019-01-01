@@ -46814,15 +46814,14 @@ var Selection = function (_React$Component) {
           tmp["chose_numeric"] = true;
         }
       }
+      tmp["redirect"] = true;
       fetch('/api/form_submit/', {
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         method: ['POST'],
         body: JSON.stringify(this.state)
-      });
+      }).then(function (res) {});
       console.log("s fetch post");
-
-      tmp["redirect"] = true;
       this.setState(tmp);
       // history.push('/label');
       _routes.history.push({
@@ -56299,6 +56298,7 @@ var Label = function (_React$Component) {
     };
     console.log("chose is ");
     console.log(_this.state['chose_numeric']);
+    console.log("single is ", _this.props["location"]["state"]['is_single_column']);
 
     for (var i = 0; i < widget_currentValues.length; ++i) {
       if (widget_currentValues[i]['value'] == 1) {
@@ -56361,16 +56361,21 @@ var Label = function (_React$Component) {
           tmp['has_Coverage'] = true;
         }
       }
-      this.setState(tmp);
       console.log("set new widgets");
       // if (!tmp["has_SingleColumn"] && added_coverage) {
       //   $(this.refs.reference).html(
       //     loadJson("mups.json")
       //   );
       // }
+      // if (tmp["has_SingleColumn"]) {
+      //   console.log("in mount single col");
+      //   $(this.refs.reference).html(
+      //     load_single_meta()
+      //   );
+      // }
       if (added_fd || added_topk) {
         console.log("added cor");
-        (0, _jquery2.default)(this.refs.reference).html(loadRawData());
+        (0, _jquery2.default)(this.refs.reference).html(load_correlation());
       }
       this.setState(tmp);
     }
@@ -56401,17 +56406,15 @@ var Label = function (_React$Component) {
       //     )
       //     .catch(error => console.log(error));// eslint-disable-line no-console
       // }
-      this.setState(tmp);
       if (tmp["has_SingleColumn"]) {
         console.log("in mount single col");
-        (0, _jquery2.default)(this.refs.reference).html(testing("numeric_single.csv")
-        // loadOVData("numeric_single.csv")
-        );
+        (0, _jquery2.default)(this.refs.reference).html(load_single_meta());
       }
       if (tmp["has_Correlation"]) {
         console.log("in mount cor");
-        (0, _jquery2.default)(this.refs.reference).html(loadRawData());
+        (0, _jquery2.default)(this.refs.reference).html(load_correlation());
       }
+      this.setState(tmp);
       console.log("e label mount", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
     }
   }, {
@@ -56507,23 +56510,18 @@ var Label = function (_React$Component) {
             'div',
             { id: 'overview', className: 'vis' },
             _react2.default.createElement(
-              'h1',
-              null,
+              'div',
+              { style: { display: "inline-block", fontSize: "32px" } },
               _react2.default.createElement(
                 'strong',
                 null,
                 'Data Overview'
               )
             ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Here you can see all the columns in the dataset, and you can select columns you need to see more analysis about them'
-            ),
-            _react2.default.createElement(
+            this.state.has_SingleColumn && this.state.chose_numeric ? _react2.default.createElement(
               'div',
               { className: 'frame', id: 'ov' },
-              this.state.has_SingleColumn ? _react2.default.createElement(
+              _react2.default.createElement(
                 'div',
                 { className: 'ov_label_title' },
                 _react2.default.createElement(
@@ -56531,63 +56529,66 @@ var Label = function (_React$Component) {
                   null,
                   'Single Column Data Distribution'
                 )
-              ) : _react2.default.createElement(
-                'div',
-                { className: 'ov_label_title' },
-                _react2.default.createElement(
-                  'h2',
-                  null,
-                  'Multi-Column Meta Information'
-                )
               ),
-              this.state.has_SingleColumn ? _react2.default.createElement(
+              _react2.default.createElement(
                 'div',
-                null,
-                this.state.chose_numeric ? _react2.default.createElement(
-                  'div',
-                  { className: 'ov_row_head' },
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'ov_cell attr' },
-                    'Attribute Name'
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'ov_cell hg' },
-                    'Histogram'
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'ov_cell max' },
-                    'Max'
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'ov_cell min' },
-                    'Min'
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'ov_cell mean' },
-                    'Mean'
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'ov_cell nul' },
-                    'Null Entries'
-                  ),
-                  _react2.default.createElement(
-                    'span',
-                    { className: 'ov_cell uniq' },
-                    'Unique Entries'
-                  )
-                ) : "Histogram not provided because a non-numeric column was chosen"
-              ) : _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement(_multi_basic2.default, { key: 0 })
+                { className: 'ov_row_head' },
+                _react2.default.createElement(
+                  'span',
+                  { className: 'ov_cell attr' },
+                  'Attribute Name'
+                ),
+                _react2.default.createElement(
+                  'span',
+                  { className: 'ov_cell hg' },
+                  'Histogram'
+                ),
+                _react2.default.createElement(
+                  'span',
+                  { className: 'ov_cell max' },
+                  'Max'
+                ),
+                _react2.default.createElement(
+                  'span',
+                  { className: 'ov_cell min' },
+                  'Min'
+                ),
+                _react2.default.createElement(
+                  'span',
+                  { className: 'ov_cell mean' },
+                  'Mean'
+                ),
+                _react2.default.createElement(
+                  'span',
+                  { className: 'ov_cell nul' },
+                  'Null Entries'
+                ),
+                _react2.default.createElement(
+                  'span',
+                  { className: 'ov_cell uniq' },
+                  'Unique Entries'
+                )
               )
-            )
+            ) : "",
+            this.state.has_SingleColumn && !this.state.chose_numeric ? _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'i',
+                null,
+                'Histogram not provided because a non-numeric column was chosen'
+              )
+            ) : "",
+            !this.state.has_SingleColumn ? _react2.default.createElement(
+              'div',
+              { className: 'ov_label_title' },
+              _react2.default.createElement(
+                'h2',
+                null,
+                'Multi-Column Meta Information'
+              ),
+              _react2.default.createElement(_multi_basic2.default, { key: 0 })
+            ) : ""
           ),
           this.state.has_Correlation ? _react2.default.createElement(
             'div',

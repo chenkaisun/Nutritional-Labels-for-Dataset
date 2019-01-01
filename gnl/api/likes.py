@@ -25,26 +25,39 @@ to avoid copy-pasted code shared between the REST API and
 server-side template views."""
 
 
-@gnl.app.route('/api/file/', methods=['GET', 'POST'])
-def get_file():
+@gnl.app.route('/api/parse_single/', methods=['GET', 'POST'])
+def get_parse_single():
     print("access test")
-    # context = {"original":"RecidivismData_Original.csv", "mups":"mups.json", "output":"result.json"}
-    # context = {"cols":list(range(len(list(gnl.app.config["CURRENT_DF"]))))}
-
-    tmp=pd.read_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single.csv"))
-    darray=[{list(tmp)[0]:entry} for entry in tmp[list(tmp)[0]]]
-    # # print("tmp ", tmp)
-    # for i in list(tmp):
-    #     darray.append([{i:entry} for entry in tmp[i]])
-    # print("darray: ",darray)
+    try:
+        tmp = pd.read_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"))
+    except pd.errors.EmptyDataError:
+        context={"re":[{"No Data Available":0}]}
+        return jsonify(**context)
+    # darray=[{list(tmp)[0]:entry} for entry in tmp[list(tmp)[0]]]
+    darray=[]
+    for index, row in tmp.iterrows():
+        darray.append(dict(row))
+    # print("darray: ", darray)
     context = {"re": darray}
-
-    # , "output": gnl.app.config["OUTPUT"],
-    # "cols": list(range(len(list(pd.read_csv(os.path.join(
-    #     gnl.app.config["DATA_FOLDER"],
-    #     "RecidivismData_Original.csv"
-    # ), index_col=False)))))
     return jsonify(**context)
+
+
+@gnl.app.route('/api/parse_multi/', methods=['GET', 'POST'])
+def get_parse_multi():
+    print("access test")
+    try:
+        tmp = pd.read_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"))
+    except pd.errors.EmptyDataError:
+        context={"re":[{"No Data Available":0}]}
+        return jsonify(**context)
+    # darray=[{list(tmp)[0]:entry} for entry in tmp[list(tmp)[0]]]
+    darray = []
+    for index, row in tmp.iterrows():
+        darray.append(dict(row))
+    # print("darray: ", darray)
+    context = {"re": darray}
+    return jsonify(**context)
+
 
 @gnl.app.route('/api/form_submit/', methods=['GET', 'POST'])
 def form_submit():
