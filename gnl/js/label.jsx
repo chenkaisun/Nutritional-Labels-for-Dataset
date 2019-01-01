@@ -124,10 +124,16 @@ export default class Label extends React.Component {
     //     loadJson("mups.json")
     //   );
     // }
+    // if (tmp["has_SingleColumn"]) {
+    //   console.log("in mount single col");
+    //   $(this.refs.reference).html(
+    //     load_single_meta()
+    //   );
+    // }
     if (added_fd || added_topk) {
       console.log("added cor");
       $(this.refs.reference).html(
-        loadRawData()
+        load_correlation()
       );
     }
     this.setState(tmp)
@@ -161,14 +167,13 @@ export default class Label extends React.Component {
     if (tmp["has_SingleColumn"]) {
       console.log("in mount single col");
       $(this.refs.reference).html(
-        testing("numeric_single.csv")
-        // loadOVData("numeric_single.csv")
+        load_single_meta()
       );
     }
     if (tmp["has_Correlation"]) {
       console.log("in mount cor");
       $(this.refs.reference).html(
-        loadRawData()
+        load_correlation()
       );
     }
     console.log("e label mount", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());

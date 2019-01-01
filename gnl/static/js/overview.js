@@ -12,7 +12,7 @@ window.onpopstate = function (event) {
   window.location.reload();
 };
 
-function testing(filename) {
+function load_single_meta() {
   var today = new Date();
   $.ajax({
     type: 'GET',

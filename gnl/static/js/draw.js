@@ -16,30 +16,23 @@ $(document).ready(function () {
   // loadRawData()
 });
 
+function load_correlation() {
+    $.ajax({
+      type: 'GET',
+      url: "/api/file/",
+      contentType: "application/json;charset=UTF-8",
+      dataType: 'json',
+      success: function (dat) {
+          loadRawData()
+      }
+    });
+}
+
 function loadRawData() {
   var today = new Date();
   console.log("\n cor\n ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   d3.csv("/static/data/" + csvFileName).then(function (d) {
-    var a = 9
-    a = 6
-    console.log("a is ", a)
-    
-
-    rawDataFiltered = []; // the variable that holds the data from csv file
-    rawData = [];
-    analysisResult = {};
-    rawColumnFiltered = [];
-    rawColumns = [];
-    categoryOfColumns = {
-      'nomimal': [],
-      'ordinal': [],
-      'quantitative': []
-    }
-
-    csvFileName = "numeric.csv";
-    jsonFileName = "result.json";
-
     console.log("d draw : ", d);
     rawData = d;
     rawDataFiltered = d;
