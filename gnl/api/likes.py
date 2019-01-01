@@ -19,28 +19,37 @@ import pandas as pd
 from jpype import *
 from copy import deepcopy
 import random
+import datetime
 """you might end up refactoring parts of this code later 
 to avoid copy-pasted code shared between the REST API and 
 server-side template views."""
 
 
-# @gnl.app.route('/api/file/', methods=['GET', 'POST'])
-# def get_file():
-#     print("access test")
-#     # context = {"original":"RecidivismData_Original.csv", "mups":"mups.json", "output":"result.json"}
-#     context = {"cols":list(range(len(list(gnl.app.config["CURRENT_DF"]))))}
-#
-#     # , "output": gnl.app.config["OUTPUT"],
-#     # "cols": list(range(len(list(pd.read_csv(os.path.join(
-#     #     gnl.app.config["DATA_FOLDER"],
-#     #     "RecidivismData_Original.csv"
-#     # ), index_col=False)))))
-#     return jsonify(**context)
+@gnl.app.route('/api/file/', methods=['GET', 'POST'])
+def get_file():
+    print("access test")
+    # context = {"original":"RecidivismData_Original.csv", "mups":"mups.json", "output":"result.json"}
+    # context = {"cols":list(range(len(list(gnl.app.config["CURRENT_DF"]))))}
+
+    tmp=pd.read_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single.csv"))
+    darray=[{list(tmp)[0]:entry} for entry in tmp[list(tmp)[0]]]
+    # # print("tmp ", tmp)
+    # for i in list(tmp):
+    #     darray.append([{i:entry} for entry in tmp[i]])
+    # print("darray: ",darray)
+    context = {"re": darray}
+
+    # , "output": gnl.app.config["OUTPUT"],
+    # "cols": list(range(len(list(pd.read_csv(os.path.join(
+    #     gnl.app.config["DATA_FOLDER"],
+    #     "RecidivismData_Original.csv"
+    # ), index_col=False)))))
+    return jsonify(**context)
 
 @gnl.app.route('/api/form_submit/', methods=['GET', 'POST'])
 def form_submit():
     # here do stuff and save json
-    print("in form submit")
+    print("in form submit", datetime.datetime.now())
     context = {}
     if not request.json:
         flask.abort(400)
@@ -48,15 +57,17 @@ def form_submit():
     sel = gnl.app.config["CURRENT_SELECTION"]
 
     # remove
-    if os.path.exists(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv")):
-        os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv"))
-    if os.path.exists(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric123.csv")):
-        os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric123.csv"))
-    if os.path.exists(os.path.join(gnl.app.config["DATA_FOLDER"], "complete123.csv")):
-        os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "complete123.csv"))
+    # if os.path.exists(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single.csv")):
+    #     print("rm")
+    #     os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single.csv"))
+    # if os.path.exists(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv")):
+    #     os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"))
+    # if os.path.exists(os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv")):
+    #     os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"))
 
-    print("sel\n")
-    pprint.pprint(sel)
+    # print("sel\n")
+    # pprint.pprint(sel)
+    print("\nform_submit\n")
 
     # protected and non-protected attributes
     col_names = list(gnl.app.config["CURRENT_DF"])
@@ -68,13 +79,8 @@ def form_submit():
     if sel['is_single_column']: sel['protected_currentValues']=[sel['protected_currentValues']] if sel['protected_currentValues'] else []
     protected_currentValues = [i['label'] for i in sel['protected_currentValues']
                                    if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["str", "empty"]]
-    # print("sel['protected_currentValues']", sel['protected_currentValues'])
-    # print("protected_currentValues", protected_currentValues)
     all_values = list(set(attribute_currentValues + protected_currentValues))
     gnl.app.config["CURRENT_DF"] = gnl.app.config["CURRENT_DF"][all_values]
-
-    # range query
-    # query_cols = sel["query_currentValues"]
 
     # select range
     if sel["is_query"]:
@@ -112,29 +118,30 @@ def form_submit():
     # print("cur df", gnl.app.config["CURRENT_DF"])
     gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
 
-    # print("cur df:\n")
-    # pprint.pprint(gnl.app.config["CURRENT_DF"])
-    #
-    # for col in gnl.app.config["CURRENT_DF"]:
-    #     pprint.pprint(gnl.app.config["CURRENT_DF"][col])
-
+    print("s write numeric single ", datetime.datetime.now())
     # numeric single column
-    if sel["is_single_column"] and sel['protected_currentValues'] and dff[sel['protected_currentValues'][0]['label']][0] not in ["str", "empty"]:
+    if sel["is_single_column"] and sel['protected_currentValues'] and \
+            dff[sel['protected_currentValues'][0]['label']][0] not in ["str", "empty"]:
+
         print("in num single")
-        print("gg", sel['protected_currentValues'][0]['label'])
         # os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv"))
-        gnl.app.config["CURRENT_DF"][[sel['protected_currentValues'][0]['label']]].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv"), index=False)
+        gnl.app.config["CURRENT_DF"][[sel['protected_currentValues'][0]['label']]].\
+            to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single.csv"), index=False)
         # gnl.app.config["CURRENT_DF"][sel['protected_currentValues'][0]['label']].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "toy.csv"))
 
+    print("e write numeric single", datetime.datetime.now())
     # numeric.csv and complete.csv
-    gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric123.csv"), index=False)
+
+    print("s write numeric", datetime.datetime.now())
+    gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"), index=False)
+    print("e write numeric", datetime.datetime.now())
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].to_csv(
-        os.path.join(gnl.app.config["DATA_FOLDER"], "complete123.csv"), index=False)
+        os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"), index=False)
 
     # print("\n\n\n\ncur df colnames",list(gnl.app.config["CURRENT_DF"]), "\n\n\n\n")
     # print(list(gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]))
 
-    widget_currentValues = [i['label'] for i in sel['widget_currentValues']]
+    # widget_currentValues = [i['label'] for i in sel['widget_currentValues']]
     # if((not widget_currentValues) or "Functional Dependencies" in widget_currentValues):
     #     get_multi_fd()
         # tmp_dict = {'colnames': list(gnl.app.config["CURRENT_COLUMN_TYPES"])}
@@ -148,6 +155,8 @@ def form_submit():
         # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "mups.json"), 'w') as outfile:
         #     json.dump({"node":"mups", "children":[]}, outfile)
         # get_coverage()
+
+    print("form return ", datetime.datetime.now())
     return jsonify(**context)
 
 @gnl.app.route('/api/get_colnames/', methods=['GET'])
@@ -389,8 +398,8 @@ def get_multi_fd():
     if not nodes: nodes.append({"id": "NONE EXISTS"})
     context["nodes"] = nodes
     context["links"] = links
-    print("fd context")
-    print(context)
+    # print("fd context")
+    # print(context)
     return jsonify(**context)
 
 
@@ -438,8 +447,8 @@ def get_multi_ar():
     if not nodes: nodes.append({"id": "NO ASSOCIATION RULE EXISTS"})
     context["nodes"]=nodes
     context["links"]=links
-    print("ar context")
-    print(context)
+    # print("ar context")
+    # print(context)
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
     #     json.dump(gnl.app.config["JSON_OUT"], outfile)

@@ -18,6 +18,7 @@ export default class Entry extends React.Component {
   // Initialize mutable state
     console.log("Entry ctor");
     super(props);
+    
     this.state={
       setted:false,
 
@@ -108,6 +109,7 @@ export default class Entry extends React.Component {
                 tempdict
             );
           } else if(this.props.label_type=='graph'){
+
 
             console.log('single graph get data');
             console.log("received column");
@@ -323,31 +325,32 @@ export default class Entry extends React.Component {
           data.push({cola:sp[0],non:"", colb:sp[1]})
         }
       }
-      let columns = [{
-        Header: "Entry A",
-               id: "cola",
-               accessor: d => d.cola,
-               filterMethod: (filter, rows) =>
-                 matchSorter(rows, filter.value, { keys: ["cola"] }),
-               filterAll: true
-       },
-       {
-         Header: "=>",
-                id: "non",
-                accessor: d => d.non,
-                filterMethod: (filter, rows) =>
-                  matchSorter(rows, filter.value, { keys: ["non"] }),
-                filterAll: true
-       },
-       {
-         Header: "Entry B",
-                id: "colb",
-                accessor: d => d.colb,
-                filterMethod: (filter, rows) =>
-                  matchSorter(rows, filter.value, { keys: ["colb"] }),
-                filterAll: true
-       },
-     ];
+      
+    //   let columns = [{
+    //     Header: "Entry A",
+    //            id: "cola",
+    //            accessor: d => d.cola,
+    //            filterMethod: (filter, rows) =>
+    //              matchSorter(rows, filter.value, { keys: ["cola"] }),
+    //            filterAll: true
+    //    },
+    //    {
+    //      Header: "=>",
+    //             id: "non",
+    //             accessor: d => d.non,
+    //             filterMethod: (filter, rows) =>
+    //               matchSorter(rows, filter.value, { keys: ["non"] }),
+    //             filterAll: true
+    //    },
+    //    {
+    //      Header: "Entry B",
+    //             id: "colb",
+    //             accessor: d => d.colb,
+    //             filterMethod: (filter, rows) =>
+    //               matchSorter(rows, filter.value, { keys: ["colb"] }),
+    //             filterAll: true
+    //    },
+    //  ];
 
       return(
         <div className="entry">
@@ -468,9 +471,11 @@ export default class Entry extends React.Component {
               }
           ]}
   />
-   ));
+  ));
+          
     console.log("scatterplot render");
-    return(
+      return (
+      
       <div className="entry">
         <div><strong>Scatterplot Chart:</strong></div>
         <ResponsiveS >

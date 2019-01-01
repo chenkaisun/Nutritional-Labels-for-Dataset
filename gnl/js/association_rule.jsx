@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
-import ReactTable from "react-table";
-import matchSorter from 'match-sorter';
+// import PropTypes from 'prop-types';
+// import ReactDOM from 'react-dom';
+// import ReactTable from "react-table";
+// import matchSorter from 'match-sorter';
 import { Graph } from 'react-d3-graph';
-import {
-  withScreenSize,
-} from '@data-ui/histogram';
+// import {
+//   withScreenSize,
+// } from '@data-ui/histogram';
 
 
 export default class AssociationRule extends React.Component {
@@ -28,6 +28,7 @@ export default class AssociationRule extends React.Component {
             nodes:data.nodes,
             links:data.links,
             setted:true,
+            
           });
         }
       )

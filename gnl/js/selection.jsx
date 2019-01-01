@@ -1,9 +1,9 @@
 import React from "react";
-import PropTypes from 'prop-types';
-import Label from './label';
-import Redirection from './redirection';
+// import PropTypes from 'prop-types';
+// import Label from './label';
+// import Redirection from './redirection';
 import Select from 'react-select';
-import { Link } from 'react-router-3';
+// import { Link } from 'react-router-3';
 import { Redirect } from 'react-router';
 import {history} from './routes';
 import ReactTooltip from 'react-tooltip';
@@ -49,20 +49,18 @@ export default class Selection extends React.Component {
 
       has_fd:true,
     }
-    // history.push({
-    //   pathname: '/label',
-    //   state: this.state
-    // })
   }
-  componentDidMount(){
+  componentDidMount() {
+    console.log("sel mount");
+    
     fetch('/api/get_colnames/', { credentials: 'same-origin' })
       .then((response) => {
-        console.log("home then");
+        // console.log("home then");
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
       .then((data) => {
-        console.log("home data");
+        // console.log("home data");
         if (false) {
           if (performance.navigation.type === 2) {
             this.setState({
@@ -87,9 +85,9 @@ export default class Selection extends React.Component {
             for (let i = 0; i < data.str_colnames.length; i++){
               tmp["str_colnames"][data.str_colnames[i]]=0;
             }
-            console.log("didmount");
-            console.log(tmp);
-            console.log("setted");
+            // console.log("didmount");
+            // console.log(tmp);
+            // console.log("setted");
             this.setState(tmp);
         }
       })
@@ -111,42 +109,36 @@ export default class Selection extends React.Component {
     if(tmp["is_single_column"] && tmp["protected_currentValues"].length<=0) {
       return (-1);
     }
-    console.log("here");
     tmp[name]=!tmp[name]
 
     // str column_name
     if(tmp["is_single_column"]&&Object.keys(tmp["protected_currentValues"]).length>=1){
       if(Object.keys(tmp["str_colnames"]).length === 0 || !(tmp["protected_currentValues"]['label'] in tmp["str_colnames"])){
-        console.log("here now");
         tmp["chose_numeric"]=true;
       }
     }
-    // console.log("str colnames");
-    // console.log(tmp["str_colnames"]);
-    // console.log("pat");
-    // console.log(tmp["protected_currentValues"]['label']);
-
-    // console.log(JSON.stringify(this.state));
     fetch('/api/form_submit/', {
       credentials: 'same-origin',
       headers: {'Content-Type': 'application/json'},
-      method: 'POST',
+      method: ['POST'],
       body: JSON.stringify(this.state),
-    });
-    tmp["redirect"]=true;
+    })
+    console.log("s fetch post");
 
-
-    console.log("submit complete");
+    tmp["redirect"] = true;
     this.setState(tmp);
     // history.push('/label');
     history.push({
       pathname: '/label',
       state: this.state
     })
+    console.log("e fetch post");
+    
+    
   }
 
   toggleCheckbox(e) {
-    console.log("start toggle");
+    console.log("sel s toggle");
     const name = e.target.name;
     const checked = e.target.checked;
     let tmp=this.state;
@@ -194,18 +186,6 @@ export default class Selection extends React.Component {
       color: state.isFocused ? 'blue' : 'black',
     });
 
-    //pick attrs
-    // let arr=[];
-    // if(!this.state.is_single_column&&!this.state.is_multi_column){
-    //     arr.push(
-    //       <label className="checkbox">
-    //         <input type="checkbox" className="checkbox-control" name="is_single_column" checked={this.state.is_single_column} onChange={this.toggleCheckbox} />
-    //         <span className="checkbox-label">Pick single column attributes</span>
-    //       </label>
-    //     )
-    // }
-
-
     return (
       <div>
         <ReactTooltip />
@@ -239,7 +219,7 @@ export default class Selection extends React.Component {
                     onChange={(opt)=>{
                         let tmp=this.state;
                         tmp.protected_currentValues=opt;
-                        console.log("protected_currentValues");
+                        // console.log("protected_currentValues");
                         this.setState(tmp);
                       }
                     }
@@ -331,7 +311,7 @@ export default class Selection extends React.Component {
                   onChange={(opt)=>{
                       let tmp=this.state;
                       tmp.widget_currentValues=opt
-                      console.log("widget_currentValues");
+                      // console.log("widget_currentValues");
                       for ( let i=0;i<opt.length;++i){
                         if(opt[i]['label']=="Functional Dependencies"){
                           tmp.has_fd=true;
@@ -356,7 +336,6 @@ export default class Selection extends React.Component {
                     onChange={(opt)=>{
                         let tmp=this.state;
                         tmp.widget_currentValues=opt
-                        console.log("widget_currentValues");
                         for ( let i=0;i<opt.length;++i){
                           if(opt[i]['label']=="Functional Dependencies"){
                             tmp.has_fd=true;
@@ -387,7 +366,7 @@ export default class Selection extends React.Component {
                     defaultValue={[]}
                     isMulti
                     onChange={(opt)=>{
-                        console.log("query select");
+                        // console.log("query select");
                         let tmp=this.state;
                         let len_new=opt.length;
                         let len_old=tmp.query_currentValues.length;
@@ -425,7 +404,6 @@ export default class Selection extends React.Component {
                             }
                           }
                         }
-                        console.log("query out");
                         this.setState(tmp);
                       }
                     }

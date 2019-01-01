@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 export default class Redirection extends React.Component {
   constructor(props) {
     super(props);

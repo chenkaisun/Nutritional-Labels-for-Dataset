@@ -1,11 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
-import ReactTable from "react-table";
-import matchSorter from 'match-sorter';
-import {
-  withScreenSize,
-} from '@data-ui/histogram';
+// import PropTypes from 'prop-types';
+// import ReactDOM from 'react-dom';
+// import ReactTable from "react-table";
+// import matchSorter from 'match-sorter';
+// import {
+//   withScreenSize,
+// } from '@data-ui/histogram';
 // import Tree from 'react-d3-tree';
 import Tree from 'react-tree-graph';
 // import 'react-tree-graph/dist/style.css'
@@ -15,12 +15,12 @@ import Tree from 'react-tree-graph';
 export default class Coverage extends React.Component {
   constructor(props) {
     super(props);
-    this.state={
-      setted:false,
-      tree:{"name":"None", "children":[]}
+    this.state = {
+      setted: false,
+      tree: { "name": "None", "children": [] }
     }
   }
-  componentDidMount(){
+  componentDidMount() {
     console.log("send request");
     fetch('/api/coverage/', { credentials: 'same-origin' })
       .then((response) => {
@@ -29,22 +29,21 @@ export default class Coverage extends React.Component {
       })
       .then((data) => {
         console.log("cov received data")
-          this.setState({
-            tree:data.tree,
-            setted:true,
-          });
-          // console.log(data.tree);
-        }
+        this.setState({
+          tree: data.tree,
+          setted: true,
+        });
+      }
       )
       .catch(error => console.log(error));// eslint-disable-line no-console
   }
-  render(){
+  render() {
     console.log("cov render")
-   return(
-     <div className="frame">
-        <Tree data={this.state.tree}  height={400}
-     width={400}/>
-     </div>
-   )
+    return (
+      <div className="frame">
+        <Tree data={this.state.tree} height={400}
+          width={400} />
+      </div>
+    )
   }
 }

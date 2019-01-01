@@ -94,12 +94,12 @@ class TANE(object):
         for attribute_id in range(column_count):
             self.rhs[slugify({attribute_id}, '-')] = self.entire_attributes.copy()
 
-        print("in")
+        # print("in")
         # init partition dictionary for level 1
-        print(column_count)
+        # print(column_count)
         for attribute_id in range(column_count):
             self.partition[slugify({attribute_id}, '-')] = self.group_by_attribute({attribute_id})
-        print("out")
+        # print("out")
         # level-wise algorithm
         for size in range(2, column_count + 1):
             #
