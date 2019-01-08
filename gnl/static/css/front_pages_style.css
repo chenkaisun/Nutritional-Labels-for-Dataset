@@ -51,20 +51,21 @@ width: 10%;
     height: inherit;
 }
 
-.registerbtn {
-    background-color: #41a0f4;
-    color: white;
-    padding: 16px 20px;
-    margin: 0 auto;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    opacity: 0.8;
-		font-size: 12pt;
-    display: block;
+.registerbtn2 {
+  background-color: #41a0f4;
+  color: white;
+  padding: 8px 8px;
+  margin: 0 auto;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  /* width: 100%; */
+  opacity: 0.8;
+  font-size: 12pt;
+  float: right;
 }
 
-.registerbtn:hover {
+.registerbtn2:hover {
     opacity: 1;
 }
 /* Full-width input fields */

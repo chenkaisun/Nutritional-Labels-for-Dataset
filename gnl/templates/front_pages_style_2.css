@@ -51,18 +51,17 @@ width: 10%;
     height: inherit;
 }
 
-.registerbtn {
+/* .registerbtn {
     background-color: #41a0f4;
     color: white;
     padding: 16px 20px;
     margin: 0 auto;
     border: none;
     cursor: pointer;
-    width: 100%;
     opacity: 0.8;
 		font-size: 12pt;
     display: block;
-}
+} */
 
 .registerbtn:hover {
     opacity: 1;

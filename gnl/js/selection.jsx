@@ -466,7 +466,7 @@ export default class Selection extends React.Component {
               <br/>
               <br/>
               <br/>
-               <button type="submit" className="registerbtn"> Generate your nutrilabel </button>
+               <button type="submit" className="registerbtn2"> Generate </button>
           <div className="scontainer"></div>
           </div>
         </form>

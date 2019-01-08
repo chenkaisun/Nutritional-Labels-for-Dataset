@@ -6,7 +6,7 @@
   <meta charset=utf-8 />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/static/css/front_pages_style_2.css">
+<link rel="stylesheet" type="text/css" href="../static/css/front_pages_style_2.css">
 <!-- <link rel="stylesheet" type="text/css" href="../static/css/style.css"> -->
 
 	 <!-- <link rel="stylesheet" type="text/css" href="front_pages_style.css"> -->
@@ -17,27 +17,25 @@
 </head>
   <body>
       <form action="" method="POST" enctype="multipart/form-data">
-
-
         <div class="scontainer"></div>
-
         <div class="container">
-
+          <img style="width:100%;"  src="../static/img/new_logo.png">
         <div class="temp">
           <h1>Generic Nutritional Label System<h1>
         </div>
-
         <hr>
-
         <div class="stitle" >
           Upload your file
         </div>
-        <label for="file-upload" class="custom-file-upload">
-          <i class="fa fa-cloud-upload"></i> Upload File &nbsp;
-          <!--  <span ><input type="checkbox" name="owner" value="owner" > I am the original owner of the dataset </span>-->
-        </label>
-        <input id="file-upload" name='filee' type="file" style="display:none;"  >
-
+        <div style="display: inline-block;">
+          <label for="file-upload" class="custom-file-upload">
+            <i class="fa fa-cloud-upload"></i> Upload File &nbsp;
+            <!--  <span ><input type="checkbox" name="owner" value="owner" > I am the original owner of the dataset </span>-->
+          </label>
+          <input id="file-upload" name='filee' type="file" style="display:none;"  >
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+        <div style="display: inline-block;"><button type="submit" name="submit" class="registerbtn">Next</button></div>
+        
         <br></br>
 
         <div class="stitle">Choose a sample dataset</div>
@@ -51,7 +49,8 @@
             <option label="penn.csv" value="penn.csv">penn.csv</option>
           </select>
           <input type="submit" style="display:none;"  >
-        </div>
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+        <div style="display: inline-block;"><button type="submit" name="submit2" class="registerbtn">Next</button></div>
         <!-- <div style="display: inline-block;">
           <button>Select</button>
         </div> -->
@@ -72,13 +71,10 @@
         <br>
                 <br>
 
-        <div  >
-          Other features Coming up...
-        </div>
 
         <hr>
 
-        <button type="submit" name="submit" class="registerbtn">Next: Manual Information</button>
+        <!-- <button type="submit" name="submit" class="registerbtn">Next: Manual Information</button> -->
         </div>
 
         <div class="scontainer"></div>

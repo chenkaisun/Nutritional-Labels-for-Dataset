@@ -2,14 +2,47 @@ import pandas as pd
 
 from  jpype import *
 import os
-# print(os.listdir)
-# os.chdir("D:\\")''
-
-
-
 import numpy as np
 from gnl.views import helper
+import  pandas as pd
+import re
+def clean(df):
+    cs = list(df)
+    # dff=find_types_of_table(df)
+    print("cs:", cs)
+    num1_pattern, num2_pattern=r"^[-+]?[0-9]*\.?[0-9]+$", r"^[-+]?[0-9]*\.?[0-9]+[eE][-+]?[0-9]+$"
+    for c in cs:
+        found=False
+        ##need edit decimals
+        for i, r in enumerate(df[c]):
+            print("r: ", r)
 
+            if type(r)==str :
+                entry = re.sub("[ ,$]", "", r)
+                if not re.match(num1_pattern,entry) and not re.match(num2_pattern,entry):
+                    found=True
+                    break
+        if not found:
+            for i, r in enumerate(df[c]):
+                if type(r) == str:
+                    print("cur: ", r)
+                    entry=re.sub(r"[ ,$]","",r)
+                    if re.match(num1_pattern, entry) or re.match(num2_pattern, entry):
+                        df.at[i, c] = entry
+            df[c]=df[c].astype(float)
+        else:
+            for i, r in enumerate(df[c]):
+                if type(r) == str and ("\n" in r or '\r' in r or "," in r or " " in r):
+                    df.at[i, c]=re.sub("[ ,]","_",r.strip())
+                    df.at[i, c]=re.sub("\r+","",df.at[i, c])
+                    df.at[i, c]=re.sub("\n+","***",df.at[i, c])
+
+a=pd.read_csv("Forbes.csv")
+clean(a)
+print("a:", a)
+
+
+exit(0)
 data = [[np.nan,10, "wf"],['1',12, "NaN"],['Clarke',13, "wef"]]
 df = pd.DataFrame(data,columns=['Name','Age', "Hello"])
 

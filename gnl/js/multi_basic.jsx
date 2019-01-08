@@ -11,8 +11,8 @@ export default class MultiBasic extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount(){
-    
+  UNSAFE_componentWillMount() {
+
   }
 
   componentDidMount() {

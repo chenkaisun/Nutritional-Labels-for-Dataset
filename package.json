@@ -45,6 +45,7 @@
     "node-sass": "^4.9.2",
     "plotly.js-cartesian-dist": "^1.39.4",
     "prop-types": "==15.6.0",
+    "rc-spider": "0.0.8",
     "react": "==16.0.0",
     "react-boxplot": "^1.1.1",
     "react-chart-histogram": "^0.2.1",

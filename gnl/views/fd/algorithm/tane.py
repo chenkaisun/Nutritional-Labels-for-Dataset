@@ -143,8 +143,6 @@ class TANE(object):
         else: self.ans.sort()
         # sorted all the functional dependencies
 
-
-
 def chain_value(row, attribute_ids):
     """
     Join all the values of attributes to get a identifier

@@ -50,6 +50,7 @@ def index():
     gnl.app.config["CURRENT_MANUAL_INFO"]=None
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]=None
     gnl.app.config["CURRENT_LOADED"]=False
+    gnl.app.config['NUM_MISSING']=0
 
     # return redirect(url_for('selection'))
 
@@ -65,11 +66,11 @@ def index():
 
     if request.method == "POST":
         print("\n**index post**\n")
-        # print("requests", flask.request)
-        # print("requests files", flask.request.files)
-        # print("request.form", request.form)
-        # print("sel", type(request.form.get('sel')))
-        if flask.request.files:
+        print("requests", request)
+        print("requests files", request.files)
+        print("request.form", request.form)
+        print("sel", type(request.form.get('sel')))
+        if request.files and not "submit2" in request.form:
             # Save POST request's file object to a temp file
             dummy, temp_filename = tempfile.mkstemp()
             # print("flask.request.files:", flask.request.files)
@@ -120,17 +121,17 @@ def index():
 def selection():
     print("\n**selection**\n")
 
-    # if gnl.app.config["CURRENT_LOADED"]:
-    #     print("LOADED")
-    #     gnl.app.config["CURRENT_COLUMN_TYPES"] = pd.read_csv(os.path.join(
-    #         gnl.app.config["UPLOAD_FOLDER"],
-    #         "()types().csv"
-    #     ))
-    #     gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
-    #         gnl.app.config["UPLOAD_FOLDER"],
-    #         "()cleaned().csv"
-    #     ))
-    #     return render_template("label.html")
+    if gnl.app.config["CURRENT_LOADED"]:
+        print("LOADED")
+        gnl.app.config["CURRENT_COLUMN_TYPES"] = pd.read_csv(os.path.join(
+            gnl.app.config["UPLOAD_FOLDER"],
+            "()types().csv"
+        ))
+        gnl.app.config["CURRENT_DF"]=pd.read_csv(os.path.join(
+            gnl.app.config["UPLOAD_FOLDER"],
+            "()cleaned().csv"
+        ))
+        return render_template("label.html")
     ########
     # gnl.app.config["CURRENT_FILE"] = os.path.join(
     #     gnl.app.config["UPLOAD_FOLDER"],
@@ -152,7 +153,6 @@ def selection():
     helper.normalize_colnames(df)
     #
     # # clean the strings that are actually numbers and also invalid string such as those with comma and special chars, or $
-    helper.clean(df)
     df.to_csv(os.path.join(
         gnl.app.config["UPLOAD_FOLDER"],
         "()cleaned().csv"

@@ -54,14 +54,15 @@ width: 10%;
 .registerbtn {
     background-color: #41a0f4;
     color: white;
-    padding: 16px 20px;
+    /* padding: 3px 3px; */
     margin: 0 auto;
-    border: none;
+    /* border: none; */
     cursor: pointer;
-    width: 100%;
+    /* border-radius: 5%; */
+    border-width: 1px;
+    /* width: 100%; */
     opacity: 0.8;
-		font-size: 12pt;
-    display: block;
+    font-size: 12pt;
 }
 
 .registerbtn:hover {

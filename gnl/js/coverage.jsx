@@ -8,7 +8,8 @@ import React from 'react';
 // } from '@data-ui/histogram';
 // import Tree from 'react-d3-tree';
 import Tree from 'react-tree-graph';
-// import 'react-tree-graph/dist/style.css'
+
+import 'react-tree-graph/dist/style.css'
 // import * as d3 from "d3";
 // import scaleBand from "d3-scale";
 

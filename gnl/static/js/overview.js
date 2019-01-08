@@ -4,9 +4,9 @@ var cols_num = [];
 var cols = [];
 // var cols = ["age", "decile_score", "priors_count", "c_days_from_compas", "v_decile_score", "Violence_score", "Recidivism_score"];
 
-$(document).ready(function () {
-  // loadOVData("numeric_single.csv")
-});
+// $(document).ready(function () {
+//   // loadOVData("numeric_single.csv")
+// });
 
 window.onpopstate = function (event) {
   window.location.reload();
@@ -19,9 +19,8 @@ function load_single_meta() {
     url: "/api/parse_single/",
     contentType: "application/json;charset=UTF-8",
     dataType: 'json',
-    async: false,
     success: function (dat) {
-      // console.log("ajax back", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+      console.log("overview ajax back", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
       // console.log("data ", dat.re);
       loadOVData(dat.re)
     }

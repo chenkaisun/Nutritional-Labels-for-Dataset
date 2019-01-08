@@ -6,7 +6,7 @@ import MultiBasic from './multi_basic';
 import FunctionalDependency from './functional_dependency';
 import AssociationRule from './association_rule';
 // import SingleColumn from './single_column';
-import Coverage from './coverage';
+// import Coverage from './coverage';
 import Select from 'react-select';
 import { HashLink as Link } from 'react-router-hash-link';
 import $ from 'jquery';
@@ -83,13 +83,15 @@ export default class Label extends React.Component {
 
 
     if (protected_currentValues.length == 0) {
+      console.log("here");
       this.state['has_Correlation'] = false;
     }
     if (this.state['has_SingleColumn']) {
       this.state['widget_options'] = [
-        { label: "Top-K Correlations", value: 1 },
+        
         { label: "Functional Dependencies", value: 2 }
       ]
+      if (protected_currentValues.length != 0) this.state["widget_options"].push({ label: "Top-K Correlations", value: 1 })
     }
   }
 
@@ -137,6 +139,12 @@ export default class Label extends React.Component {
         load_correlation()
       );
     }
+    if (added_coverage) {
+      console.log("added cor");
+      $(this.refs.reference).html(
+        load_mups()
+      );
+    }
     this.setState(tmp)
   }
   componentDidMount() {
@@ -176,6 +184,13 @@ export default class Label extends React.Component {
         load_correlation()
       );
     }
+    if (tmp["has_Coverage"]) {
+      console.log("in mount cor");
+      $(this.refs.reference).html(
+        load_mups()
+      );
+    }
+    // tmp["setted"] = true;
     this.setState(tmp);
     console.log("e label mount", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
   }
@@ -212,12 +227,9 @@ export default class Label extends React.Component {
         <div className="right_column">
           <div id="overview" className="vis">
 
-            <div style={{ display: "inline-block", fontSize: "32px" }}><strong>Data Overview</strong></div>
+            <div style={{ display: "inline-block", fontSize: "32px" }}><strong>Data Overview </strong></div><div style={{ display: "inline-block", fontSize: "16px" }}>(Please wait while the widgets are rendering)</div><br />
             {this.state.has_SingleColumn && this.state.chose_numeric ?
               <div className="frame" id="ov">
-                <div className="ov_label_title">
-                  <h2>Single Column Data Distribution</h2>
-                </div>
                 <div className="ov_row_head">
                   <span className="ov_cell attr">Attribute Name</span>
                   <span className="ov_cell hg">Histogram</span>
@@ -234,10 +246,12 @@ export default class Label extends React.Component {
               <div><i>Histogram not provided because a non-numeric column was chosen</i></div> : ""
             }
             {!this.state.has_SingleColumn ?
-              <div className="ov_label_title">
-                <h2>Multi-Column Meta Information</h2>
-                <MultiBasic key={0} />
-              </div> : ""
+              <div className="frame">
+                <div className="ov_label_title">
+                  <MultiBasic key={0} />
+                </div>
+              </div>
+              : ""
             }
           </div>
           {this.state.has_Correlation ?
@@ -249,7 +263,7 @@ export default class Label extends React.Component {
                   tmp["has_Correlation"] = false;
                   this.setState(tmp);
                 }}>Remove</button></div></div>
-              <p>This shows correlation between selected attributes</p>
+              <p>This shows correlation between selected attributes. Click to see scatterplot.</p>
               <div className="frame">
                 <div id="diagramCorrelations" className='diagram'> </div>
                 <h4 id="diagramScatterPlotName" className='diagram'></h4>
@@ -266,10 +280,8 @@ export default class Label extends React.Component {
                   tmp["has_Coverage"] = false;
                   this.setState(tmp);
                 }}>Remove</button></div></div>
-              <Coverage key={6} />
-
-
-
+              <p>Uncovered patterns shows the combination of values that are undersampled in the dataset</p>
+              <div className="frame"><div id="mups_vis"></div></div>
             </div>) : ""
           }
           {!this.state.has_SingleColumn && this.state.has_AssociationRule ?
@@ -290,24 +302,26 @@ export default class Label extends React.Component {
             </div>) : ""
           }
           {this.state.has_FunctionalDependency ?
-            (<div id="fds" className="vis">
-              <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Functional Dependency </strong></div>&nbsp;&nbsp;&nbsp;
+          
+              (<div id="fds" className="vis">
+                <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Functional Dependency </strong></div>&nbsp;&nbsp;&nbsp;
               <div style={{ display: "inline-block" }}><button className="rmv_button" onClick={(e) => {
-                  e.preventDefault();
-                  let tmp = this.state;
-                  tmp["has_FunctionalDependency"] = false;
-                  this.setState(tmp);
-                }}>Remove</button></div>
-              </div>
-              <p>Functional dependency is a relationship that exists when one attribute uniquely determines another attribute.</p>
-              <p>Here you can see all functional dependencies observed in the dataset. You can drag the nodes apart to see relationships and patterns.</p>
-              <div id="visFunctionalDep" className="frame">
-                <div>
-                  <FunctionalDependency key={2} />
-                  <hr />
+                    e.preventDefault();
+                    let tmp = this.state;
+                    tmp["has_FunctionalDependency"] = false;
+                    this.setState(tmp);
+                  }}>Remove</button></div>
                 </div>
-              </div>
-            </div>) : ""
+                <p>Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute.</p>
+                <p>Here you can see all functional dependencies observed in the dataset. You can drag the nodes apart to see relationships and patterns.</p>
+                <div id="visFunctionalDep" className="frame">
+                  <div>
+                  <FunctionalDependency key={2} />
+                    <hr />
+                  </div>
+                </div>
+              </div>) 
+            :""
           }
           <div id="additional_widgets" className="vis">
             <div style={{ fontSize: "32px" }}><strong>Add More widgets</strong></div>

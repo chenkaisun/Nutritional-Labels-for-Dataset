@@ -52,6 +52,7 @@ h4{
 	font-weight:bold;
 	padding:6px 10px;
 	text-decoration:none;
+	border: none;
 }
 .add_button:hover {
 	background-color:#72b352;

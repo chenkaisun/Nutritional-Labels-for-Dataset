@@ -470,24 +470,27 @@ def get_corr_ranking(df, other_attribute_currentValues, protected_currentValues)
 def clean(df):
     cs = list(df)
     # dff=find_types_of_table(df)
+    num1_pattern, num2_pattern=r"^[-+]?[0-9]*\.?[0-9]+$", r"^[-+]?[0-9]*\.?[0-9]+[eE][-+]?[0-9]+$"
     for c in cs:
         found=False
         ##need edit decimals
         for i, r in enumerate(df[c]):
-            if type(r)==str and not r.strip().replace(",","").replace("$","").isnumeric():
-                found=True
-                break
+            if type(r)==str :
+                entry = re.sub("[ ,$]", "", r)
+                if not re.match(num1_pattern,entry) and not re.match(num2_pattern,entry):
+                    found=True
+                    break
         if not found:
             for i, r in enumerate(df[c]):
                 if type(r) == str:
-                    df.at[i, c] = float(r.strip().replace(',', '').replace('$', ''))
+                    print("cur: ", r)
+                    entry=re.sub(r"[ ,$]","",r)
+                    if re.match(num1_pattern, entry) or re.match(num2_pattern, entry):
+                        df.at[i, c] = entry
             df[c]=df[c].astype(float)
         else:
             for i, r in enumerate(df[c]):
                 if type(r) == str and ("\n" in r or '\r' in r or "," in r or " " in r):
-                    # need edit
                     df.at[i, c]=re.sub("[ ,]","_",r.strip())
                     df.at[i, c]=re.sub("\r+","",df.at[i, c])
                     df.at[i, c]=re.sub("\n+","***",df.at[i, c])
-                    # df.at[i, c] = r.strip().replace(" ", "_").replace(",", "_").replace("\r\n", "\n").replace("\r\r\r", "\n").replace("\r\r", "\n").replace("\r", "\n"). \
-                    #     replace("\n\n\n", "\n").replace("\n\n", "\n").replace("\n", "***")

@@ -12,9 +12,9 @@ var categoryOfColumns = {
 var csvFileName = "numeric.csv";
 // var jsonFileName = "result.json";
 
-$(document).ready(function () {
-  // loadRawData()
-});
+// $(document).ready(function () {
+//   // loadRawData()
+// });
 
 function load_correlation() {
   console.log("load cor");
@@ -25,7 +25,7 @@ function load_correlation() {
     contentType: "application/json;charset=UTF-8",
     dataType: 'json',
     success: function (dat) {
-      console.log("dat", dat.re);
+      console.log("load_correlation dat ", dat.re);
 
       loadRawData(dat.re)
     }
@@ -380,17 +380,20 @@ function drawScatterPlot(quanColumnX, quanColumnY) {
     },
     width = 600 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
-
+  
   var x = d3.scaleLinear().range([0, width])
     .domain(d3.extent(rawData, function (d) {
+            // console.log("x:", d[Object.keys(d)[columnX]]);
       return d[Object.keys(d)[columnX]];
     })),
     // .nice(),
     y = d3.scaleLinear().range([height, 0])
     .domain(d3.extent(rawData, function (d) {
+            // console.log("y:", d[Object.keys(d)[columnY]]);
       return d[Object.keys(d)[columnY]];
     }));
 
+  
   if (!initDrawScatterPlot) {
     var svg = d3.select("#diagramScatterPlot")
     $("#diagramScatterPlot").empty();
@@ -535,8 +538,8 @@ function drawDiagramFunctionalDep(init = false) {
 
   var sourceNodes = [],
     sourceLinks = [];
-  console.log("colnames");
-  console.log(analysisResult.colnames);
+  // console.log("colnames");
+  // console.log(analysisResult.colnames);
   analysisResult.colnames.forEach(function (v, i) {
     sourceNodes.push({
       'id': v,
