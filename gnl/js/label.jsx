@@ -82,10 +82,10 @@ export default class Label extends React.Component {
     }
 
 
-    if (protected_currentValues.length == 0) {
-      console.log("here");
-      this.state['has_Correlation'] = false;
-    }
+    // if (protected_currentValues.length == 0) {
+    //   console.log("here");
+    //   this.state['has_Correlation'] = false;
+    // }
     if (this.state['has_SingleColumn']) {
       this.state['widget_options'] = [
         

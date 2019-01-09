@@ -46021,6 +46021,7 @@ var Selection = function (_React$Component) {
           )
         );
       };
+
       var ClearIndicatorStyles = function ClearIndicatorStyles(base, state) {
         return _extends({}, base, {
           cursor: 'pointer',
@@ -46041,7 +46042,7 @@ var Selection = function (_React$Component) {
             { className: 'bcontainer' },
             _react2.default.createElement(
               'h2',
-              { 'data-tip': 'Specify what to be included in the label' },
+              null,
               'Selections'
             ),
             _react2.default.createElement(
@@ -46064,8 +46065,18 @@ var Selection = function (_React$Component) {
                 _react2.default.createElement('input', { type: 'radio', name: 'is_multi_column', checked: this.state.is_multi_column, onChange: this.toggleCheckbox }),
                 _react2.default.createElement(
                   'span',
-                  { className: 'checkbox-label', 'data-tip': 'Causion: select too many columns can make column wise operation (i.e. Functional Dependency) take long time' },
-                  'Multi Column Analysis'
+                  { className: 'checkbox-label' },
+                  'Multi-Column Analysis'
+                )
+              ),
+              ' \xA0',
+              _react2.default.createElement(
+                'span',
+                { 'data-tip': 'Single Column Analysis will perform analysis on a attribute you select from the dropdown menu, while Multi-Column Analysis perform anaysis on combination of protected and other attributes you select below', className: 'ttip' },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  '?'
                 )
               )
             ),
@@ -46101,18 +46112,38 @@ var Selection = function (_React$Component) {
                   _react2.default.createElement(
                     'span',
                     { className: 'checkbox-label' },
-                    'Pick your non-protected attributes'
+                    'Pick your attributes'
                   )
                 ),
                 '\xA0',
                 _react2.default.createElement(
                   'label',
-                  { className: 'checkbox', 'data-tip': 'Causion: select too many columns can make column wise operation (i.e. Functional Dependency) take long time' },
+                  { className: 'checkbox' },
                   _react2.default.createElement('input', { type: 'radio', name: 'is_whole', checked: this.state.is_whole, onChange: this.toggleCheckbox }),
                   _react2.default.createElement(
                     'span',
                     { className: 'checkbox-label' },
-                    'Use the whole dataset'
+                    'Use all attributes'
+                  )
+                ),
+                '\xA0',
+                _react2.default.createElement(
+                  'span',
+                  { 'data-tip': 'Pick the columns you would like to be included in the analysis, or simply use all columns', className: 'ttip' },
+                  _react2.default.createElement(
+                    'strong',
+                    null,
+                    '?'
+                  )
+                ),
+                '\xA0',
+                _react2.default.createElement(
+                  'span',
+                  { 'data-tip': 'If you pick too many columns (i.e. more than 10 for a larget dataset), some widgets such as association rules would take huge amount of time to finish computation', className: 'warningtip' },
+                  _react2.default.createElement(
+                    'strong',
+                    null,
+                    'warning'
                   )
                 )
               ),
@@ -46139,10 +46170,21 @@ var Selection = function (_React$Component) {
             !this.state.is_single_column ? _react2.default.createElement(
               'div',
               null,
+              _react2.default.createElement(_reactTooltip2.default, null),
               _react2.default.createElement(
                 'span',
-                { 'data-tip': 'Only for correlation and functional dependency' },
+                null,
                 'Pick protected attributes'
+              ),
+              '\xA0',
+              _react2.default.createElement(
+                'span',
+                { 'data-tip': 'Protected attributes are the columns that potentially introduce biases against certain social groups (i.e. gender, race, etc)', className: 'ttip' },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  '?'
+                )
               ),
               _react2.default.createElement(
                 'div',
@@ -46173,8 +46215,18 @@ var Selection = function (_React$Component) {
                 _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-control', name: 'is_manually_widgets', checked: this.state.is_manually_widgets, onChange: this.toggleCheckbox }),
                 _react2.default.createElement(
                   'span',
-                  { className: 'checkbox-label', 'data-tip': 'Leave this unchecked if you would like the system to optimally choose the widgets for your task' },
+                  { className: 'checkbox-label' },
                   'Pick your widgets'
+                ),
+                '\xA0',
+                _react2.default.createElement(
+                  'span',
+                  { 'data-tip': 'Pick what you would like to be included in the nutritional label', className: 'ttip' },
+                  _react2.default.createElement(
+                    'strong',
+                    null,
+                    '?'
+                  )
                 )
               )
             ) : "",
@@ -46234,8 +46286,18 @@ var Selection = function (_React$Component) {
               _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-control', name: 'is_query', checked: this.state.is_query, onChange: this.toggleCheckbox }),
               _react2.default.createElement(
                 'span',
-                { className: 'checkbox-label', 'data-tip': 'Give ranges for attributes inclusively' },
+                { className: 'checkbox-label' },
                 'Slice the dataset '
+              ),
+              '\xA0',
+              _react2.default.createElement(
+                'span',
+                { 'data-tip': 'Constrain the value range for selected attributes', className: 'ttip' },
+                _react2.default.createElement(
+                  'strong',
+                  null,
+                  '?'
+                )
               )
             ),
             this.state.is_query ? _react2.default.createElement(
@@ -46249,11 +46311,13 @@ var Selection = function (_React$Component) {
                 defaultValue: [],
                 isMulti: true,
                 onChange: function onChange(opt) {
-                  // console.log("query select");
+                  console.log("query current ", opt);
                   var tmp = _this3.state;
                   var len_new = opt.length;
                   var len_old = tmp.query_currentValues.length;
                   if (len_new < len_old) {
+                    var val_to_del = [];
+                    var indices_to_del = [];
                     for (var i = 0; i < len_old; ++i) {
                       var found = false;
                       var val1 = tmp.query_currentValues[i];
@@ -46267,6 +46331,7 @@ var Selection = function (_React$Component) {
 
                           if (val2["label"] == val1["label"]) {
                             found = true;
+                            break;
                           }
                         }
                       } catch (err) {
@@ -46285,15 +46350,20 @@ var Selection = function (_React$Component) {
                       }
 
                       if (!found) {
-                        delete tmp.query_rangeValues[val1["label"]];
-                        tmp.query_currentValues.splice(i, 1);
-                        break;
+                        val_to_del.push(val1["label"]);
+                        indices_to_del.push(i);
+                        // break;
                       }
                     }
+
+                    for (var _i2 = val_to_del.length - 1; _i2 >= 0; --_i2) {
+                      delete tmp.query_rangeValues[val_to_del[_i2]];
+                      tmp.query_currentValues.splice(indices_to_del[_i2], 1);
+                    }
                   } else if (len_new > len_old) {
-                    for (var _i2 = 0; _i2 < len_new; ++_i2) {
+                    for (var _i3 = 0; _i3 < len_new; ++_i3) {
                       var _found = false;
-                      var _val = opt[_i2];
+                      var _val = opt[_i3];
                       var _iteratorNormalCompletion2 = true;
                       var _didIteratorError2 = false;
                       var _iteratorError2 = undefined;
@@ -46330,6 +46400,7 @@ var Selection = function (_React$Component) {
                       }
                     }
                   }
+
                   _this3.setState(tmp);
                 },
                 simpleValue: true,
@@ -55457,10 +55528,10 @@ var Label = function (_React$Component) {
       };
     }
 
-    if (protected_currentValues.length == 0) {
-      console.log("here");
-      _this.state['has_Correlation'] = false;
-    }
+    // if (protected_currentValues.length == 0) {
+    //   console.log("here");
+    //   this.state['has_Correlation'] = false;
+    // }
     if (_this.state['has_SingleColumn']) {
       _this.state['widget_options'] = [{ label: "Functional Dependencies", value: 2 }];
       if (protected_currentValues.length != 0) _this.state["widget_options"].push({ label: "Top-K Correlations", value: 1 });

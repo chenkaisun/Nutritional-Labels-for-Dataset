@@ -11,6 +11,8 @@ hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 5px;
 }
+
+
 select{
   width: inherit;
 }
@@ -19,6 +21,16 @@ select{
   width: inherit;
 }
 
+.ttip{
+  color: black;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+.warningtip {
+  color: red;
+  display: inline-block;
+  border-bottom: 1px dotted red;
+}
 .card_down{
   display: inline-block;
 height: 100px;
