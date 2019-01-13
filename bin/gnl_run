@@ -6,4 +6,4 @@ node_modules/.bin/webpack
 node_modules/.bin/javascript-obfuscator gnl/static/js/bundle.js
 mv gnl/static/js/bundle-obfuscated.js gnl/static/js/bundle.js
 pkill -f gunicorn
-gunicorn -b localhost:8000 -w 1 -t 150 gnl:app
+gunicorn -b localhost:8000 -D -w 1 -t 150 gnl:app

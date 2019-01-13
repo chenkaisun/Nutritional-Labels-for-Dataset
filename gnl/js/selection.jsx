@@ -407,8 +407,8 @@ export default class Selection extends React.Component {
                           // break;
                         }
                       }
-                      
-                      for (let i = val_to_del.length-1; i>=0; --i) {
+
+                      for (let i = val_to_del.length - 1; i >= 0; --i) {
                         delete tmp.query_rangeValues[val_to_del[i]];
                         tmp.query_currentValues.splice(indices_to_del[i], 1);
                       }
