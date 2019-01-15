@@ -1,4 +1,5 @@
-import React from "react";
+// import React from "react";
+import React, { Component, PropTypes } from 'react';
 // import PropTypes from 'prop-types';
 // import Label from './label';
 // import Redirection from './redirection';
@@ -9,6 +10,7 @@ import { history } from './routes';
 import ReactTooltip from 'react-tooltip';
 // import { withRouter } from 'react-router-dom'
 // import VirtualizedSelect from 'react-virtualized-select';
+import Checkbox from 'rc-checkbox';
 
 export default class Selection extends React.Component {
   constructor(props) {
@@ -16,12 +18,13 @@ export default class Selection extends React.Component {
     console.log("select ctor");
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleCheckbox = this.toggleCheckbox.bind(this);
+    this.toggleRadio = this.toggleRadio.bind(this);
     this.state = {
       redirect: false,
       setted: false,
       attribute_options: [],
       widget_options: [
-        { label: "Top-K Correlations", value: 1 },
+        { label: "Correlations", value: 1 },
         { label: "Functional Dependencies", value: 2 },
         { label: "Association Rules", value: 3 },
         { label: "Maximal Uncovered Patterns", value: 4 },
@@ -154,6 +157,26 @@ export default class Selection extends React.Component {
     this.setState(tmp);
   }
 
+  toggleRadio(value) {
+    console.log("cur val", value);
+    
+    const name = value;
+    let tmp = this.state;
+    tmp[name] = !tmp[name]
+    if (name == "is_whole") {
+      tmp["is_choose_attributes"] = !tmp["is_choose_attributes"]
+    } else if (name == "is_choose_attributes") {
+      tmp["is_whole"] = !tmp["is_whole"]
+    } else if (name == "is_single_column") {
+      tmp["is_multi_column"] = !tmp["is_multi_column"]
+    } else if (name == "is_multi_column") {
+      tmp["is_single_column"] = !tmp["is_single_column"]
+    }
+    this.setState(tmp);
+    console.log("tmp",tmp);
+    
+  }
+
   render() {
     if (this.state.redirect) {
       const { from } = this.props.location.state || '/';
@@ -195,15 +218,16 @@ export default class Selection extends React.Component {
             <h2>Selections</h2>
 
             <span>
-              <label className="checkbox">
-                <input type="radio" name="is_single_column" checked={this.state.is_single_column} onChange={this.toggleCheckbox} />
+              <label>
+                <input className="form-radio" type="radio" name="is_single_column" checked={this.state.is_single_column} onChange={this.toggleCheckbox} />
                 <span className="checkbox-label" >Single Column Analysis</span>
               </label>
               &nbsp;
-              <label className="checkbox">
-                <input type="radio" name="is_multi_column" checked={this.state.is_multi_column} onChange={this.toggleCheckbox} />
+              <label className="container">
+                <input className="form-radio" type="radio" name="is_multi_column" checked={this.state.is_multi_column} onChange={this.toggleCheckbox} />
                 <span className="checkbox-label" >Multi-Column Analysis</span>
               </label> &nbsp;
+
               <span data-tip="Single Column Analysis will perform analysis on a attribute you select from the dropdown menu, while Multi-Column Analysis perform anaysis on combination of protected and other attributes you select below" className="ttip">
                 <strong>?</strong></span>
             </span>
@@ -212,6 +236,7 @@ export default class Selection extends React.Component {
 
             {this.state.is_single_column ?
               <div>
+                <div style={{ height: "3px"}}>&nbsp;</div>
                 <Select
                   required={this.state.is_single_column}
                   closeMenuOnSelect={false}
@@ -227,27 +252,27 @@ export default class Selection extends React.Component {
                   }
                   simpleValue
                   options={this.state.attribute_options} />
-                <hr />
               </div> : ""}
             {true ?
               <div>
                 <span>
                   <label className="checkbox">
-                    <input type="radio" name="is_choose_attributes" checked={this.state.is_choose_attributes} onChange={this.toggleCheckbox} />
-                    <span className="checkbox-label">Pick your attributes</span>
+                    <input type="radio" className="form-radio" name="is_choose_attributes" checked={this.state.is_choose_attributes} onChange={this.toggleCheckbox} />
+                    <span className="checkbox-label">Pick attributes</span>
                   </label>
                   &nbsp;
                     <label className="checkbox">
-                    <input type="radio" name="is_whole" checked={this.state.is_whole} onChange={this.toggleCheckbox} />
+                    <input type="radio" className="form-radio" name="is_whole" checked={this.state.is_whole} onChange={this.toggleCheckbox} />
                     <span className="checkbox-label">Use all attributes</span>
                   </label>&nbsp;
               <span data-tip="Pick the columns you would like to be included in the analysis, or simply use all columns" className="ttip">
                     <strong>?</strong></span>
                   &nbsp;
-              <span data-tip="If you pick too many columns (i.e. more than 10 for a larget dataset), some widgets such as association rules would take huge amount of time to finish computation" className="warningtip">
+              <span data-tip="If you pick too many columns (i.e. more than 10 for a large dataset), some widgets such as association rules would take huge amount of time to finish computation" className="warningtip">
                     <strong>warning</strong></span>
                 </span>
                 {this.state.is_choose_attributes ? <div>
+                  <div style={{ height: "3px" }}>&nbsp;</div>
                   <Select
                     required={this.state.is_multi_column && this.state.is_choose_attributes}
                     closeMenuOnSelect={false}
@@ -270,7 +295,6 @@ export default class Selection extends React.Component {
 
 
             {!this.state.is_single_column ? <div>
-
               <ReactTooltip />
               <span >Pick protected attributes</span>
               &nbsp;
@@ -303,11 +327,14 @@ export default class Selection extends React.Component {
 
 
             {true ? <div>
-              <label className="checkbox">
-                <input type="checkbox" className="checkbox-control" name="is_manually_widgets" checked={this.state.is_manually_widgets} onChange={this.toggleCheckbox} />
-                <span className="checkbox-label">Pick your widgets</span>
+
+              <label className="checkbox" >
                 &nbsp;
-              <span data-tip="Pick what you would like to be included in the nutritional label" className="ttip">
+                <Checkbox name="is_manually_widgets" checked={this.state.is_manually_widgets} onChange={this.toggleCheckbox}>
+                </Checkbox>
+                &nbsp;&nbsp;
+                <span className="checkbox-label">Pick widgets</span>&nbsp;
+                <span data-tip="Pick what you would like to be included in the nutritional label" className="ttip">
                   <strong>?</strong></span>
               </label>
 
@@ -361,15 +388,17 @@ export default class Selection extends React.Component {
                   }
                   }
                   simpleValue
-                  options={[{ label: "Top-K Correlations", value: 1 },
+                  options={[{ label: "Correlations", value: 1 },
                   { label: "Functional Dependencies", value: 2 }]} />
               </div> : ""}
 
 
             <hr />
-            <label className="checkbox">
-              <input type="checkbox" className="checkbox-control" name="is_query" checked={this.state.is_query} onChange={this.toggleCheckbox} />
-              <span className="checkbox-label">Slice the dataset </span>
+            <label className="checkbox">&nbsp;
+              <Checkbox name="is_query" checked={this.state.is_query} onChange={this.toggleCheckbox}>
+              </Checkbox>
+              &nbsp;&nbsp;
+              <span className="checkbox-label">Slice the dataset by value range</span>
               &nbsp;
               <span data-tip="Constrain the value range for selected attributes" className="ttip">
                 <strong>?</strong></span>

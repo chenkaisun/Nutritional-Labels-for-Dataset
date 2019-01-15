@@ -1,19 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset=utf-8 />
-	<title>Selection</title>
+  <title>Selection</title>
   <link rel="shortcut icon" href="">
-
-  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="/static/css/front_pages_style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="../static/css/front_pages_style2.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/front_pages_style.css">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/react-table@latest/react-table.css"> -->
+  <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+  <!-- <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" type="text/css" href="..   /static/css/mups.css" />
   <!-- <link rel="stylesheet" type="text/css" href="front_pages_style.css"> -->
 
-  <script>
+  <!-- <script>
   $(document).ready(function() {
 
       $("input[name='column_type']").val(['single']);
@@ -98,57 +98,34 @@
         }
       });
   });
-  </script>
+  </script> -->
 </head>
-<body >
 
-  <form>
-    <!-- <div class="scontainer"></div> -->
-    <div style="width:550px;margin-left:auto;margin-right:auto;">
-      <h1 >Selections</h1>
-      <span class="main_radio">
-          <input class="column_type" type="radio" name="column_type" value="single"/>Single Column Analysis
-          <input class="column_type" type="radio" name="column_type" value="multi"/>Multi Column Analysis
-      </span>
-      <br>
-      <span class='radio1'>
-          <input class='col_range' type='radio' name='col_range' value='pick'/>Pick you attributes
-          <input class='col_range' type='radio' name='col_range' value='whole'/>Whole dataset
-      </span>
-      <div class='sel sel1'>
-        <select class='sela' name='states[]' multiple='multiple'>
-          {% for option in options %}
-      		  <option value={{option.value}} label={{option.label}}>{{option.value}}</option>
-      	  {% endfor %}
-        </select><hr>
+<body>
+  <div>
+    <form>
+      <div class="scontainer"></div>
+      <div class="bcontainer">
+        <h2>Selections</h2>
+        <span>
+          <label class="container">
+            <input type="radio" class="form-radio" name="is_single_column" />
+            <span>Single Column Analysis</span>
+          </label>
+          &nbsp;
+          <label class="container">
+            <input type="radio" class="form-radio" name="is_multi_column" />
+            <span >Multi-Column Analysis</span>
+          </label> &nbsp;
+
+          <span class="ttip">
+            <strong>?</strong></span>
+        </span>
+        <div>Hello World</div>
       </div>
-
-      <div class='sel sel2'>Pick protected attributes
-        <br><select class='selb' name='states[]' multiple='multiple'>
-
-        </select><hr>
-      </div>
-
-      <label class='widget'><input type='checkbox' name='widget' />Pick your widgets</label><br>
-      <div class='sel sel3'>
-        <select class='selc' name='states[]' multiple='multiple'>
-        </select><hr>
-      </div >
-
-      <label class="row_range">
-        <input type="checkbox" name="row_range" />Slice the dataset
-      </label>
-      <div class='sel rangesel'>
-        <select class='row_range_sel' name='states[]' multiple='multiple'>
-        </select><hr>
-      </div>
-
-      <button type="submit" class="registerbtn">Generate your nutrilabel </button>
-    </div>
-
-    <!-- <div className="scontainer"></div> -->
-
-  </form>
+      <div class="scontainer"></div>
+    </form>
+  </div>
 </body>
 
 </html>

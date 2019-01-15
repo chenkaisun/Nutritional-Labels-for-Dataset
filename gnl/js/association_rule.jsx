@@ -60,7 +60,7 @@ export default class AssociationRule extends React.Component {
            id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
            data={dat}
            config={myConfig}
-       />;
+       />
      </div>
    );
 

@@ -172,7 +172,7 @@ class Apriori:
                         confidence_score = self.frequentItemsSupport[frozen_item_set] / float(
                             self.frequentItemsSupport[frozenset(comb)])
                         if confidence_score>threshold:
-                            self.true_associations.append(",".join(list(comb))+"=>"+",".join(list(temp_item_set-set(comb)))) #str(i) for i in comb
+                            self.true_associations.append(", ".join(list(comb))+"=>"+", ".join(list(temp_item_set-set(comb)))) #str(i) for i in comb
         if exceeded: self.true_associations=["Timelimit=>Exceeded(because of too many columns)"]
         return
 

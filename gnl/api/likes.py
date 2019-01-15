@@ -288,7 +288,8 @@ def get_coverage():
             "x": -10,
             "y": -10,
             "fill": 'red'}
-    tree=[{"node":"mups", "children":[]}]
+    tree=[{"node":"patterns", "children":[]}]
+    if not mups: tree[0]={"node":"no patterns discovered", "children":[]}
     ptrs=[tree[0]]*len(pattern_lists)
     for i in range(len(ptrs)):
         ptrs[i]=tree[0]
@@ -419,7 +420,7 @@ def get_multi_fd():
     tne.run()
     wt = writer.Writer(col_names)
     output = wt.write_dependency_to_file(tne.ans)
-    releveant_output = [comb for comb in output if any([item in pattrs for item in comb.split("=>")[1].split(",")])]
+    releveant_output = [comb for comb in output if any([item in pattrs for item in comb.split("=>")[1].split(", ")])]
     if output and output[0]=="Timelimit=>Exceeded(because of too many columns)":
         releveant_output=output
 

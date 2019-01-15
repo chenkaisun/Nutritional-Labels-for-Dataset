@@ -23,12 +23,12 @@ export default class Label extends React.Component {
       setted: false,
       widget_currentValues: this.props["location"]["state"]['widget_currentValues'],
       widget_options: [
-        { label: "Top-K Correlations", value: 1 },
+        { label: "Correlations", value: 1 },
         { label: "Functional Dependencies", value: 2 },
         { label: "Association Rules", value: 3 },
         { label: "Maximal Uncovered Patterns", value: 4 },
       ],
-      // cur_widget_names=["Top-K Correlations","Association Rules"],
+      // cur_widget_names=["Correlations","Association Rules"],
       // cur_widgets=[],
       additional: [],
       chose_numeric: this.props["location"]["state"]['chose_numeric'],
@@ -61,12 +61,12 @@ export default class Label extends React.Component {
     if (!this.props["location"]["state"]["is_manually_widgets"]) {
       this.state = {
         setted: false,
-        widget_currentValues: [{ label: "Top-K Correlations", value: 1 },
+        widget_currentValues: [{ label: "Correlations", value: 1 },
         { label: "Functional Dependencies", value: 2 },
         { label: "Association Rules", value: 3 },
         { label: "Maximal Uncovered Patterns", value: 4 }],
         widget_options: [
-          { label: "Top-K Correlations", value: 1 },
+          { label: "Correlation", value: 1 },
           { label: "Functional Dependencies", value: 2 },
           { label: "Association Rules", value: 3 },
           { label: "Maximal Uncovered Patterns", value: 4 },
@@ -91,7 +91,7 @@ export default class Label extends React.Component {
         
         { label: "Functional Dependencies", value: 2 }
       ]
-      if (protected_currentValues.length != 0) this.state["widget_options"].push({ label: "Top-K Correlations", value: 1 })
+      if (protected_currentValues.length != 0) this.state["widget_options"].push({ label: "Correlations", value: 1 })
     }
   }
 
@@ -104,7 +104,7 @@ export default class Label extends React.Component {
     let added_fd = false;
     let added_ar = false;
     for (; i < tmp["widget_currentValues"].length; i++) {
-      if (tmp["widget_currentValues"][i]["label"] == "Top-K Correlations") {
+      if (tmp["widget_currentValues"][i]["label"] == "Correlations") {
         if (!tmp['has_Correlation']) added_topk = true;
         tmp['has_Correlation'] = true;
       }
@@ -257,7 +257,7 @@ export default class Label extends React.Component {
           {this.state.has_Correlation ?
             (<div id="correlation" className="vis">
               <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Correlations</strong></div>&nbsp;&nbsp;&nbsp;
-              <div style={{ display: "inline-block" }}><button className="rmv_button" onClick={(e) => {
+              <div style={{ display: "inline-block"}}><button className="rmv_button" onClick={(e) => {
                   e.preventDefault();
                   let tmp = this.state;
                   tmp["has_Correlation"] = false;
@@ -293,6 +293,9 @@ export default class Label extends React.Component {
                   tmp["has_AssociationRule"] = false;
                   this.setState(tmp);
                 }}>Remove</button></div></div>
+              <p>Association rules is a set of directed relations between set A and set B such that set A determines the value of set B with over some predefined probability.</p>
+              <p>Here you can see all association rules in the sliced dataset. You can drag the nodes apart to see relations.</p>
+
               <div id="ars_vis" className="frame">
                 <div>
                   <AssociationRule key={3} />
@@ -313,7 +316,7 @@ export default class Label extends React.Component {
                   }}>Remove</button></div>
                 </div>
                 <p>Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute.</p>
-                <p>Here you can see all functional dependencies observed in the dataset. You can drag the nodes apart to see relationships and patterns.</p>
+              <p>Here you can see all functional dependencies observed in the sliced dataset. You can drag the nodes apart to see relations.</p>
                 <div id="visFunctionalDep" className="frame">
                   <div>
                   <FunctionalDependency key={2} />
@@ -343,7 +346,7 @@ export default class Label extends React.Component {
                     }
                     simpleValue
                     options={[
-                      { label: "Top-K Correlations", value: 1 },
+                      { label: "Correlations", value: 1 },
                       { label: "Functional Dependencies", value: 2 },
                     ]} />
                 </div> : <div>
@@ -362,7 +365,7 @@ export default class Label extends React.Component {
                       }
                       simpleValue
                       options={[
-                        { label: "Top-K Correlations", value: 1 },
+                        { label: "Correlations", value: 1 },
                         { label: "Functional Dependencies", value: 2 },
                         { label: "Association Rules", value: 3 },
                         { label: "Maximal Uncovered Patterns", value: 4 },
