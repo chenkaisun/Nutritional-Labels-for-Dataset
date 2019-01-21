@@ -35,8 +35,9 @@ export default class Selection extends React.Component {
       protected_currentValues: [],
       label_currentValues: [],
 
-      is_manually_widgets: false,
-      widget_currentValues: [],
+      is_manually_widgets: true,
+      widget_currentValues: [{ label: "Correlations", value: 1 },
+        { label: "Maximal Uncovered Patterns", value: 4 },],
 
       chose_numeric: false,
 
@@ -226,7 +227,7 @@ export default class Selection extends React.Component {
               <label className="container">
                 <input className="form-radio" type="radio" name="is_multi_column" checked={this.state.is_multi_column} onChange={this.toggleCheckbox} />
                 <span className="checkbox-label" >Multi-Column Analysis</span>
-              </label> &nbsp;
+              </label>
 
               <span data-tip="Single Column Analysis will perform analysis on a attribute you select from the dropdown menu, while Multi-Column Analysis perform anaysis on combination of protected and other attributes you select below" className="ttip">
                 <strong>?</strong></span>
@@ -260,7 +261,7 @@ export default class Selection extends React.Component {
                     <input type="radio" className="form-radio" name="is_choose_attributes" checked={this.state.is_choose_attributes} onChange={this.toggleCheckbox} />
                     <span className="checkbox-label">Pick attributes</span>
                   </label>
-                  &nbsp;
+                  &nbsp;&nbsp;&nbsp;
                     <label className="checkbox">
                     <input type="radio" className="form-radio" name="is_whole" checked={this.state.is_whole} onChange={this.toggleCheckbox} />
                     <span className="checkbox-label">Use all attributes</span>
@@ -348,7 +349,8 @@ export default class Selection extends React.Component {
                   closeMenuOnSelect={false}
                   components={{ ClearIndicator }}
                   styles={{ clearIndicator: ClearIndicatorStyles }}
-                  defaultValue={[]}
+                  defaultValue={[{ label: "Correlations", value: 1 },
+                    { label: "Maximal Uncovered Patterns", value: 4 },]}
                   isMulti
                   onChange={(opt) => {
                     let tmp = this.state;

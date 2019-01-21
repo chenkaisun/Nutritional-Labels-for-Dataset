@@ -61,7 +61,7 @@ def get_parse_multi():
 @gnl.app.route('/api/form_submit/', methods=['GET', 'POST'])
 def form_submit():
     # here do stuff and save json
-    print("in form submit", datetime.datetime.now())
+    # print("in form submit", datetime.datetime.now())
     context = {}
     if not request.json:
         flask.abort(400)
@@ -87,10 +87,10 @@ def form_submit():
     #     os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"))
 
 
-    print("sel\n")
-    pprint.pprint(sel)
+    # print("sel\n")
+    # pprint.pprint(sel)
     print("\nform_submit\n")
-    print("types: ", gnl.app.config["CURRENT_COLUMN_TYPES"])
+    # print("types: ", gnl.app.config["CURRENT_COLUMN_TYPES"])
     # protected and non-protected attributes
     col_names = list(gnl.app.config["CURRENT_DF"])
     # print("col_names", col_names)
@@ -125,7 +125,7 @@ def form_submit():
     if not sel["is_single_column"]:
         gnl.app.config['NUM_MISSING']=0
         print("in not single")
-        print(gnl.app.config["CURRENT_DF"].isnull().sum())
+        # print(gnl.app.config["CURRENT_DF"].isnull().sum())
         for col_name in list(gnl.app.config["CURRENT_DF"]):
             for entry in gnl.app.config["CURRENT_DF"][col_name]:
                 if helper.is_nan(entry):
@@ -146,24 +146,24 @@ def form_submit():
     # print("cur df", gnl.app.config["CURRENT_DF"])
     gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
 
-    print("s write numeric single ", datetime.datetime.now())
+    # print("s write numeric single ", datetime.datetime.now())
     # numeric single column
     if sel["is_single_column"] and sel['protected_currentValues'] and \
             dff[sel['protected_currentValues'][0]['label']][0] not in ["str", "empty"]:
 
-        print("in num single: ", sel['protected_currentValues'][0]['label'])
-        print(gnl.app.config["CURRENT_DF"][[sel['protected_currentValues'][0]['label']]])
+        # print("in num single: ", sel['protected_currentValues'][0]['label'])
+        # print(gnl.app.config["CURRENT_DF"][[sel['protected_currentValues'][0]['label']]])
         # os.remove(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single123.csv"))
         gnl.app.config["CURRENT_DF"][[sel['protected_currentValues'][0]['label']]].\
             to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric_single.csv"), index=False)
         # gnl.app.config["CURRENT_DF"][sel['protected_currentValues'][0]['label']].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "toy.csv"))
 
-    print("e write numeric single", datetime.datetime.now())
+    # print("e write numeric single", datetime.datetime.now())
     # numeric.csv and complete.csv
 
-    print("s write numeric", datetime.datetime.now())
+    # print("s write numeric", datetime.datetime.now())
     gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"), index=False)
-    print("e write numeric", datetime.datetime.now())
+    # print("e write numeric", datetime.datetime.now())
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].to_csv(
         os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"), index=False)
 
@@ -185,7 +185,7 @@ def form_submit():
         #     json.dump({"node":"mups", "children":[]}, outfile)
         # get_coverage()
 
-    print("form return ", datetime.datetime.now())
+    # print("form return ", datetime.datetime.now())
 
 
     return jsonify(**context)

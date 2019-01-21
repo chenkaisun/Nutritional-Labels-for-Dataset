@@ -46497,8 +46497,8 @@ var Selection = function (_React$Component) {
       protected_currentValues: [],
       label_currentValues: [],
 
-      is_manually_widgets: false,
-      widget_currentValues: [],
+      is_manually_widgets: true,
+      widget_currentValues: [{ label: "Correlations", value: 1 }, { label: "Maximal Uncovered Patterns", value: 4 }],
 
       chose_numeric: false,
 
@@ -46731,7 +46731,6 @@ var Selection = function (_React$Component) {
                   'Multi-Column Analysis'
                 )
               ),
-              ' \xA0',
               _react2.default.createElement(
                 'span',
                 { 'data-tip': 'Single Column Analysis will perform analysis on a attribute you select from the dropdown menu, while Multi-Column Analysis perform anaysis on combination of protected and other attributes you select below', className: 'ttip' },
@@ -46781,7 +46780,7 @@ var Selection = function (_React$Component) {
                     'Pick attributes'
                   )
                 ),
-                '\xA0',
+                '\xA0\xA0\xA0',
                 _react2.default.createElement(
                   'label',
                   { className: 'checkbox' },
@@ -46911,7 +46910,7 @@ var Selection = function (_React$Component) {
                 closeMenuOnSelect: false,
                 components: { ClearIndicator: ClearIndicator },
                 styles: { clearIndicator: ClearIndicatorStyles },
-                defaultValue: [],
+                defaultValue: [{ label: "Correlations", value: 1 }, { label: "Maximal Uncovered Patterns", value: 4 }],
                 isMulti: true,
                 onChange: function onChange(opt) {
                   var tmp = _this3.state;
@@ -58400,7 +58399,7 @@ var Label = function (_React$Component) {
             _react2.default.createElement(
               _reactRouterHashLink.HashLink,
               { to: 'label#correlation' },
-              'Correlation'
+              'Correlations'
             )
           ) : "",
           !this.state.has_SingleColumn && this.state.has_Coverage ? _react2.default.createElement(
@@ -58409,16 +58408,7 @@ var Label = function (_React$Component) {
             _react2.default.createElement(
               _reactRouterHashLink.HashLink,
               { to: 'label#mups' },
-              'Uncovered Patterns'
-            )
-          ) : "",
-          this.state.has_FunctionalDependency ? _react2.default.createElement(
-            'div',
-            { className: 'tab' },
-            _react2.default.createElement(
-              _reactRouterHashLink.HashLink,
-              { to: 'label#fds' },
-              'Functional Dependences'
+              'Maximal Uncovered Patterns'
             )
           ) : "",
           !this.state.has_SingleColumn && this.state.has_AssociationRule ? _react2.default.createElement(
@@ -58428,6 +58418,15 @@ var Label = function (_React$Component) {
               _reactRouterHashLink.HashLink,
               { to: 'label#ars' },
               'Association Rules'
+            )
+          ) : "",
+          this.state.has_FunctionalDependency ? _react2.default.createElement(
+            'div',
+            { className: 'tab' },
+            _react2.default.createElement(
+              _reactRouterHashLink.HashLink,
+              { to: 'label#fds' },
+              'Functional Dependencies'
             )
           ) : ""
         ),
@@ -58548,7 +58547,7 @@ var Label = function (_React$Component) {
             _react2.default.createElement(
               'p',
               null,
-              'This shows correlation between selected attributes. Click to see scatterplot.'
+              'This shows correlation between selected attributes. Click on the squares to see scatterplot.'
             ),
             _react2.default.createElement(
               'div',
@@ -58578,7 +58577,7 @@ var Label = function (_React$Component) {
                 _react2.default.createElement(
                   'strong',
                   null,
-                  'Uncovered Patterns'
+                  'Maximal Uncovered Patterns'
                 )
               ),
               '\xA0\xA0\xA0',
@@ -58600,7 +58599,7 @@ var Label = function (_React$Component) {
             _react2.default.createElement(
               'p',
               null,
-              'Uncovered patterns shows the combination of values that are undersampled in the dataset'
+              'Maximal uncovered pattern shows the combination of values that are undersampled in the dataset'
             ),
             _react2.default.createElement(
               'div',
@@ -58642,12 +58641,7 @@ var Label = function (_React$Component) {
             _react2.default.createElement(
               'p',
               null,
-              'Association rules is a set of directed relations between set A and set B such that set A determines the value of set B with over some predefined probability.'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Here you can see all association rules in the sliced dataset. You can drag the nodes apart to see relations.'
+              'Association rule of a dataset is a set of directed relations in between set A and set B such that values of set A determines the values of set B for over some predefined probability. You can drag the nodes around or magnify/diminish them by scrolling.'
             ),
             _react2.default.createElement(
               'div',
@@ -58672,7 +58666,7 @@ var Label = function (_React$Component) {
                 _react2.default.createElement(
                   'strong',
                   null,
-                  'Functional Dependency '
+                  'Functional Dependencies '
                 )
               ),
               '\xA0\xA0\xA0',
@@ -58694,12 +58688,7 @@ var Label = function (_React$Component) {
             _react2.default.createElement(
               'p',
               null,
-              'Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute.'
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              'Here you can see all functional dependencies observed in the sliced dataset. You can drag the nodes apart to see relations.'
+              'Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute. You can drag the nodes around or magnify/diminish them by scrolling.'
             ),
             _react2.default.createElement(
               'div',

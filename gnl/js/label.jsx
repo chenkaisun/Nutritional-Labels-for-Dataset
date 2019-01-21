@@ -218,10 +218,10 @@ export default class Label extends React.Component {
         <div className="left_column">
 
           <div className="tab"><Link to="label#overview">Data Overview</Link></div>
-          {this.state.has_Correlation ? <div className="tab"><Link to="label#correlation">Correlation</Link></div> : ""}
-          {!this.state.has_SingleColumn && this.state.has_Coverage ? <div className="tab"><Link to="label#mups">Uncovered Patterns</Link></div> : ""}
-          {this.state.has_FunctionalDependency ? <div className="tab"><Link to="label#fds">Functional Dependences</Link></div> : ""}
+          {this.state.has_Correlation ? <div className="tab"><Link to="label#correlation">Correlations</Link></div> : ""}
+          {!this.state.has_SingleColumn && this.state.has_Coverage ? <div className="tab"><Link to="label#mups">Maximal Uncovered Patterns</Link></div> : ""}
           {!this.state.has_SingleColumn && this.state.has_AssociationRule ? <div className="tab"><Link to="label#ars">Association Rules</Link></div> : ""}
+          {this.state.has_FunctionalDependency ? <div className="tab"><Link to="label#fds">Functional Dependencies</Link></div> : ""}
         </div>
 
         <div className="right_column">
@@ -263,7 +263,7 @@ export default class Label extends React.Component {
                   tmp["has_Correlation"] = false;
                   this.setState(tmp);
                 }}>Remove</button></div></div>
-              <p>This shows correlation between selected attributes. Click to see scatterplot.</p>
+              <p>This shows correlation between selected attributes. Click on the squares to see scatterplot.</p>
               <div className="frame">
                 <div id="diagramCorrelations" className='diagram'> </div>
                 <h4 id="diagramScatterPlotName" className='diagram'></h4>
@@ -273,14 +273,14 @@ export default class Label extends React.Component {
           }
           {!this.state.has_SingleColumn && this.state.has_Coverage ?
             (<div id="mups" className="vis">
-              <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Uncovered Patterns</strong></div>&nbsp;&nbsp;&nbsp;
+              <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Maximal Uncovered Patterns</strong></div>&nbsp;&nbsp;&nbsp;
               <div style={{ display: "inline-block" }}><button className="rmv_button" onClick={(e) => {
                   e.preventDefault();
                   let tmp = this.state;
                   tmp["has_Coverage"] = false;
                   this.setState(tmp);
                 }}>Remove</button></div></div>
-              <p>Uncovered patterns shows the combination of values that are undersampled in the dataset</p>
+              <p>Maximal uncovered pattern shows the combination of values that are undersampled in the dataset</p>
               <div className="frame"><div id="mups_vis"></div></div>
             </div>) : ""
           }
@@ -293,8 +293,7 @@ export default class Label extends React.Component {
                   tmp["has_AssociationRule"] = false;
                   this.setState(tmp);
                 }}>Remove</button></div></div>
-              <p>Association rules is a set of directed relations between set A and set B such that set A determines the value of set B with over some predefined probability.</p>
-              <p>Here you can see all association rules in the sliced dataset. You can drag the nodes apart to see relations.</p>
+              <p>Association rule of a dataset is a set of directed relations in between set A and set B such that values of set A determines the values of set B for over some predefined probability. You can drag the nodes around or magnify/diminish them by scrolling.</p>
 
               <div id="ars_vis" className="frame">
                 <div>
@@ -307,7 +306,7 @@ export default class Label extends React.Component {
           {this.state.has_FunctionalDependency ?
           
               (<div id="fds" className="vis">
-                <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Functional Dependency </strong></div>&nbsp;&nbsp;&nbsp;
+                <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Functional Dependencies </strong></div>&nbsp;&nbsp;&nbsp;
               <div style={{ display: "inline-block" }}><button className="rmv_button" onClick={(e) => {
                     e.preventDefault();
                     let tmp = this.state;
@@ -315,8 +314,7 @@ export default class Label extends React.Component {
                     this.setState(tmp);
                   }}>Remove</button></div>
                 </div>
-                <p>Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute.</p>
-              <p>Here you can see all functional dependencies observed in the sliced dataset. You can drag the nodes apart to see relations.</p>
+              <p>Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute. You can drag the nodes around or magnify/diminish them by scrolling.</p>
                 <div id="visFunctionalDep" className="frame">
                   <div>
                   <FunctionalDependency key={2} />
