@@ -58640,6 +58640,11 @@ var Label = function (_React$Component) {
             ),
             _react2.default.createElement(
               'p',
+              { style: { color: "red" } },
+              'WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) '
+            ),
+            _react2.default.createElement(
+              'p',
               null,
               'Association rule of a dataset is a set of directed relations in between set A and set B such that values of set A determines the values of set B for over some predefined probability. You can drag the nodes around or magnify/diminish them by scrolling.'
             ),
@@ -58684,6 +58689,11 @@ var Label = function (_React$Component) {
                   'Remove'
                 )
               )
+            ),
+            _react2.default.createElement(
+              'p',
+              { style: { color: "red" } },
+              'WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) '
             ),
             _react2.default.createElement(
               'p',

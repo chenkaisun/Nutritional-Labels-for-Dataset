@@ -293,6 +293,7 @@ export default class Label extends React.Component {
                   tmp["has_AssociationRule"] = false;
                   this.setState(tmp);
                 }}>Remove</button></div></div>
+              <p style={{ color: "red" }}>WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) </p>
               <p>Association rule of a dataset is a set of directed relations in between set A and set B such that values of set A determines the values of set B for over some predefined probability. You can drag the nodes around or magnify/diminish them by scrolling.</p>
 
               <div id="ars_vis" className="frame">
@@ -313,7 +314,8 @@ export default class Label extends React.Component {
                     tmp["has_FunctionalDependency"] = false;
                     this.setState(tmp);
                   }}>Remove</button></div>
-                </div>
+              </div>
+              <p style={{ color: "red" }}>WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) </p>
               <p>Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute. You can drag the nodes around or magnify/diminish them by scrolling.</p>
                 <div id="visFunctionalDep" className="frame">
                   <div>
