@@ -37,7 +37,7 @@ export default class Selection extends React.Component {
 
       is_manually_widgets: true,
       widget_currentValues: [{ label: "Correlations", value: 1 },
-        { label: "Maximal Uncovered Patterns", value: 4 },],
+      { label: "Maximal Uncovered Patterns", value: 4 },],
 
       chose_numeric: false,
 
@@ -151,8 +151,11 @@ export default class Selection extends React.Component {
     } else if (name == "is_choose_attributes") {
       tmp["is_whole"] = !tmp["is_whole"]
     } else if (name == "is_single_column") {
+      tmp["widget_currentValues"]=[]
       tmp["is_multi_column"] = !tmp["is_multi_column"]
     } else if (name == "is_multi_column") {
+      tmp["widget_currentValues"] = [{ label: "Correlations", value: 1 },
+        { label: "Maximal Uncovered Patterns", value: 4 },]
       tmp["is_single_column"] = !tmp["is_single_column"]
     }
     this.setState(tmp);
@@ -160,7 +163,7 @@ export default class Selection extends React.Component {
 
   toggleRadio(value) {
     console.log("cur val", value);
-    
+
     const name = value;
     let tmp = this.state;
     tmp[name] = !tmp[name]
@@ -174,8 +177,8 @@ export default class Selection extends React.Component {
       tmp["is_single_column"] = !tmp["is_single_column"]
     }
     this.setState(tmp);
-    console.log("tmp",tmp);
-    
+    console.log("tmp", tmp);
+
   }
 
   render() {
@@ -237,7 +240,7 @@ export default class Selection extends React.Component {
 
             {this.state.is_single_column ?
               <div>
-                <div style={{ height: "3px"}}>&nbsp;</div>
+                <div style={{ height: "3px" }}>&nbsp;</div>
                 <Select
                   required={this.state.is_single_column}
                   closeMenuOnSelect={false}
@@ -334,7 +337,7 @@ export default class Selection extends React.Component {
                 <Checkbox name="is_manually_widgets" checked={this.state.is_manually_widgets} onChange={this.toggleCheckbox}>
                 </Checkbox>
                 &nbsp;&nbsp;
-                <span className="checkbox-label">Pick widgets</span>&nbsp;
+                <span className="checkbox-label">Pick widgets yourself</span>&nbsp;
                 <span data-tip="Pick what you would like to be included in the nutritional label" className="ttip">
                   <strong>?</strong></span>
               </label>
@@ -350,7 +353,7 @@ export default class Selection extends React.Component {
                   components={{ ClearIndicator }}
                   styles={{ clearIndicator: ClearIndicatorStyles }}
                   defaultValue={[{ label: "Correlations", value: 1 },
-                    { label: "Maximal Uncovered Patterns", value: 4 },]}
+                  { label: "Maximal Uncovered Patterns", value: 4 },]}
                   isMulti
                   onChange={(opt) => {
                     let tmp = this.state;

@@ -16,32 +16,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/gnl/api/likes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="87" selection-start-line="87" selection-end-line="87" />
-              <folding>
-                <element signature="e#26#38#0" expanded="true" />
-                <marker date="1548088621204" expanded="true" signature="13739:13764" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gnl/views/fd/utils/writer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gnl/views/apriori.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3230">
+            <state relative-caret-position="627">
               <caret line="174" column="83" selection-start-line="174" selection-start-column="81" selection-end-line="174" selection-end-column="83" />
               <folding>
                 <element signature="e#612#623#0" expanded="true" />
@@ -53,19 +31,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gnl/views/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+            <state relative-caret-position="114">
+              <caret line="153" column="5" selection-start-line="153" selection-start-column="5" selection-end-line="153" selection-end-column="5" />
+              <folding>
+                <element signature="e#47#56#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../Testing.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/gnl/api/likes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+            <state relative-caret-position="174">
+              <caret line="261" column="24" lean-forward="true" selection-start-line="261" selection-start-column="24" selection-end-line="261" selection-end-column="24" />
               <folding>
-                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#26#38#0" expanded="true" />
+                <marker date="1548228681467" expanded="true" signature="14784:14809" ph="..." />
               </folding>
             </state>
           </provider>
@@ -74,19 +56,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gnl/views/helper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gnl/views/fd/algorithm/tane.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="57">
+              <caret line="469" column="4" selection-start-line="469" selection-start-column="4" selection-end-line="469" selection-end-column="4" />
               <folding>
-                <element signature="e#46#80#0" expanded="true" />
+                <element signature="e#0#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -96,10 +69,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>protected_currentValues</find>
-      <find>numer</find>
-      <find>to_csv</find>
-      <find>fill_n</find>
       <find>NUM_MISSING</find>
       <find>time</find>
       <find>DATA_F</find>
@@ -125,6 +94,10 @@
       <find>clean</find>
       <find>=&gt;</find>
       <find>sort</find>
+      <find>types</find>
+      <find>CURRENT_DF_WITH_IGNORED_COLUMNS</find>
+      <find>500</find>
+      <find>ppr</find>
       <find>print</find>
     </findStrings>
   </component>
@@ -143,16 +116,16 @@
         <option value="$PROJECT_DIR$/gnl/views/testing.py" />
         <option value="$PROJECT_DIR$/gnl/views/helper.py" />
         <option value="$PROJECT_DIR$/gnl/views/fd/algorithm/tane.py" />
-        <option value="$PROJECT_DIR$/gnl/views/index.py" />
         <option value="$PROJECT_DIR$/../Testing.py" />
         <option value="$PROJECT_DIR$/gnl/views/apriori.py" />
+        <option value="$PROJECT_DIR$/gnl/views/index.py" />
         <option value="$PROJECT_DIR$/gnl/api/likes.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="951" />
-    <option name="width" value="978" />
+    <option name="x" value="950" />
+    <option name="width" value="980" />
     <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -293,7 +266,7 @@
     <frame x="-7" y="-7" width="1550" height="848" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.08129544" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17514871" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Project Explorer" order="2" weight="0.32980832" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -526,27 +499,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gnl/views/fd/utils/writer.py">
+    <entry file="file://$PROJECT_DIR$/gnl/views/fd/algorithm/tane.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gnl/views/apriori.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3230">
-          <caret line="174" column="83" selection-start-line="174" selection-start-column="81" selection-end-line="174" selection-end-column="83" />
+        <state relative-caret-position="133">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
           <folding>
-            <element signature="e#612#623#0" expanded="true" />
+            <element signature="e#46#80#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gnl/views/index.py">
+    <entry file="file://$PROJECT_DIR$/gnl/views/fd/utils/writer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+        <state relative-caret-position="380">
+          <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -560,30 +526,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gnl/views/fd/algorithm/tane.py">
+    <entry file="file://$PROJECT_DIR$/gnl/views/apriori.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="627">
+          <caret line="174" column="83" selection-start-line="174" selection-start-column="81" selection-end-line="174" selection-end-column="83" />
           <folding>
-            <element signature="e#46#80#0" expanded="true" />
+            <element signature="e#612#623#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gnl/views/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="153" column="5" selection-start-line="153" selection-start-column="5" selection-end-line="153" selection-end-column="5" />
+          <folding>
+            <element signature="e#47#56#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gnl/views/helper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+        <state relative-caret-position="57">
+          <caret line="469" column="4" selection-start-line="469" selection-start-column="4" selection-end-line="469" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gnl/api/likes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="87" selection-start-line="87" selection-end-line="87" />
+        <state relative-caret-position="174">
+          <caret line="261" column="24" lean-forward="true" selection-start-line="261" selection-start-column="24" selection-end-line="261" selection-end-column="24" />
           <folding>
             <element signature="e#26#38#0" expanded="true" />
-            <marker date="1548088621204" expanded="true" signature="13739:13764" ph="..." />
+            <marker date="1548228681467" expanded="true" signature="14784:14809" ph="..." />
           </folding>
         </state>
       </provider>

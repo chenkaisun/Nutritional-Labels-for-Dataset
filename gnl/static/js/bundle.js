@@ -46618,8 +46618,10 @@ var Selection = function (_React$Component) {
       } else if (name == "is_choose_attributes") {
         tmp["is_whole"] = !tmp["is_whole"];
       } else if (name == "is_single_column") {
+        tmp["widget_currentValues"] = [];
         tmp["is_multi_column"] = !tmp["is_multi_column"];
       } else if (name == "is_multi_column") {
+        tmp["widget_currentValues"] = [{ label: "Correlations", value: 1 }, { label: "Maximal Uncovered Patterns", value: 4 }];
         tmp["is_single_column"] = !tmp["is_single_column"];
       }
       this.setState(tmp);
@@ -46888,7 +46890,7 @@ var Selection = function (_React$Component) {
                 _react2.default.createElement(
                   'span',
                   { className: 'checkbox-label' },
-                  'Pick widgets'
+                  'Pick widgets yourself'
                 ),
                 '\xA0',
                 _react2.default.createElement(
@@ -58216,6 +58218,8 @@ var Label = function (_React$Component) {
     console.log(_this.state['chose_numeric']);
     console.log("single is ", _this.props["location"]["state"]['is_single_column']);
 
+    console.log("widget_currentValues", widget_currentValues);
+
     for (var i = 0; i < widget_currentValues.length; ++i) {
       if (widget_currentValues[i]['value'] == 1) {
         _this.state['has_Correlation'] = true;
@@ -58531,7 +58535,7 @@ var Label = function (_React$Component) {
               '\xA0\xA0\xA0',
               _react2.default.createElement(
                 'div',
-                { style: { display: "inline-block" } },
+                { style: { display: "inline-block", fontSize: "10px" } },
                 _react2.default.createElement(
                   'button',
                   { className: 'rmv_button', onClick: function onClick(e) {

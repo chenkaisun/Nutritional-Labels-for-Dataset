@@ -45,7 +45,8 @@ export default class Label extends React.Component {
 
 
 
-
+    console.log("widget_currentValues",widget_currentValues);
+    
     for (let i = 0; i < widget_currentValues.length; ++i) {
       if (widget_currentValues[i]['value'] == 1) {
         this.state['has_Correlation'] = true;
@@ -88,7 +89,7 @@ export default class Label extends React.Component {
     // }
     if (this.state['has_SingleColumn']) {
       this.state['widget_options'] = [
-        
+
         { label: "Functional Dependencies", value: 2 }
       ]
       if (protected_currentValues.length != 0) this.state["widget_options"].push({ label: "Correlations", value: 1 })
@@ -257,7 +258,7 @@ export default class Label extends React.Component {
           {this.state.has_Correlation ?
             (<div id="correlation" className="vis">
               <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Correlations</strong></div>&nbsp;&nbsp;&nbsp;
-              <div style={{ display: "inline-block"}}><button className="rmv_button" onClick={(e) => {
+              <div style={{ display: "inline-block", fontSize: "10px" }}><button className="rmv_button" onClick={(e) => {
                   e.preventDefault();
                   let tmp = this.state;
                   tmp["has_Correlation"] = false;
@@ -305,26 +306,26 @@ export default class Label extends React.Component {
             </div>) : ""
           }
           {this.state.has_FunctionalDependency ?
-          
-              (<div id="fds" className="vis">
-                <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Functional Dependencies </strong></div>&nbsp;&nbsp;&nbsp;
+
+            (<div id="fds" className="vis">
+              <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Functional Dependencies </strong></div>&nbsp;&nbsp;&nbsp;
               <div style={{ display: "inline-block" }}><button className="rmv_button" onClick={(e) => {
-                    e.preventDefault();
-                    let tmp = this.state;
-                    tmp["has_FunctionalDependency"] = false;
-                    this.setState(tmp);
-                  }}>Remove</button></div>
+                  e.preventDefault();
+                  let tmp = this.state;
+                  tmp["has_FunctionalDependency"] = false;
+                  this.setState(tmp);
+                }}>Remove</button></div>
               </div>
               <p style={{ color: "red" }}>WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) </p>
               <p>Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute. You can drag the nodes around or magnify/diminish them by scrolling.</p>
-                <div id="visFunctionalDep" className="frame">
-                  <div>
+              <div id="visFunctionalDep" className="frame">
+                <div>
                   <FunctionalDependency key={2} />
-                    <hr />
-                  </div>
+                  <hr />
                 </div>
-              </div>) 
-            :""
+              </div>
+            </div>)
+            : ""
           }
           <div id="additional_widgets" className="vis">
             <div style={{ fontSize: "32px" }}><strong>Add More widgets</strong></div>

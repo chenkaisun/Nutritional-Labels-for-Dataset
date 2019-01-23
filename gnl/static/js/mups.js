@@ -143,7 +143,7 @@ function drawTree(data) {
 			.text(function (d) {
 				val = d.node.split(":");
 				if (val[1] != undefined) {
-					return val[0] + " --> " + val[1];
+					return val[0] + ": " + val[1];
 				} else {
 					return val[0];
 				}

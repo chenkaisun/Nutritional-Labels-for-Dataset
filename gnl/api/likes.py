@@ -94,18 +94,24 @@ def form_submit():
     # protected and non-protected attributes
     col_names = list(gnl.app.config["CURRENT_DF"])
     # print("col_names", col_names)
-    attribute_currentValues = [i['label'] for i in sel['attribute_currentValues']
-                               if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["str", "empty"]] \
-        if not sel['is_whole'] else col_names
+    attribute_currentValues = [i['label'] for i in sel['attribute_currentValues']] if not sel['is_whole'] else col_names
+                               # if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["empty"]] \
+
+
+    # str cols
 
     if sel['is_single_column']: sel['protected_currentValues']=[sel['protected_currentValues']] if sel['protected_currentValues'] else []
-    protected_currentValues = [i['label'] for i in sel['protected_currentValues']
-                                   if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["str", "empty"]]
-    all_values = list(set(attribute_currentValues + protected_currentValues))
-    gnl.app.config["CURRENT_DF"] = gnl.app.config["CURRENT_DF"][all_values]
+    protected_currentValues = [i['label'] for i in sel['protected_currentValues']]
+    # if gnl.app.config["CURRENT_COLUMN_TYPES"][i['label']][0] not in ["empty"]
 
+    all_values = list(set(attribute_currentValues + protected_currentValues))
+
+    # slice value range first
+    print("pattrs are ",protected_currentValues )
+    print("attrs are ",attribute_currentValues )
     # select range
     if sel["is_query"]:
+        print("is query")
         query_ranges = sel["query_rangeValues"]
         for key in query_ranges:
 
@@ -121,6 +127,9 @@ def form_submit():
                         gnl.app.config["CURRENT_DF"][
                             gnl.app.config["CURRENT_DF"][key]==query_ranges[key]]
 
+    # then slice cols
+    gnl.app.config["CURRENT_DF"] = gnl.app.config["CURRENT_DF"][all_values]
+
     # slicing completed, count missing before fill in nan
     if not sel["is_single_column"]:
         gnl.app.config['NUM_MISSING']=0
@@ -131,11 +140,25 @@ def form_submit():
                 if helper.is_nan(entry):
                     gnl.app.config['NUM_MISSING'] += 1
 
-    gnl.app.config['CURRENT_DF'] = helper.fill_na(gnl.app.config['CURRENT_DF'])
+    dff = gnl.app.config["CURRENT_COLUMN_TYPES"]
+
+
+    # drop empty ones
+    gnl.app.config["CURRENT_DF"].drop(columns=[col for col in list(gnl.app.config["CURRENT_DF"])
+                                                      if (dff[col][0] == "empty")], inplace=True)
+    gnl.app.config["CURRENT_DF"]=gnl.app.config["CURRENT_DF"].fillna(method='ffill')
+    # gnl.app.config['CURRENT_DF'] = helper.fill_na(gnl.app.config['CURRENT_DF'])
+
+    # print("null 1", gnl.app.config['CURRENT_DF'].isna().sum())
     # now clean after fill na
     helper.clean(gnl.app.config['CURRENT_DF'])
 
-    dff = gnl.app.config["CURRENT_COLUMN_TYPES"]
+    gnl.app.config["CURRENT_DF"] = gnl.app.config["CURRENT_DF"].fillna(method='ffill')
+    # gnl.app.config['CURRENT_DF'] = helper.fill_na(gnl.app.config['CURRENT_DF'])
+    # print("null 2", gnl.app.config['CURRENT_DF'].isna().sum())
+
+
+
     gnl.app.config["CURRENT_IGNORED_COLUMNS"]=[]
     gnl.app.config["CURRENT_IGNORED_COLUMNS"] += [col for col in list(gnl.app.config["CURRENT_DF"])
                                                       if (dff[col][0] == "str" or dff[col][0] == "empty")]
@@ -143,6 +166,9 @@ def form_submit():
     # print("gnl.app.config[CURRENT_IGNORED_COLUMNS]", gnl.app.config["CURRENT_IGNORED_COLUMNS"])
     # keep full dataset
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"] = gnl.app.config["CURRENT_DF"].copy()
+
+    # print("null in form", gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].isna().sum())
+
     # print("cur df", gnl.app.config["CURRENT_DF"])
     gnl.app.config["CURRENT_DF"].drop(columns=gnl.app.config["CURRENT_IGNORED_COLUMNS"], inplace=True)
 
@@ -187,6 +213,8 @@ def form_submit():
 
     # print("form return ", datetime.datetime.now())
 
+    # print("df in form submit is ", )
+    # pprint.pprint(gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"])
 
     return jsonify(**context)
 
@@ -226,7 +254,9 @@ def get_coverage():
     # now only for str cols
     # todo
     df=df.drop(columns=[col for col in list(df) if dff[col][0] == "empty"])
-
+    # print("df is ")
+    # pprint.pprint(df)
+    # print("null ", df.isna().sum())
     valid_cols, valid_col_indices, cardinality, categories=[], [], [], []
 
     # grouping numerical
@@ -258,7 +288,7 @@ def get_coverage():
     dataset1 = dataset(gnl.app.config["CURRENT_TEMP_FILE"], cardinality, [i for i in range(len(valid_cols))], df.shape[0])
 
     hybrid1 = hybrid(dataset1)
-    a = hybrid1.findMaxUncoveredPatternSet(500, 3)
+    a = hybrid1.findMaxUncoveredPatternSet(30, 3)
 
     mups = [i.getStr() for i in a]
 
@@ -327,7 +357,7 @@ def get_coverage():
     # to mup.json
     context={"tree":tree}
     # context = {'mups': uncovered_patterns, tree: tree}
-    print("uncovered_patterns:",tree)
+    # print("uncovered_patterns:",tree)
     # print("tree", tree)
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
@@ -409,7 +439,10 @@ def get_multi_fd():
     for pattr in pattrs:
         if pattr not in cols:
             cols.append(pattr)
-
+    # pprint.pprint(df)
+    # print("available cols: ", list(df))
+    # print("pcols: ", pattrs)
+    # print("cols: ", cols)
     # print("pattr", pattrs)
     # drop the spaces and commas
     df.to_csv(gnl.app.config["CURRENT_TEMP_FILE"], index=False)
