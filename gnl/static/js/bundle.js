@@ -46846,7 +46846,7 @@ var Selection = function (_React$Component) {
               _react2.default.createElement(
                 'span',
                 null,
-                'Pick protected attributes'
+                'Pick protected/label attributes'
               ),
               '\xA0',
               _react2.default.createElement(

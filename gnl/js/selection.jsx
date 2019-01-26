@@ -151,11 +151,11 @@ export default class Selection extends React.Component {
     } else if (name == "is_choose_attributes") {
       tmp["is_whole"] = !tmp["is_whole"]
     } else if (name == "is_single_column") {
-      tmp["widget_currentValues"]=[]
+      tmp["widget_currentValues"] = []
       tmp["is_multi_column"] = !tmp["is_multi_column"]
     } else if (name == "is_multi_column") {
       tmp["widget_currentValues"] = [{ label: "Correlations", value: 1 },
-        { label: "Maximal Uncovered Patterns", value: 4 },]
+      { label: "Maximal Uncovered Patterns", value: 4 },]
       tmp["is_single_column"] = !tmp["is_single_column"]
     }
     this.setState(tmp);
@@ -300,7 +300,7 @@ export default class Selection extends React.Component {
 
             {!this.state.is_single_column ? <div>
               <ReactTooltip />
-              <span >Pick protected attributes</span>
+              <span >Pick protected/label attributes</span>
               &nbsp;
               <span data-tip="Protected attributes are the columns that potentially introduce biases against certain social groups (i.e. gender, race, etc)" className="ttip">
                 <strong>?</strong></span>

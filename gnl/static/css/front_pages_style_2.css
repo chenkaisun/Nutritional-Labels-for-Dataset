@@ -144,6 +144,19 @@ input[type=submit] {
   background-color: inherit;
 }
 
+.span_tag1 {
+  font-size: 12pt;
+  color: #fff;
+  border-color: black;
+  border-style: solid;
+  border-width: 2px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: black;
+}
+
 .span_tag:hover {
     opacity: 0.5;
 }
