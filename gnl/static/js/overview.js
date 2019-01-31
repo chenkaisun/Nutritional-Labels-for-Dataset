@@ -20,7 +20,7 @@ function load_single_meta() {
     contentType: "application/json;charset=UTF-8",
     dataType: 'json',
     success: function (dat) {
-      console.log("overview ajax back", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+      // console.log("overview ajax back", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
       // console.log("data ", dat.re);
       loadOVData(dat.re)
     }
@@ -29,7 +29,7 @@ function load_single_meta() {
 
 function loadOVData(d) {
   var today = new Date();
-  console.log("\n overview\n ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+  // console.log("\n overview\n ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   ovData = [];
   cols_num = [];
@@ -45,14 +45,14 @@ function loadOVData(d) {
       cols.push(v)
     }
   });
-  console.log('cols : ', cols)
-  console.log("s drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+  // console.log('cols : ', cols)
+  // console.log("s drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
   cols.forEach(element => {
     drawRow(ovData, element);
     drawHistogram(ovData, element);
   });
   toggleHis();
-  console.log("e drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+  // console.log("e drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
   // });
 }
 

@@ -8,6 +8,8 @@ import AssociationRule from './association_rule';
 // import SingleColumn from './single_column';
 // import Coverage from './coverage';
 import Select from 'react-select';
+
+import ReactTable from "react-table";
 import { HashLink as Link } from 'react-router-hash-link';
 import $ from 'jquery';
 export default class Label extends React.Component {
@@ -15,6 +17,7 @@ export default class Label extends React.Component {
     super(props);
     console.log("label ctor");
     this.handleClick = this.handleClick.bind(this);
+    // this.setParams = this.setParams.bind(this);
     // this.handleRemove = this.handleRemove.bind(this);
     let widget_currentValues = this.props["location"]["state"]['widget_currentValues'];
     let protected_currentValues = this.props["location"]["state"]['protected_currentValues'];
@@ -39,48 +42,52 @@ export default class Label extends React.Component {
       has_SingleColumn: this.props["location"]["state"]['is_single_column'],
       //this.props["location"]["state"]['is_single_column']
     }
-    console.log("chose is ");
-    console.log(this.state['chose_numeric']);
-    console.log("single is ", this.props["location"]["state"]['is_single_column']);
+    // console.log("chose is ");
+    // console.log(this.state['chose_numeric']);
+    // console.log("single is ", this.props["location"]["state"]['is_single_column']);
 
 
 
-    console.log("widget_currentValues",widget_currentValues);
-    
-    for (let i = 0; i < widget_currentValues.length; ++i) {
-      if (widget_currentValues[i]['value'] == 1) {
-        this.state['has_Correlation'] = true;
-      } else if (widget_currentValues[i]['value'] == 2) {
-        this.state['has_FunctionalDependency'] = true;
-      } else if (widget_currentValues[i]['value'] == 3) {
-        this.state['has_AssociationRule'] = true;
-      } else if (widget_currentValues[i]['value'] == 4) {
-        this.state['has_Coverage'] = true;
+    // console.log("label widget_currentValues", widget_currentValues);
+
+
+    if (this.props["location"]["state"]["is_manually_widgets"]) {
+      for (let i = 0; i < widget_currentValues.length; ++i) {
+        if (widget_currentValues[i]['value'] == 1) {
+          this.state['has_Correlation'] = true;
+        } else if (widget_currentValues[i]['value'] == 2) {
+          this.state['has_FunctionalDependency'] = true;
+        } else if (widget_currentValues[i]['value'] == 3) {
+          this.state['has_AssociationRule'] = true;
+        } else if (widget_currentValues[i]['value'] == 4) {
+          this.state['has_Coverage'] = true;
+        }
       }
     }
 
-    if (!this.props["location"]["state"]["is_manually_widgets"]) {
-      this.state = {
-        setted: false,
-        widget_currentValues: [{ label: "Correlations", value: 1 },
-        { label: "Functional Dependencies", value: 2 },
-        { label: "Association Rules", value: 3 },
-        { label: "Maximal Uncovered Patterns", value: 4 }],
-        widget_options: [
-          { label: "Correlation", value: 1 },
-          { label: "Functional Dependencies", value: 2 },
-          { label: "Association Rules", value: 3 },
-          { label: "Maximal Uncovered Patterns", value: 4 },
-        ],
-        additional: [],
-        chose_numeric: this.props["location"]["state"]['chose_numeric'],
-        has_Correlation: true,
-        has_FunctionalDependency: true,
-        has_AssociationRule: true,
-        has_Coverage: true,
-        has_SingleColumn: this.props["location"]["state"]['is_single_column'],
-      }
-    }
+
+    // if (!this.props["location"]["state"]["is_manually_widgets"]) {
+    //   this.state = {
+    //     setted: false,
+    //     widget_currentValues: [{ label: "Correlations", value: 1 },
+    //     { label: "Functional Dependencies", value: 2 },
+    //     { label: "Association Rules", value: 3 },
+    //     { label: "Maximal Uncovered Patterns", value: 4 }],
+    //     widget_options: [
+    //       { label: "Correlation", value: 1 },
+    //       { label: "Functional Dependencies", value: 2 },
+    //       { label: "Association Rules", value: 3 },
+    //       { label: "Maximal Uncovered Patterns", value: 4 },
+    //     ],
+    //     additional: [],
+    //     chose_numeric: this.props["location"]["state"]['chose_numeric'],
+    //     has_Correlation: true,
+    //     has_FunctionalDependency: true,
+    //     has_AssociationRule: true,
+    //     has_Coverage: true,
+    //     has_SingleColumn: this.props["location"]["state"]['is_single_column'],
+    //   }
+    // }
 
 
     // if (protected_currentValues.length == 0) {
@@ -96,6 +103,17 @@ export default class Label extends React.Component {
     }
   }
 
+  // setParams() {
+
+  //   fetch('/api/params/', {
+  //     credentials: 'same-origin',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     method: ['POST'],
+  //     body: JSON.stringify(this.state),
+  //   }).then((res) => {
+
+  //   })
+  // }
   handleClick(e) {
     e.preventDefault();
     let tmp = this.state;
@@ -122,6 +140,12 @@ export default class Label extends React.Component {
         tmp['has_Coverage'] = true;
       }
     }
+    fetch('/api/params/', {
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      method: ['POST'],
+      body: JSON.stringify(tmp),
+    })
     console.log("set new widgets");
     // if (!tmp["has_SingleColumn"] && added_coverage) {
     //   $(this.refs.reference).html(
@@ -148,56 +172,77 @@ export default class Label extends React.Component {
     }
     this.setState(tmp)
   }
+
+
   componentDidMount() {
-    var today = new Date();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    console.log("label mount", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds())
+    // var today = new Date();
+    // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    // console.log("label mount", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds())
     let tmp = this.state;
-    // if(tmp["has_Coverage"]){
-    //   fetch('/api/coverage/', { credentials: 'same-origin' })
-    //     .then((response) => {
-    //       if (!response.ok) throw Error(response.statusText);
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       console.log("setting cov");
-    //       // $(this.refs.reference).html(
-    //       //   loadJson("mups.json")
-    //       // );
-    //         this.setState(tmp);
-    //         $(this.refs.reference).html(
-    //           loadJson("mups.json")
-    //         );
-    //           console.log("cov jq complete");
-    //       }
-    //     )
-    //     .catch(error => console.log(error));// eslint-disable-line no-console
-    // }
-    if (tmp["has_SingleColumn"]) {
-      console.log("in mount single col");
-      $(this.refs.reference).html(
-        load_single_meta()
-      );
-    }
-    if (tmp["has_Correlation"]) {
-      console.log("in mount cor");
-      $(this.refs.reference).html(
-        load_correlation()
-      );
-    }
-    if (tmp["has_Coverage"]) {
-      console.log("in mount cor");
-      $(this.refs.reference).html(
-        load_mups()
-      );
-    }
-    // tmp["setted"] = true;
-    this.setState(tmp);
-    console.log("e label mount", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+
+    fetch('/api/sel/', { credentials: 'same-origin' })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        // console.log("res sel", data);
+
+        if (!this.props["location"]["state"]["is_manually_widgets"]) {
+          tmp["has_Correlation"] = false
+          tmp["has_FunctionalDependency"] = false
+          tmp["has_AssociationRule"] = false
+          tmp["has_Coverage"] = false
+          tmp["widget_currentValues"] = data.sel
+          for (let i = 0; i < data.sel.length; ++i) {
+            let cur = data.sel[i];
+            if (cur["label"] == "Correlations") {
+              tmp["has_Correlation"] = true;
+            }
+            else if (cur["label"] == "Functional Dependencies") {
+              tmp["has_FunctionalDependency"] = true;
+            }
+            else if (cur["label"] == "Association Rules") {
+              tmp["has_AssociationRule"] = true;
+            }
+            else if (cur["label"] == "Maximal Uncovered Patterns") {
+              tmp["has_Coverage"] = true;
+            }
+          }
+        }
+        // console.log(data.sel);
+
+        if (tmp["has_SingleColumn"]) {
+          // console.log("in mount single col");
+          $(this.refs.reference).html(
+            load_single_meta()
+          );
+        }
+        if (tmp["has_Correlation"]) {
+          // console.log("in mount cor");
+          $(this.refs.reference).html(
+            load_correlation()
+          );
+        }
+        if (tmp["has_Coverage"]) {
+          // console.log("in mount cor");
+          $(this.refs.reference).html(
+            load_mups()
+          );
+        }
+        tmp["setted"] = true;
+        // this.setState(tmp);
+
+        this.setState(tmp);
+      }
+      )
+      .catch(error => console.log(error));// eslint-disable-line no-console
+
+    // console.log("e label mount", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
   }
   render() {
     var today = new Date();
-    console.log("label render", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds())
+    // console.log("label render", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds())
     const CustomClearText = () => 'clear all';
     const ClearIndicator = (props) => {
       const { children = <CustomClearText />, getStyles, innerProps: { ref, ...restInnerProps } } = props;
@@ -262,6 +307,20 @@ export default class Label extends React.Component {
                   e.preventDefault();
                   let tmp = this.state;
                   tmp["has_Correlation"] = false;
+                  for (let i = 0; i < tmp["widget_currentValues"].length; ++i) {
+                    if (tmp["widget_currentValues"][i]["label"] == "Correlations") {
+                      tmp["widget_currentValues"].splice(i, 1);
+                      break
+
+                    }
+                  }
+                  fetch('/api/params/', {
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    method: ['POST'],
+                    body: JSON.stringify(tmp),
+                  }).then((res) => {
+                  })
                   this.setState(tmp);
                 }}>Remove</button></div></div>
               <p>This shows correlation between selected attributes. Click on the squares to see scatterplot.</p>
@@ -279,7 +338,25 @@ export default class Label extends React.Component {
                   e.preventDefault();
                   let tmp = this.state;
                   tmp["has_Coverage"] = false;
+
+                  for (let i = 0; i < tmp["widget_currentValues"].length; ++i) {
+                    if (tmp["widget_currentValues"][i]["label"] == "Maximal Uncovered Patterns") {
+                      tmp["widget_currentValues"].splice(i, 1);
+                      break
+
+                    }
+                  }
+                  fetch('/api/params/', {
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    method: ['POST'],
+                    body: JSON.stringify(tmp),
+                  }).then((res) => {
+                  })
                   this.setState(tmp);
+                  // console.log("tmp", tmp);
+
+
                 }}>Remove</button></div></div>
               <p>Maximal uncovered pattern shows the combination of values that are undersampled in the dataset</p>
               <div className="frame"><div id="mups_vis"></div></div>
@@ -292,6 +369,31 @@ export default class Label extends React.Component {
                   e.preventDefault();
                   let tmp = this.state;
                   tmp["has_AssociationRule"] = false;
+                  console.log("brefore ", tmp["widget_currentValues"]);
+                  let tlist = tmp["widget_currentValues"]
+                  // console.log("length is ", tlist.length);
+                  
+                  for (let i = 0; i < tlist.length; ++i) {
+                    // console.log(i," ",tmp["widget_currentValues"][i]);
+                    
+                    if (tmp["widget_currentValues"][i]["label"] == "Association Rules") {
+                      console.log("here");
+                      tmp["widget_currentValues"].splice(i, 1);
+                      break
+                    }
+                  }
+                  console.log("after ", tmp["widget_currentValues"]);
+                  
+                  fetch('/api/params/', {
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    method: ['POST'],
+                    body: JSON.stringify(tmp),
+                  }).then((res) => {
+                  })
+                  // this.setState(tmp);
+                  console.log("cur tmp", tmp["widget_currentValues"]);
+
                   this.setState(tmp);
                 }}>Remove</button></div></div>
               <p style={{ color: "red" }}>WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) </p>
@@ -310,9 +412,25 @@ export default class Label extends React.Component {
             (<div id="fds" className="vis">
               <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Functional Dependencies </strong></div>&nbsp;&nbsp;&nbsp;
               <div style={{ display: "inline-block" }}><button className="rmv_button" onClick={(e) => {
+
                   e.preventDefault();
                   let tmp = this.state;
                   tmp["has_FunctionalDependency"] = false;
+
+                  for (let i = 0; i < tmp["widget_currentValues"].length; ++i) {
+                    if (tmp["widget_currentValues"][i]["label"] == "Functional Dependencies") {
+                      tmp["widget_currentValues"].splice(i, 1);
+                      break
+
+                    }
+                  }
+                  fetch('/api/params/', {
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    method: ['POST'],
+                    body: JSON.stringify(tmp),
+                  }).then((res) => {
+                  })
                   this.setState(tmp);
                 }}>Remove</button></div>
               </div>
@@ -343,6 +461,7 @@ export default class Label extends React.Component {
                       let tmp = this.state;
                       tmp.widget_currentValues = opt
                       this.setState(tmp);
+                      // console.log("tmp", tmp);
                     }
                     }
                     simpleValue
@@ -362,6 +481,8 @@ export default class Label extends React.Component {
                         let tmp = this.state;
                         tmp.widget_currentValues = opt
                         this.setState(tmp);
+                        // console.log("tmp", tmp);
+
                       }
                       }
                       simpleValue

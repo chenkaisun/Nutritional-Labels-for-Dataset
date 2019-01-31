@@ -25,7 +25,7 @@ function load_correlation() {
     contentType: "application/json;charset=UTF-8",
     dataType: 'json',
     success: function (dat) {
-      console.log("load_correlation dat ", dat.re);
+      // console.log("load_correlation dat ", dat.re);
 
       loadRawData(dat.re)
     }
@@ -34,24 +34,24 @@ function load_correlation() {
 
 function loadRawData(d) {
   var today = new Date();
-  console.log("\n cor\n ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+  // console.log("\n cor\n ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
   var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
   // d3.csv("/static/data/" + csvFileName).then(function (d) {
-  console.log("d draw : ", d);
+  // console.log("d draw : ", d);
   rawData = d;
   rawDataFiltered = d;
   rawColumns = Object.keys(rawData[1]);
-  console.log("rawColumns : ", rawColumns);
+  // console.log("rawColumns : ", rawColumns);
   for (let i = 0; i < rawColumns.length; ++i) {
     categoryOfColumns.quantitative.push(i);
   }
-  console.log("quantitative : ", categoryOfColumns.quantitative);
+  // console.log("quantitative : ", categoryOfColumns.quantitative);
   rawColumnFiltered = Object.keys(rawData[1]);
   analysisResult["colnames"] = rawColumns;
-  console.log("s drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+  // console.log("s drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
   init();
   drawAll(true);
-  console.log("e drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+  // console.log("e drawing ", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
   // loadAnalysisResult();
   // });
 }

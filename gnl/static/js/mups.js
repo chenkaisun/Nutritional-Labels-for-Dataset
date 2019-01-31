@@ -31,8 +31,8 @@ function load_mups() {
 		contentType: "application/json;charset=UTF-8",
 		dataType: 'json',
 		success: function (dat) {
-			console.log("mups ajax back", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
-			console.log("mups ", dat.tree);
+			// console.log("mups ajax back", today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds());
+			// console.log("mups ", dat.tree);
 			drawTree(dat.tree);
 		}
 	});
@@ -41,8 +41,8 @@ function load_mups() {
 function loadJson(fileName) {
 	console.log("mups here");
 	d3v3.json("/static/data/" + fileName, function (error, data) {
-		console.log("data");
-		console.log(data);
+		// console.log("data");
+		// console.log(data);
 		drawTree(data);
 	});
 }

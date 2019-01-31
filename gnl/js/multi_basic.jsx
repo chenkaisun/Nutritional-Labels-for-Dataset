@@ -1,6 +1,11 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 // import ReactDOM from 'react-dom';
+import ReactTable from "react-table";
+import matchSorter from 'match-sorter';
+// import {
+//   withScreenSize,
+// } from '@data-ui/histogram';
 
 
 export default class MultiBasic extends React.Component {
@@ -11,10 +16,6 @@ export default class MultiBasic extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount() {
-
-  }
-
   componentDidMount() {
     fetch('/api/multi_basic/', { credentials: 'same-origin' })
       .then((response) => {
@@ -23,8 +24,11 @@ export default class MultiBasic extends React.Component {
       })
       .then((data) => {
         console.log('multi basic get data');
-        console.log();
+        console.log("data.repr ", data.repr);
+
         this.setState({
+          repr: data.repr,
+          repr_names: data.repr_names,
           keywords: data.keywords,
           num_rows: data.num_rows,
           num_cols: data.num_cols,
@@ -36,7 +40,25 @@ export default class MultiBasic extends React.Component {
       .catch(error => console.log(error));// eslint-disable-line no-console
   }
   render() {
+
+
     if (this.state.setted) {
+      let data = this.state.repr;
+      let columns = this.state.repr_names.map((name) => {
+        return (
+          {
+            Header: name,
+            id: name,
+            accessor: d => d[name],
+            filterMethod: (filter, rows) =>
+              matchSorter(rows, filter.value, { keys: [name] }),
+            filterAll: true
+          }
+        );
+      }
+      );
+      console.log("columns: ", columns);
+
       return (
         <div>
           <div className="ov_row_head">
@@ -57,6 +79,22 @@ export default class MultiBasic extends React.Component {
               }
             })}</span>
           </div>
+          <div className="ov_row_head">
+            <span className="ov_cell mattr">Representative rows and columns</span>
+          </div>
+          <div className="ov_row">
+            <ReactTable
+              data={data}
+              columns={columns}
+              defaultPageSize={10}
+              filterable
+              defaultFilterMethod={(filter, row) =>
+                String(row[filter.id]) === filter.value}
+
+              className="-striped -highlight"
+            />
+          </div>
+
         </div>
       );
 

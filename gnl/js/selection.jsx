@@ -127,17 +127,36 @@ export default class Selection extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       method: ['POST'],
       body: JSON.stringify(this.state),
-    }).then((res) => {
-
+    }).then((response) => {
     })
-    console.log("s fetch post");
+      
+    // fetch('/api/get_colnames/', { credentials: 'same-origin' })
+    //   .then((response) => {
+
+    //   })
+
+
+    // fetch('/api/sel/', {
+    //   credentials: 'same-origin',
+    //   method: ['GET'],
+    // }).then((res) => {
+    //   console.log("sel res", res.sel);
+    //   tmp = res.sel;
+
+    // })
+    console.log("out of fetch");
+
     this.setState(tmp);
-    // history.push('/label');
+
     history.push({
       pathname: '/label',
-      state: this.state
+      state: tmp
     })
-    console.log("e fetch post");
+
+    // console.log("s fetch post");
+    // this.setState(tmp);
+    // history.push('/label');
+    // console.log("e fetch post");
   }
 
   toggleCheckbox(e) {
@@ -162,7 +181,7 @@ export default class Selection extends React.Component {
   }
 
   toggleRadio(value) {
-    console.log("cur val", value);
+    // console.log("cur val", value);
 
     const name = value;
     let tmp = this.state;
@@ -177,7 +196,7 @@ export default class Selection extends React.Component {
       tmp["is_single_column"] = !tmp["is_single_column"]
     }
     this.setState(tmp);
-    console.log("tmp", tmp);
+    // console.log("tmp", tmp);
 
   }
 
@@ -225,6 +244,8 @@ export default class Selection extends React.Component {
               <label>
                 <input className="form-radio" type="radio" name="is_single_column" checked={this.state.is_single_column} onChange={this.toggleCheckbox} />
                 <span className="checkbox-label" >Single Column Analysis</span>
+                {this.state.is_single_column ? <div style={{ display: "inline-block" }}><span data-tip="Must choose one attribute" className="warningtip1"><strong>*</strong></span></div> : ""}
+                
               </label>
               &nbsp;
               <label className="container">
@@ -419,7 +440,7 @@ export default class Selection extends React.Component {
                   defaultValue={[]}
                   isMulti
                   onChange={(opt) => {
-                    console.log("query current ", opt);
+                    // console.log("query current ", opt);
                     let tmp = this.state;
                     let len_new = opt.length;
                     let len_old = tmp.query_currentValues.length;
