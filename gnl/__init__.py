@@ -22,4 +22,4 @@ app.config.from_envvar('GNL_SETTINGS', silent=True)
 # going to tell pylint and pycodestyle to ignore this coding style violation.
 import gnl.api  # noqa: E402  pylint: disable=wrong-import-position
 import gnl.views  # noqa: E402  pylint: disable=wrong-import-position
-import gnl.model  # noqa: E402  pylint: disable=wrong-import-position
+# import gnl.model  # noqa: E402  pylint: disable=wrong-import-position

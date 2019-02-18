@@ -1,7 +1,7 @@
 """REST API for likes."""
 import flask
 import gnl
-from flask import make_response
+# from flask import make_response
 from flask import jsonify
 from flask import request
 import numpy as np
@@ -10,8 +10,8 @@ from gnl.views.fd.utils import reader
 from gnl.views.fd.utils import writer
 from gnl.views.fd.algorithm import tane
 from gnl.views import helper
-from statistics import mean, median
-import pandas as pd
+# from statistics import mean, median
+# import pandas as pd
 import os
 import json
 # import pprint
@@ -20,7 +20,7 @@ import pandas as pd
 from jpype import *
 import random
 from copy import deepcopy
-import datetime
+# import datetime
 
 """you might end up refactoring parts of this code later 
 to avoid copy-pasted code shared between the REST API and 

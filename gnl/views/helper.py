@@ -1,17 +1,17 @@
-from future.builtins import next
-from unidecode import unidecode
+# from future.builtins import next
+# from unidecode import unidecode
 from difflib import SequenceMatcher
 import pandas as pd
-import csv
-import re
+# import csv
+# import re
 import numpy as np
-import dedupe
-import os
-import logging
-import optparse
+# import dedupe
+# import os
+# import logging
+# import optparse
 import gnl
 import re
-import math
+# import math
 from copy import deepcopy
 _float_regexp = re.compile(r"^[-+]?(?:\b[0-9]+(?:\.[0-9]*)?|\.[0-9]+\b)(?:[eE][-+]?[0-9]+\b)?$").match
 
@@ -81,139 +81,139 @@ def jaccard_distance(str1, str2):
     union = (len(list1) + len(list2)) - intersect
     return float(intersect / union)
 
-def preProcess(column):
-    try:  # python 2/3 string differences
-        column = column.decode('utf8')
-    except AttributeError:
-        pass
-    column = unidecode(column)
-    column = re.sub('  +', ' ', column)
-    column = re.sub('\n', ' ', column)
-    column = column.strip().strip('"').strip("'").lower().strip()
-
-    if not column:
-        column = None
-    return column
-
-def readData(filename):
-    data_d = {}
-    with open(filename) as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            clean_row = [(k, preProcess(v)) for (k, v) in row.items()]
-            row_id = int(row['Id'])
-            data_d[row_id] = dict(clean_row)
-
-    return data_d
-
-def deduplication(input_file, output_file):
-
-    optp = optparse.OptionParser()
-    optp.add_option('-v', '--verbose', dest='verbose', action='count',
-                    help='Increase verbosity (specify multiple times for more)'
-                    )
-    (opts, args) = optp.parse_args()
-    log_level = logging.WARNING
-    if opts.verbose :
-        if opts.verbose == 1:
-            log_level = logging.INFO
-        elif opts.verbose >= 2:
-            log_level = logging.DEBUG
-    logging.getLogger().setLevel(log_level)
-
-    #import headers data to become rows
-    # input_file = 'input.csv'
-    # output_file = 'out.csv'
-    settings_file = 'csv_example_learned_settings'
-    training_file = 'csv_example_training.json'
-
-    print('importing data ...')
-    data_d = readData(input_file)
-    if os.path.exists(settings_file):
-        os.remove(settings_file)
-        # print('reading from', settings_file)
-        # with open(settings_file, 'rb') as f:
-        #     deduper = dedupe.StaticDedupe(f)
-
-    else:
-
-        fields = [
-                {'field' : list(pd.read_csv(input_file))[1], 'type': 'String', 'has missing' : True
-                 }
-                ]
-
-        deduper = dedupe.Dedupe(fields)
-        deduper.sample(data_d, 15000)
-
-        if os.path.exists(training_file):
-            os.remove(training_file)
-            # print('reading labeled examples from ', training_file)
-            # with open(training_file, 'rb') as f:
-            #     deduper.readTraining(f)
-
-        print('starting active labeling...')
-        dedupe.consoleLabel(deduper)
-        deduper.train()
-
-
-        with open(training_file, 'w') as tf:
-            deduper.writeTraining(tf)
-
-        with open(settings_file, 'wb') as sf:
-            deduper.writeSettings(sf)
-
-
-    threshold = deduper.threshold(data_d, recall_weight=1)
-
-    print('clustering...')
-    clustered_dupes = deduper.match(data_d, threshold)
-
-    print('# duplicate sets', len(clustered_dupes))
-
-    cluster_membership = {}
-    cluster_id = 0
-    for (cluster_id, cluster) in enumerate(clustered_dupes):
-        id_set, scores = cluster
-        cluster_d = [data_d[c] for c in id_set]
-        canonical_rep = dedupe.canonicalize(cluster_d)
-        for record_id, score in zip(id_set, scores):
-            cluster_membership[record_id] = {
-                "cluster id" : cluster_id,
-                "canonical representation" : canonical_rep,
-                "confidence": score
-            }
-
-    singleton_id = cluster_id + 1
-
-    with open(output_file, 'w') as f_output, open(input_file) as f_input:
-        writer = csv.writer(f_output)
-        reader = csv.reader(f_input)
-
-        heading_row = next(reader)
-        heading_row.insert(0, 'confidence_score')
-        heading_row.insert(0, 'Cluster ID')
-        canonical_keys = canonical_rep.keys()
-        for key in canonical_keys:
-            heading_row.append('canonical_' + key)
-
-        writer.writerow(heading_row)
-
-        for row in reader:
-            row_id = int(row[0])
-            if row_id in cluster_membership:
-                cluster_id = cluster_membership[row_id]["cluster id"]
-                canonical_rep = cluster_membership[row_id]["canonical representation"]
-                row.insert(0, cluster_membership[row_id]['confidence'])
-                row.insert(0, cluster_id)
-                for key in canonical_keys:
-                    row.append(canonical_rep[key].encode('utf8'))
-            else:
-                row.insert(0, None)
-                row.insert(0, singleton_id)
-                singleton_id += 1
-                for key in canonical_keys:
-                    row.append(None)
-            writer.writerow(row)
+# def preProcess(column):
+#     try:  # python 2/3 string differences
+#         column = column.decode('utf8')
+#     except AttributeError:
+#         pass
+#     column = unidecode(column)
+#     column = re.sub('  +', ' ', column)
+#     column = re.sub('\n', ' ', column)
+#     column = column.strip().strip('"').strip("'").lower().strip()
+#
+#     if not column:
+#         column = None
+#     return column
+#
+# def readData(filename):
+#     data_d = {}
+#     with open(filename) as f:
+#         reader = csv.DictReader(f)
+#         for row in reader:
+#             clean_row = [(k, preProcess(v)) for (k, v) in row.items()]
+#             row_id = int(row['Id'])
+#             data_d[row_id] = dict(clean_row)
+#
+#     return data_d
+#
+# def deduplication(input_file, output_file):
+#
+#     optp = optparse.OptionParser()
+#     optp.add_option('-v', '--verbose', dest='verbose', action='count',
+#                     help='Increase verbosity (specify multiple times for more)'
+#                     )
+#     (opts, args) = optp.parse_args()
+#     log_level = logging.WARNING
+#     if opts.verbose :
+#         if opts.verbose == 1:
+#             log_level = logging.INFO
+#         elif opts.verbose >= 2:
+#             log_level = logging.DEBUG
+#     logging.getLogger().setLevel(log_level)
+#
+#     #import headers data to become rows
+#     # input_file = 'input.csv'
+#     # output_file = 'out.csv'
+#     settings_file = 'csv_example_learned_settings'
+#     training_file = 'csv_example_training.json'
+#
+#     print('importing data ...')
+#     data_d = readData(input_file)
+#     if os.path.exists(settings_file):
+#         os.remove(settings_file)
+#         # print('reading from', settings_file)
+#         # with open(settings_file, 'rb') as f:
+#         #     deduper = dedupe.StaticDedupe(f)
+#
+#     else:
+#
+#         fields = [
+#                 {'field' : list(pd.read_csv(input_file))[1], 'type': 'String', 'has missing' : True
+#                  }
+#                 ]
+#
+#         deduper = dedupe.Dedupe(fields)
+#         deduper.sample(data_d, 15000)
+#
+#         if os.path.exists(training_file):
+#             os.remove(training_file)
+#             # print('reading labeled examples from ', training_file)
+#             # with open(training_file, 'rb') as f:
+#             #     deduper.readTraining(f)
+#
+#         print('starting active labeling...')
+#         dedupe.consoleLabel(deduper)
+#         deduper.train()
+#
+#
+#         with open(training_file, 'w') as tf:
+#             deduper.writeTraining(tf)
+#
+#         with open(settings_file, 'wb') as sf:
+#             deduper.writeSettings(sf)
+#
+#
+#     threshold = deduper.threshold(data_d, recall_weight=1)
+#
+#     print('clustering...')
+#     clustered_dupes = deduper.match(data_d, threshold)
+#
+#     print('# duplicate sets', len(clustered_dupes))
+#
+#     cluster_membership = {}
+#     cluster_id = 0
+#     for (cluster_id, cluster) in enumerate(clustered_dupes):
+#         id_set, scores = cluster
+#         cluster_d = [data_d[c] for c in id_set]
+#         canonical_rep = dedupe.canonicalize(cluster_d)
+#         for record_id, score in zip(id_set, scores):
+#             cluster_membership[record_id] = {
+#                 "cluster id" : cluster_id,
+#                 "canonical representation" : canonical_rep,
+#                 "confidence": score
+#             }
+#
+#     singleton_id = cluster_id + 1
+#
+#     with open(output_file, 'w') as f_output, open(input_file) as f_input:
+#         writer = csv.writer(f_output)
+#         reader = csv.reader(f_input)
+#
+#         heading_row = next(reader)
+#         heading_row.insert(0, 'confidence_score')
+#         heading_row.insert(0, 'Cluster ID')
+#         canonical_keys = canonical_rep.keys()
+#         for key in canonical_keys:
+#             heading_row.append('canonical_' + key)
+#
+#         writer.writerow(heading_row)
+#
+#         for row in reader:
+#             row_id = int(row[0])
+#             if row_id in cluster_membership:
+#                 cluster_id = cluster_membership[row_id]["cluster id"]
+#                 canonical_rep = cluster_membership[row_id]["canonical representation"]
+#                 row.insert(0, cluster_membership[row_id]['confidence'])
+#                 row.insert(0, cluster_id)
+#                 for key in canonical_keys:
+#                     row.append(canonical_rep[key].encode('utf8'))
+#             else:
+#                 row.insert(0, None)
+#                 row.insert(0, singleton_id)
+#                 singleton_id += 1
+#                 for key in canonical_keys:
+#                     row.append(None)
+#             writer.writerow(row)
 
 
 def space_to_nan():
