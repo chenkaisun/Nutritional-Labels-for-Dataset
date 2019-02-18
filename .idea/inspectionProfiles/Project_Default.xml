@@ -4,7 +4,7 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="8">
+          <list size="16">
             <item index="0" class="java.lang.String" itemvalue="pylint" />
             <item index="1" class="java.lang.String" itemvalue="pycodestyle" />
             <item index="2" class="java.lang.String" itemvalue="Flask" />
@@ -13,6 +13,14 @@
             <item index="5" class="java.lang.String" itemvalue="future" />
             <item index="6" class="java.lang.String" itemvalue="unidecode" />
             <item index="7" class="java.lang.String" itemvalue="nltk" />
+            <item index="8" class="java.lang.String" itemvalue="nodeenv" />
+            <item index="9" class="java.lang.String" itemvalue="selenium" />
+            <item index="10" class="java.lang.String" itemvalue="sh" />
+            <item index="11" class="java.lang.String" itemvalue="arrow" />
+            <item index="12" class="java.lang.String" itemvalue="requests" />
+            <item index="13" class="java.lang.String" itemvalue="pydocstyle" />
+            <item index="14" class="java.lang.String" itemvalue="Flask-Testing" />
+            <item index="15" class="java.lang.String" itemvalue="html5validator" />
           </list>
         </value>
       </option>

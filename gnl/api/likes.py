@@ -327,9 +327,6 @@ def get_coverage():
     # now only for str cols
     # todo
     df = df.drop(columns=[col for col in list(df) if dff[col][0] == "empty"])
-    # print("df is ")
-    # pprint.pprint(df)
-    # print("null ", df.isna().sum())
     valid_cols, valid_col_indices, cardinality, categories = [], [], [], []
 
     # grouping numerical
@@ -376,7 +373,6 @@ def get_coverage():
     val_cnt = {}
     pattern_lists = []
     for i, mup in enumerate(mups):
-        # print("mup:",mup)
         tmp_list = []
         for j, char in enumerate(mup):
             if char != 'x':
@@ -386,7 +382,6 @@ def get_coverage():
                     val_cnt[categories[j][ord(char) - ord('0')]] += 1
         pattern_lists.append(tmp_list)
         uncovered_patterns.append(" ".join(tmp_list))
-        # uncovered_patterns.append(" ".join([categories[j][ord(char)-ord('0')] for j, char in enumerate(mup) if char!='x']))
 
     # generate tree
     sprop = {"width": 20,
@@ -432,18 +427,6 @@ def get_coverage():
 
     # to mup.json
     context = {"tree": tree}
-    # context = {'mups': uncovered_patterns, tree: tree}
-    # print("uncovered_patterns:",tree)
-    # print("tree", tree)
-    # gnl.app.config["JSON_OUT"].update(context)
-    # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
-    #     json.dump(gnl.app.config["JSON_OUT"], outfile)
-    # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "mups.json"), 'w') as outfile:
-    #     json.dump(tree, outfile)
-    # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "mups.json")) as infile:
-    #     data = json.load(infile)
-    #     print("data is ", data)
-    # print("data complete")
 
     return jsonify(**context)
 
