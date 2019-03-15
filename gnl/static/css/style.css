@@ -19,6 +19,30 @@ h4 {
   text-align: left;
 }
 
+input:focus {
+  outline:none !important;
+}
+
+.registerbtn {
+  outline: none;
+  background-color: #41a0f4;
+  color: white;
+  /* padding: 3px 3px; */
+  margin: 0 auto;
+  /* border: none; */
+  cursor: pointer;
+  /* border-radius: 5%; */
+  border-width: 1px;
+  /* width: 100%; */
+  opacity: 0.8;
+  font-size: 12pt;
+}
+.registerbtn:focus {outline:0;}
+
+.registerbtn:hover {
+  opacity: 1;
+}
+
 /*  newly added */
 .rmv_button {
   background-color: #d0451b;
@@ -43,6 +67,8 @@ h4 {
 
 .rmv_button:active {}
 
+.rmv_button:focus {outline:0;}
+
 .add_button {
   background-color: #77b55a;
   border-radius: 42px;
@@ -64,7 +90,7 @@ h4 {
   position: relative;
   top: 1px;
 }
-
+.add_button:focus {outline:0;}
 
 
 .note {

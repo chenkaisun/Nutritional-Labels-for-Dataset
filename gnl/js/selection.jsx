@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 // import PropTypes from 'prop-types';
 // import Label from './label';
 // import Redirection from './redirection';
+import ReactTable from "react-table";
 import Select from 'react-select';
 // import { Link } from 'react-router-3';
 import { Redirect } from 'react-router';
@@ -29,15 +30,16 @@ export default class Selection extends React.Component {
         { label: "Association Rules", value: 3 },
         { label: "Maximal Uncovered Patterns", value: 4 },
       ],
-
+      tmp_attribute_currentValues:[],
+      tmp_protected_currentValues:[],
       str_colnames: {},
 
       protected_currentValues: [],
       label_currentValues: [],
 
       is_manually_widgets: true,
-      widget_currentValues: [{ label: "Correlations", value: 1 },
-      { label: "Maximal Uncovered Patterns", value: 4 },],
+      widget_currentValues: [{ label: "Correlations", value: 1 },{ label: "Functional Dependencies", value: 2 },{ label: "Association Rules", value: 3 },
+      { label: "Maximal Uncovered Patterns", value: 4 }],
 
       chose_numeric: false,
 
@@ -50,6 +52,7 @@ export default class Selection extends React.Component {
       is_query: false,
       query_currentValues: [],
       query_rangeValues: {},
+      show_profit:false,
 
       has_fd: true,
     }
@@ -81,7 +84,31 @@ export default class Selection extends React.Component {
             history.replaceState(this.state, null, '/');
           }
         } else {
-          let tmp = this.state;
+
+          let tmp = this.state
+          console.log(data)
+
+          if(data.is_demo){
+            console.log(data.is_demo);
+            tmp["is_whole"]=false
+            tmp["is_choose_attributes"]=true
+            tmp["tmp_attribute_currentValues"] = [{ label: "decile_score", value: 9 },
+            { label: "Violence_score", value: 54 },{ label: "event", value: 55 } ,{ label: "c_charge_degree", value: 56 },{ label: "first_name", value: 57 },{ label: "age", value: 58 }, { label: "marriage_status", value: 59 }]
+            tmp["attribute_currentValues"] = [{ label: "decile_score", value: 9 },
+            { label: "Violence_score", value: 54 },{ label: "event", value: 55 } ,{ label: "c_charge_degree", value: 56 },{ label: "first_name", value: 57 },{ label: "age", value: 58 }, { label: "marriage_status", value: 59 }]
+            
+            tmp["tmp_protected_currentValues"] =  [{ label: "sex", value: 50 },{ label: "race", value: 51 }]
+            tmp["protected_currentValues"] = [{ label: "sex", value: 50 },{ label: "race", value: 51 }]
+            
+          }
+          
+        //also get params
+
+
+
+          tmp["repr"] = data.repr;
+          tmp["repr_names"] = data.repr_names;
+          
           tmp["setted"] = true;
           for (let i = 0; i < data.colnames.length; i++) {
             tmp.attribute_options.push({ label: data.colnames[i], value: i });
@@ -89,10 +116,13 @@ export default class Selection extends React.Component {
           for (let i = 0; i < data.str_colnames.length; i++) {
             tmp["str_colnames"][data.str_colnames[i]] = 0;
           }
+          
+
           // console.log("didmount");
           // console.log(tmp);
           // console.log("setted");
           this.setState(tmp);
+          console.log(this.state);
         }
       })
       .catch(error => console.log(error));// eslint-disable-line no-console
@@ -169,13 +199,18 @@ export default class Selection extends React.Component {
       tmp["is_choose_attributes"] = !tmp["is_choose_attributes"]
     } else if (name == "is_choose_attributes") {
       tmp["is_whole"] = !tmp["is_whole"]
+
     } else if (name == "is_single_column") {
-      tmp["widget_currentValues"] = []
+      tmp["widget_currentValues"] = [{ label: "Correlations", value: 1 },{ label: "Functional Dependencies", value: 2 }]
       tmp["is_multi_column"] = !tmp["is_multi_column"]
+      tmp["is_manually_widgets"]=true
+      tmp["protected_currentValues"]=[]
     } else if (name == "is_multi_column") {
       tmp["widget_currentValues"] = [{ label: "Correlations", value: 1 },
       { label: "Maximal Uncovered Patterns", value: 4 },]
+      tmp["is_manually_widgets"]=true
       tmp["is_single_column"] = !tmp["is_single_column"]
+      tmp["protected_currentValues"]=tmp["tmp_protected_currentValues"]
     }
     this.setState(tmp);
   }
@@ -232,22 +267,54 @@ export default class Selection extends React.Component {
       color: state.isFocused ? 'blue' : 'black',
     });
 
+    let data = this.state.repr;
+    let columns = this.state.repr_names.map((name) => {
+      return (
+        {
+          Header: name,
+          id: name,
+          accessor: d => d[name],
+        }
+      );
+    }
+    );
     return (
       <div>
         <ReactTooltip />
         <form onSubmit={this.handleSubmit}>
           <div className="scontainer"></div>
           <div className="bcontainer">
-            <h2>Selections</h2>
-
+            {/* <h2>Selections</h2> */}
+            <div><div style={{ display: "inline-block", fontSize: "36px" }}><strong>Selections</strong></div>
+                </div>
+                <br/>
+             <div style={{ display: "inline-block", fontSize: "6px"  }}><button style={{ fontSize: "10pt"  }} className="registerbtn" onClick={(e) => {
+              e.preventDefault();
+              let tmp = this.state;
+              tmp["show_profit"]=!tmp["show_profit"]
+              this.setState(tmp);
+            }}>{!this.state.show_profit?"Show":"Hide"} profit table</button></div>&nbsp;&nbsp;&nbsp;
+            <span data-tip="If 'Pick widgets yourself' is not checked, the system will return optimal widgets based on the profit table" className="ttip">
+                <strong>?</strong></span>
+            
+            {this.state.show_profit?<div>
+              <ReactTable
+              data={this.state.repr}
+              columns={columns}
+              showPagination={false}
+              defaultPageSize={4}
+              className="-striped -highlight"
+            />
+            </div>:""}
+            
+<div></div>
             <span>
               <label>
                 <input className="form-radio" type="radio" name="is_single_column" checked={this.state.is_single_column} onChange={this.toggleCheckbox} />
-                <span className="checkbox-label" >Single Column Analysis</span>
-                {this.state.is_single_column ? <div style={{ display: "inline-block" }}><span data-tip="Must choose one attribute" className="warningtip1"><strong>*</strong></span></div> : ""}
+                <span className="checkbox-label" >Single Column Analysis <div style={{ display: "inline-block" }}><span data-tip="Must choose one attribute" className="warningtip1"><strong>{this.state.is_single_column ? <span>*</span>: ""}</strong></span></div>  </span>
+                
                 
               </label>
-              &nbsp;
               <label className="container">
                 <input className="form-radio" type="radio" name="is_multi_column" checked={this.state.is_multi_column} onChange={this.toggleCheckbox} />
                 <span className="checkbox-label" >Multi-Column Analysis</span>
@@ -271,7 +338,7 @@ export default class Selection extends React.Component {
                   onChange={(opt) => {
                     let tmp = this.state;
                     tmp.protected_currentValues = opt;
-                    // console.log("protected_currentValues");
+                    // console.log("protecte  d_currentValues");
                     this.setState(tmp);
                   }
                   }
@@ -280,6 +347,7 @@ export default class Selection extends React.Component {
               </div> : ""}
             {true ?
               <div>
+              
                 <span>
                   <label className="checkbox">
                     <input type="radio" className="form-radio" name="is_choose_attributes" checked={this.state.is_choose_attributes} onChange={this.toggleCheckbox} />
@@ -296,6 +364,7 @@ export default class Selection extends React.Component {
               <span data-tip="If you pick too many columns (i.e. more than 10 for a large dataset), some widgets such as association rules would take huge amount of time to finish computation" className="warningtip">
                     <strong>warning</strong></span>
                 </span>
+                
                 {this.state.is_choose_attributes ? <div>
                   <div style={{ height: "3px" }}>&nbsp;</div>
                   <Select
@@ -303,7 +372,7 @@ export default class Selection extends React.Component {
                     closeMenuOnSelect={false}
                     components={{ ClearIndicator }}
                     styles={{ clearIndicator: ClearIndicatorStyles }}
-                    defaultValue={[]}
+                    defaultValue={this.state.tmp_attribute_currentValues}
                     isMulti
                     onChange={(opt) => {
                       let tmp = this.state;
@@ -315,11 +384,13 @@ export default class Selection extends React.Component {
                     options={this.state.attribute_options} />
                 </div> : ""
                 }
-                <hr />
+                
+                {/* <hr /> */}
               </div> : ""}
 
 
             {!this.state.is_single_column ? <div>
+            <br />
               <ReactTooltip />
               <span >Pick protected/label attributes</span>
               &nbsp;
@@ -332,7 +403,7 @@ export default class Selection extends React.Component {
                   closeMenuOnSelect={false}
                   components={{ ClearIndicator }}
                   styles={{ clearIndicator: ClearIndicatorStyles }}
-                  defaultValue={[]}
+                  defaultValue={this.state.tmp_protected_currentValues}
                   isMulti
                   onChange={(opt) => {
                     let tmp = this.state;
@@ -344,7 +415,7 @@ export default class Selection extends React.Component {
                   options={this.state.attribute_options} />
               </div>
 
-              <hr />
+              {/* <hr /> */}
             </div> : ""
 
             }
@@ -352,6 +423,7 @@ export default class Selection extends React.Component {
 
 
             {true ? <div>
+            <br />
 
               <label className="checkbox" >
                 &nbsp;
@@ -362,6 +434,7 @@ export default class Selection extends React.Component {
                 <span data-tip="Pick what you would like to be included in the nutritional label" className="ttip">
                   <strong>?</strong></span>
               </label>
+            <br />
 
             </div> : ""
             }
@@ -373,8 +446,7 @@ export default class Selection extends React.Component {
                   closeMenuOnSelect={false}
                   components={{ ClearIndicator }}
                   styles={{ clearIndicator: ClearIndicatorStyles }}
-                  defaultValue={[{ label: "Correlations", value: 1 },
-                  { label: "Maximal Uncovered Patterns", value: 4 },]}
+                  defaultValue={this.state.widget_currentValues}
                   isMulti
                   onChange={(opt) => {
                     let tmp = this.state;
@@ -399,7 +471,7 @@ export default class Selection extends React.Component {
                   closeMenuOnSelect={false}
                   components={{ ClearIndicator }}
                   styles={{ clearIndicator: ClearIndicatorStyles }}
-                  defaultValue={[]}
+                  defaultValue={this.state.widget_currentValues}
                   isMulti
                   onChange={(opt) => {
                     let tmp = this.state;
@@ -419,7 +491,8 @@ export default class Selection extends React.Component {
               </div> : ""}
 
 
-            <hr />
+            {/* <hr /> */}
+            <br />
             <label className="checkbox">&nbsp;
               <Checkbox name="is_query" checked={this.state.is_query} onChange={this.toggleCheckbox}>
               </Checkbox>

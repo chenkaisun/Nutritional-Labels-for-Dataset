@@ -268,6 +268,7 @@ export default class Label extends React.Component {
           {!this.state.has_SingleColumn && this.state.has_Coverage ? <div className="tab"><Link to="label#mups">Maximal Uncovered Patterns</Link></div> : ""}
           {!this.state.has_SingleColumn && this.state.has_AssociationRule ? <div className="tab"><Link to="label#ars">Association Rules</Link></div> : ""}
           {this.state.has_FunctionalDependency ? <div className="tab"><Link to="label#fds">Functional Dependencies</Link></div> : ""}
+          <div className="tab"><Link to="label#additional_widgets">Generate More Labels</Link></div>
         </div>
 
         <div className="right_column">
@@ -323,7 +324,7 @@ export default class Label extends React.Component {
                   })
                   this.setState(tmp);
                 }}>Remove</button></div></div>
-              <p>This shows correlation between selected attributes. Click on the squares to see scatterplot.</p>
+              <p>This shows correlation between selected <strong>ordinal</strong> attributes. Click on the squares to see scatterplot.</p>
               <div className="frame">
                 <div id="diagramCorrelations" className='diagram'> </div>
                 <h4 id="diagramScatterPlotName" className='diagram'></h4>
@@ -446,7 +447,7 @@ export default class Label extends React.Component {
             : ""
           }
           <div id="additional_widgets" className="vis">
-            <div style={{ fontSize: "32px" }}><strong>Add More widgets</strong></div>
+            <div style={{ fontSize: "32px" }}><strong>Generate More Labels</strong></div>
             <div className="frame" >
               <div style={{ display: "inline-block", width: "95%" }}>
                 {this.state.has_SingleColumn ? <div>
@@ -499,6 +500,7 @@ export default class Label extends React.Component {
 
             </div>
           </div>
+
         </div>
 
       </div>

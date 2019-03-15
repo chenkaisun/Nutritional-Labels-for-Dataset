@@ -273,7 +273,7 @@ select {
 .registerbtn2:hover {
   opacity: 1;
 }
-
+.registerbtn2:focus {outline:0;}
 /* Full-width input fields */
 /* input[type=text], input[type=password] {
     width: 100%;

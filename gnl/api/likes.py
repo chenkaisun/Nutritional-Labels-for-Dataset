@@ -304,6 +304,21 @@ def get_colnames():
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "output.json"), 'w') as outfile:
     #     json.dump(gnl.app.config["JSON_OUT"], outfile)
+    with open(os.path.join(gnl.app.config["DATA_FOLDER"], "params.json")) as f2:
+        table = json.load(f2)
+    names=[" "]+list(table["Functional Dependencies"].keys())
+    tmp={}
+    out=[]
+    for key in table:
+        tmp=table[key]
+        tmp[" "]=key
+        out.append(tmp)
+    context['repr_names'] = names
+    context['repr'] = out
+    # pprint(context)
+    context["is_demo"]=gnl.app.config["CURRENT_FILE"].split("/")[-1]=="RecidivismData_Original.csv"
+    print("now file", gnl.app.config["CURRENT_FILE"])
+
     return jsonify(**context)
 
 
@@ -444,6 +459,9 @@ def get_multi_basic():
     context['num_cols'] = df.shape[1]
     context['num_missing'] = gnl.app.config['NUM_MISSING']
 
+
+
+
     colnames=list(df)
     rand_names=np.random.choice(colnames,min(len(colnames), 5), replace =False)
     context['repr_names']=list(rand_names)
@@ -453,6 +471,7 @@ def get_multi_basic():
     # gnl.app.config["JSON_OUT"].update(context)
     # with open(os.path.join(gnl.app.config["DATA_FOLDER"], "result.json"), 'w') as outfile:
     #     json.dump(gnl.app.config["JSON_OUT"], outfile)
+
     return jsonify(**context)
 
 

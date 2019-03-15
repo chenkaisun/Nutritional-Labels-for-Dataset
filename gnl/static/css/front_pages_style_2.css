@@ -95,7 +95,9 @@ select {
   height: inherit;
 }
 
+
 .registerbtn {
+  outline: none;
   background-color: #41a0f4;
   color: white;
   /* padding: 3px 3px; */
@@ -108,6 +110,7 @@ select {
   opacity: 0.8;
   font-size: 12pt;
 }
+.registerbtn:focus {outline:0;}
 
 .registerbtn:hover {
   opacity: 1;

@@ -86,7 +86,7 @@ export default class MultiBasic extends React.Component {
             <ReactTable
               data={data}
               columns={columns}
-              defaultPageSize={10}
+              defaultPageSize={5}
               filterable
               defaultFilterMethod={(filter, row) =>
                 String(row[filter.id]) === filter.value}
@@ -95,11 +95,12 @@ export default class MultiBasic extends React.Component {
             />
           </div>
 
+
         </div>
       );
 
     }
-    return ("")
+    return ("");
 
 
   }
