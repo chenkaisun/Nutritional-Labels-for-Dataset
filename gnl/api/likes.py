@@ -36,8 +36,24 @@ def get_sel():
     context["sel"] = gnl.app.config["CURRENT_SELECTION"]["widget_currentValues"] if "widget_currentValues" in \
                                                                                     gnl.app.config[
                                                                                         "CURRENT_SELECTION"] else []
-    # print("widgets ")
-    # pprint(context["sel"])
+
+    df=gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]
+    dff = gnl.app.config["CURRENT_COLUMN_TYPES"]
+
+    sel = gnl.app.config["CURRENT_SELECTION"]
+    tmp = {}
+    # print("sel['protected_currentValues']: ",sel['protected_currentValues'])
+    if sel["is_single_column"] and sel['protected_currentValues'] and dff[sel['protected_currentValues'][0]["label"]][0]=="str":
+        for entry in df[sel['protected_currentValues'][0]["label"]]:
+            if entry:
+                entry=str(entry)
+                if entry not in tmp:
+                    tmp[entry]=0
+                tmp[entry]+=1
+
+        context["single_colname"]=sel['protected_currentValues'][0]["label"]
+    context["labels"]=list(tmp.keys())
+    context["values"]=[tmp[key] for key in tmp]
     return jsonify(**context)
 
 

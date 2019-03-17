@@ -8,7 +8,7 @@ import AssociationRule from './association_rule';
 // import SingleColumn from './single_column';
 // import Coverage from './coverage';
 import Select from 'react-select';
-
+import {HorizontalBar} from 'react-chartjs-2';
 import ReactTable from "react-table";
 import { HashLink as Link } from 'react-router-hash-link';
 import $ from 'jquery';
@@ -40,6 +40,10 @@ export default class Label extends React.Component {
       has_AssociationRule: false,
       has_Coverage: false,
       has_SingleColumn: this.props["location"]["state"]['is_single_column'],
+      dataa:{},
+      labels:[],
+      values:[],
+      single_colname:"Column Name"
       //this.props["location"]["state"]['is_single_column']
     }
     // console.log("chose is ");
@@ -187,6 +191,11 @@ export default class Label extends React.Component {
       })
       .then((data) => {
         // console.log("res sel", data);
+        if(tmp["has_SingleColumn"] && !tmp["chose_numeric"]){
+          tmp["values"]=data.values
+          tmp["labels"]=data.labels
+          tmp["single_colname"]=data.single_colname
+        }
 
         if (!this.props["location"]["state"]["is_manually_widgets"]) {
           tmp["has_Correlation"] = false
@@ -259,9 +268,26 @@ export default class Label extends React.Component {
       cursor: 'pointer',
       color: state.isFocused ? 'blue' : 'black',
     });
+
+    const dataa = {
+      labels: this.state.labels,
+      datasets: [
+        {
+          label: this.state.single_colname,
+          backgroundColor: 'rgba(0,0,0,1)',
+          borderColor: 'rgba(119,119,119,1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(51,51,51,1)',
+          hoverBorderColor: 'rgba(119,119,119,1)',
+          data: this.state.values
+        }
+      ]
+    };
+    // const margin = {top: 20, right: 20, bottom: 30, left: 40};
     return (
       <div ref="reference">
         <div className="left_column">
+
 
           <div className="tab"><Link to="label#overview">Data Overview</Link></div>
           {this.state.has_Correlation ? <div className="tab"><Link to="label#correlation">Correlations</Link></div> : ""}
@@ -274,6 +300,8 @@ export default class Label extends React.Component {
         <div className="right_column">
           <div id="overview" className="vis">
 
+
+                 
             <div style={{ display: "inline-block", fontSize: "32px" }}><strong>Data Overview </strong></div><div style={{ display: "inline-block", fontSize: "16px" }}>(Please wait while the widgets are rendering)</div><br />
             {this.state.has_SingleColumn && this.state.chose_numeric ?
               <div className="frame" id="ov">
@@ -290,7 +318,9 @@ export default class Label extends React.Component {
               ""
             }
             {this.state.has_SingleColumn && !this.state.chose_numeric ?
-              <div><i>Histogram not provided because a non-numeric column was chosen</i></div> : ""
+              <div className="frame" id="non">
+                <HorizontalBar data={dataa} />
+              </div>: ""
             }
             {!this.state.has_SingleColumn ?
               <div className="frame">
