@@ -221,7 +221,7 @@ export default class Label extends React.Component {
         }
         // console.log(data.sel);
 
-        if (tmp["has_SingleColumn"]&&!tmp["chose_numeric"]) {
+        if (tmp["has_SingleColumn"]&&tmp["chose_numeric"]) {
           // console.log("in mount single col");
           $(this.refs.reference).html(
             load_single_meta()
