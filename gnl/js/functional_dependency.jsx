@@ -39,6 +39,9 @@ export default class FunctionalDependency extends React.Component {
     }
     console.log("multi fd render");
     const myConfig = {
+      "d3":{
+        "gravity":-200
+      },
       nodeHighlightBehavior: true,
       directed: true,
       node: {
@@ -54,14 +57,21 @@ export default class FunctionalDependency extends React.Component {
       nodes: this.state.nodes,
       links: this.state.links
     };
+    // console.log("fd");
+    // console.log(dat.links);
+    
     return (
       <div>
-        <Graph
-          id="graph-id2" // id is mandatory, if no id is defined rd3g will throw an error
-          data={dat}
-          config={myConfig}
-        />
+      {dat.links.length==0?<div><i>No functional dependency discovered</i></div>:<div>
+      <Graph
+        id="graph-id2" // id is mandatory, if no id is defined rd3g will throw an error
+        data={dat}
+        config={myConfig}
+      />
+      </div>}
+
       </div>
+      
     )
 
 

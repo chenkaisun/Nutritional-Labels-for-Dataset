@@ -67,11 +67,11 @@ def index():
 
     if request.method == "POST":
         print("\n**index post**\n")
-        print("requests", request)
-        print("requests files", request.files)
-        print("request.form", request.form)
-        print("task", type(request.form.get('task')))
-        print(request.form.get('task'))
+        # print("requests", request)
+        # print("requests files", request.files)
+        # print("request.form", request.form)
+        # print("task", type(request.form.get('task')))
+        # print(request.form.get('task'))
 
         # read task button
 
@@ -82,7 +82,7 @@ def index():
             # print("flask.request.files:", flask.request.files)
             file_name = flask.request.files["filee"]
             file_name.save(temp_filename)
-            print("file_name:",file_name)
+            # print("file_name:",file_name)
             # Compute filename with sha256 for encoding
             hash_txt = sha1sum(temp_filename)
             dummy, suffix = os.path.splitext(file_name.filename)
@@ -97,7 +97,7 @@ def index():
 
             shutil.move(temp_filename, hash_filename)
             gnl.app.logger.debug("Saved %s", hash_filename_basename)
-            print(hash_filename)
+            # print(hash_filename)
 
             # ###move csv to data folder
             # shutil.move(temp_filename, os.path.join(

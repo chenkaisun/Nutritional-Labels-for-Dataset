@@ -86,10 +86,10 @@ export default class Selection extends React.Component {
         } else {
 
           let tmp = this.state
-          console.log(data)
+          // console.log(data)
 
           if(data.is_demo){
-            console.log(data.is_demo);
+            // console.log(data.is_demo);
             tmp["is_whole"]=false
             tmp["is_choose_attributes"]=true
             tmp["tmp_attribute_currentValues"] = [{ label: "decile_score", value: 9 },
@@ -122,7 +122,7 @@ export default class Selection extends React.Component {
           // console.log(tmp);
           // console.log("setted");
           this.setState(tmp);
-          console.log(this.state);
+          // console.log(this.state);
         }
       })
       .catch(error => console.log(error));// eslint-disable-line no-console
@@ -621,13 +621,11 @@ export default class Selection extends React.Component {
               </div> : ""}
             <br />
             <br />
-            <br />
-            <br />
-            <button type="submit" className="registerbtn2"> Generate </button>
+            <div style={{ fontSize: "12px", float: "right"   }}><button style={{ fontSize: "14pt"  }} type="submit" className="generatebtn">Generate</button></div>
+            {/* <button type="submit" className="registerbtn2"> Generate </button> */}
             <div className="scontainer"></div>
           </div>
         </form>
-
       </div>
     )
   }

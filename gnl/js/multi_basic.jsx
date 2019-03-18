@@ -24,7 +24,7 @@ export default class MultiBasic extends React.Component {
       })
       .then((data) => {
         console.log('multi basic get data');
-        console.log("data.repr ", data.repr);
+        // console.log("data.repr ", data.repr);
 
         this.setState({
           repr: data.repr,
@@ -57,7 +57,7 @@ export default class MultiBasic extends React.Component {
         );
       }
       );
-      console.log("columns: ", columns);
+      // console.log("columns: ", columns);
 
       return (
         <div>

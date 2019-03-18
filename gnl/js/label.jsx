@@ -289,12 +289,12 @@ export default class Label extends React.Component {
         <div className="left_column">
 
 
-          <div className="tab"><Link to="label#overview">Data Overview</Link></div>
-          {this.state.has_Correlation ? <div className="tab"><Link to="label#correlation">Correlations</Link></div> : ""}
-          {!this.state.has_SingleColumn && this.state.has_Coverage ? <div className="tab"><Link to="label#mups">Maximal Uncovered Patterns</Link></div> : ""}
-          {!this.state.has_SingleColumn && this.state.has_AssociationRule ? <div className="tab"><Link to="label#ars">Association Rules</Link></div> : ""}
-          {this.state.has_FunctionalDependency ? <div className="tab"><Link to="label#fds">Functional Dependencies</Link></div> : ""}
-          <div className="tab"><Link to="label#additional_widgets">Generate More Labels</Link></div>
+          <div className="tab"><Link to="label#overview"># Data Overview</Link></div>
+          {this.state.has_Correlation ? <div className="tab"><Link to="label#correlation"># Correlations</Link></div> : ""}
+          {!this.state.has_SingleColumn && this.state.has_Coverage ? <div className="tab"><Link to="label#mups"># Maximal Uncovered Patterns</Link></div> : ""}
+          {!this.state.has_SingleColumn && this.state.has_AssociationRule ? <div className="tab"><Link to="label#ars"># Association Rules</Link></div> : ""}
+          {this.state.has_FunctionalDependency ? <div className="tab"><Link to="label#fds"># Functional Dependencies</Link></div> : ""}
+          <div className="tab"><Link to="label#additional_widgets"># Generate More Labels</Link></div>
         </div>
 
         <div className="right_column">
@@ -334,7 +334,7 @@ export default class Label extends React.Component {
           {this.state.has_Correlation ?
             (<div id="correlation" className="vis">
               <div><div style={{ display: "inline-block", fontSize: "32px" }}><strong>Correlations</strong></div>&nbsp;&nbsp;&nbsp;
-              <div style={{ display: "inline-block", fontSize: "10px" }}><button className="rmv_button" onClick={(e) => {
+              <div style={{ display: "inline-block", fontSize: "30px" }}><button className="rmv_button" onClick={(e) => {
                   e.preventDefault();
                   let tmp = this.state;
                   tmp["has_Correlation"] = false;
@@ -353,7 +353,7 @@ export default class Label extends React.Component {
                   }).then((res) => {
                   })
                   this.setState(tmp);
-                }}>Remove</button></div></div>
+                }}>X</button></div></div>
               <p>This shows correlation between selected <strong>ordinal</strong> attributes. Click on the squares to see scatterplot.</p>
               <div className="frame">
                 <div id="diagramCorrelations" className='diagram'> </div>
@@ -388,7 +388,7 @@ export default class Label extends React.Component {
                   // console.log("tmp", tmp);
 
 
-                }}>Remove</button></div></div>
+                }}>X</button></div></div>
               <p>Maximal uncovered pattern shows the combination of values that are undersampled in the dataset</p>
               <div className="frame"><div id="mups_vis"></div></div>
             </div>) : ""
@@ -400,7 +400,7 @@ export default class Label extends React.Component {
                   e.preventDefault();
                   let tmp = this.state;
                   tmp["has_AssociationRule"] = false;
-                  console.log("brefore ", tmp["widget_currentValues"]);
+                  // console.log("brefore ", tmp["widget_currentValues"]);
                   let tlist = tmp["widget_currentValues"]
                   // console.log("length is ", tlist.length);
                   
@@ -408,12 +408,12 @@ export default class Label extends React.Component {
                     // console.log(i," ",tmp["widget_currentValues"][i]);
                     
                     if (tmp["widget_currentValues"][i]["label"] == "Association Rules") {
-                      console.log("here");
+                      // console.log("here");
                       tmp["widget_currentValues"].splice(i, 1);
                       break
                     }
                   }
-                  console.log("after ", tmp["widget_currentValues"]);
+                  // console.log("after ", tmp["widget_currentValues"]);
                   
                   fetch('/api/params/', {
                     credentials: 'same-origin',
@@ -423,17 +423,16 @@ export default class Label extends React.Component {
                   }).then((res) => {
                   })
                   // this.setState(tmp);
-                  console.log("cur tmp", tmp["widget_currentValues"]);
+                  // console.log("cur tmp", tmp["widget_currentValues"]);
 
                   this.setState(tmp);
-                }}>Remove</button></div></div>
+                }}>X</button></div></div>
               <p style={{ color: "red" }}>WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) </p>
               <p>Association rule of a dataset is a set of directed relations in between set A and set B such that values of set A determines the values of set B for over some predefined probability. You can drag the nodes around or magnify/diminish them by scrolling.</p>
 
               <div id="ars_vis" className="frame">
                 <div>
                   <AssociationRule key={3} />
-                  <hr />
                 </div>
               </div>
             </div>) : ""
@@ -463,14 +462,13 @@ export default class Label extends React.Component {
                   }).then((res) => {
                   })
                   this.setState(tmp);
-                }}>Remove</button></div>
+                }}>X</button></div>
               </div>
               <p style={{ color: "red" }}>WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) </p>
               <p>Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute. You can drag the nodes around or magnify/diminish them by scrolling.</p>
-              <div id="visFunctionalDep" className="frame">
+              <div id="fd_vis" className="frame">
                 <div>
                   <FunctionalDependency key={2} />
-                  <hr />
                 </div>
               </div>
             </div>)
@@ -478,7 +476,7 @@ export default class Label extends React.Component {
           }
           <div id="additional_widgets" className="vis">
             <div style={{ fontSize: "32px" }}><strong>Generate More Labels</strong></div>
-            <div className="frame" >
+            <div>
               <div style={{ display: "inline-block", width: "95%" }}>
                 {this.state.has_SingleColumn ? <div>
                   <Select

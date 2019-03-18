@@ -43,26 +43,53 @@ input:focus {
   opacity: 1;
 }
 
+.generatebtn {
+  outline: none;
+  background-color: #41a0f4;
+  color: white;
+  padding: 4px 4px 4px 4px;
+  margin: 0 auto;
+  /* border: none; */
+  cursor: pointer;
+  border-radius: 8px;
+  border-width: 1px;
+  /* width: 100%; */
+  opacity: 0.8;
+  font-size: 12pt;
+
+}
+.generatebtn:focus {outline:0;}
+
+.generatebtn:hover {
+  opacity: 1;
+}
+
 /*  newly added */
 .rmv_button {
-  background-color: #d0451b;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  border: 1px solid #942911;
+  background-color: #ffffff;
+  /* -moz-border-radius: 3px;
+  -webkit-border-radius: 3px; */
+  /* border-radius: 3px; */
+  border: 0px solid #ffffff;
   cursor: pointer;
-  color: #ffffff;
+  /* color: #ffffff; */
   font-family: Arial;
-  font-size: 12px;
-  padding: 6px 17px;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-weight: 500;
+  font-size: 22px;
+  /* padding:1px 1px 2px 2px; */
+  /* padding: 2px 2px 2px 2px; */
+  /* margin-bottom: 2px; */
+  /* text-decoration: none; */
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
 }
 
 .rmv_button:hover {
-  background-color: #bc3315;
+  color: #ffffff;
+  background-color: #d80202;
+  border: 0px solid #ffffff;
+  /* padding:1px 1px 1px 1px; */
 }
 
 .rmv_button:active {}
@@ -70,20 +97,24 @@ input:focus {
 .rmv_button:focus {outline:0;}
 
 .add_button {
-  background-color: #77b55a;
-  border-radius: 42px;
+  /* background-color: #77b55a; */
+  border: 0px solid #ffffff;
+  /* border-radius: 42px; */
   cursor: pointer;
   color: #ffffff;
   font-family: Arial;
-  font-size: 13px;
-  font-weight: bold;
-  padding: 6px 10px;
+  font-size: 22px;
+  font-weight: 500;
+  /* padding: 8px 12px; */
   text-decoration: none;
-  border: none;
+  /* border: none; */
+  margin-left: 2pt
 }
 
 .add_button:hover {
   background-color: #72b352;
+  color: #ffffff;
+  border: 0px solid #ffffff;
 }
 
 .add_button:active {
@@ -347,7 +378,7 @@ label.column_name {
 
 .tab {
   color: black;
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 .change {

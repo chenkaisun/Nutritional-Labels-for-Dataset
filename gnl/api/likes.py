@@ -117,7 +117,7 @@ def form_submit():
     if sel["is_manually_widgets"]:
 
         # Take in selection and perform profit table change
-        print("selected widgets", sel['widget_currentValues'])
+        # print("selected widgets", sel['widget_currentValues'])
         for item in sel['widget_currentValues']:
             table[item["label"]][gnl.app.config['TASK']] += (1 / 2)
 
@@ -131,8 +131,8 @@ def form_submit():
         "Maximal Uncovered Patterns": 4
     }
 
-    print("cur table after (optional update):")
-    pprint(table)
+    # print("cur table after (optional update):")
+    # pprint(table)
     if not sel["is_manually_widgets"]:
         tmp_dic = {key: table[key][gnl.app.config['TASK']] for key in table}
         sorted_widgets = [k for k in sorted(tmp_dic, key=lambda k: tmp_dic[k], reverse=True)][:2]
@@ -333,7 +333,7 @@ def get_colnames():
     context['repr'] = out
     # pprint(context)
     context["is_demo"]=gnl.app.config["CURRENT_FILE"].split("/")[-1]=="RecidivismData_Original.csv"
-    print("now file", gnl.app.config["CURRENT_FILE"])
+    # print("now file", gnl.app.config["CURRENT_FILE"])
 
     return jsonify(**context)
 

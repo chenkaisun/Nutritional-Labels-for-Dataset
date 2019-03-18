@@ -39,6 +39,9 @@ export default class AssociationRule extends React.Component {
       return("");
     }
    const myConfig = {
+        "d3":{
+          "gravity":-200
+        },
         nodeHighlightBehavior: true,
         directed: true,
         node: {
@@ -54,14 +57,19 @@ export default class AssociationRule extends React.Component {
       nodes: this.state.nodes,
   links: this.state.links
     };
+    // console.log("ar");
+    // console.log(dat.links);
    return(
-     <div>
-       <Graph
-           id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
-           data={dat}
-           config={myConfig}
-       />
-     </div>
+<div>
+      {dat.links.length==0?<div><i>No association rule discovered</i></div>:<div>
+      <Graph
+        id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
+        data={dat}
+        config={myConfig}
+      />
+      </div>}
+
+      </div>
    );
 
   }

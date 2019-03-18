@@ -17,7 +17,7 @@
       <file leaf-file-name="index.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gnl/views/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
+            <state relative-caret-position="3002">
               <caret line="176" column="53" selection-start-line="176" selection-start-column="22" selection-end-line="176" selection-end-column="53" />
               <folding>
                 <element signature="e#47#56#0" expanded="true" />
@@ -29,8 +29,8 @@
       <file leaf-file-name="likes.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gnl/api/likes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="60" column="4" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="4" />
+            <state relative-caret-position="13">
+              <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
               <folding>
                 <element signature="e#26#38#0" expanded="true" />
               </folding>
@@ -41,7 +41,7 @@
       <file leaf-file-name="config.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gnl/config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
+            <state relative-caret-position="817">
               <caret line="43" column="31" selection-start-line="43" selection-end-line="43" selection-end-column="31" />
             </state>
           </provider>
@@ -60,7 +60,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>NUM_M</find>
       <find>clean</find>
       <find>=&gt;</find>
       <find>types</find>
@@ -90,6 +89,7 @@
       <find>dff</find>
       <find>sel['protected_currentValues']</find>
       <find>params</find>
+      <find>get_parse_single</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -115,9 +115,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="950" />
-    <option name="width" value="980" />
-    <option name="height" value="1050" />
+    <option name="x" value="120" />
+    <option name="y" value="45" />
+    <option name="width" value="1535" />
+    <option name="height" value="985" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -125,7 +126,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -155,11 +155,12 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://D:/Documents/Nutritional-Labels-for-Dataset/gnl/config.py" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Deep Learning/Code" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -239,9 +240,9 @@
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5032552" side_tool="true" weight="0.28958052" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32960895" />
       <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" weight="0.32960895" />
-      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49674478" visible="true" weight="0.1977716" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="12" sideWeight="0.49674478" visible="true" weight="0.1977716" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32960895" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17514871" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17514871" />
       <window_info id="Project Explorer" order="2" weight="0.32980832" />
       <window_info id="Job Explorer" order="5" />
       <window_info anchor="bottom" id="Console" order="7" />
@@ -282,6 +283,40 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/gnl/views/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3002">
+          <caret line="176" column="53" selection-start-line="176" selection-start-column="22" selection-end-line="176" selection-end-column="53" />
+          <folding>
+            <element signature="e#47#56#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gnl/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="817">
+          <caret line="43" column="31" selection-start-line="43" selection-end-line="43" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gnl/api/likes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="798">
+          <caret line="62" column="8" lean-forward="true" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="8" />
+          <folding>
+            <element signature="e#26#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gnl/views/index.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1843">
@@ -359,14 +394,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gnl/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
+        <state relative-caret-position="817">
           <caret line="43" column="31" selection-start-line="43" selection-end-line="43" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gnl/views/index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
+        <state relative-caret-position="3002">
           <caret line="176" column="53" selection-start-line="176" selection-start-column="22" selection-end-line="176" selection-end-column="53" />
           <folding>
             <element signature="e#47#56#0" expanded="true" />
@@ -376,8 +411,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gnl/api/likes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="60" column="4" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="4" />
+        <state relative-caret-position="13">
+          <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
           <folding>
             <element signature="e#26#38#0" expanded="true" />
           </folding>
