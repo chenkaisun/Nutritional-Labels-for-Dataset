@@ -7,7 +7,7 @@
 __pycache__/
 build/
 env/
-var/Carspecs*
+var/uploads/Carspecs*
 gnl/static/data/*csv
 .vagrant/
 dist/
