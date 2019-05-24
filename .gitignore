@@ -7,7 +7,8 @@
 __pycache__/
 build/
 env/
-var/
+var/Carspecs*
+gnl/static/data/*csv
 .vagrant/
 dist/
 jpype/
