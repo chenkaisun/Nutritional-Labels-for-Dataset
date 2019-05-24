@@ -30,6 +30,19 @@ export default class Selection extends React.Component {
         { label: "Association Rules", value: 3 },
         { label: "Maximal Uncovered Patterns", value: 4 },
       ],
+      topk_options_multi: [
+        { label: "Only show metadata", value: 0 },
+        { label: "Top 1 widget", value: 1 },
+        { label: "Top 2 widgets", value: 2 },
+        { label: "Top 3 widgets", value: 3 },
+        { label: "Top 4 widgets", value: 4 },
+      ],
+      topk_options_single: [
+        { label: "Only show metadata", value:0 },
+        { label: "Top 1 widget", value: 1 },
+        { label: "Top 2 widgets", value: 2 },
+      ],
+
       tmp_attribute_currentValues:[],
       tmp_protected_currentValues:[],
       str_colnames: {},
@@ -42,6 +55,7 @@ export default class Selection extends React.Component {
       { label: "Maximal Uncovered Patterns", value: 4 }],
 
       chose_numeric: false,
+      num_widgets:0,
 
       attribute_currentValues: [],
       is_single_column: false,
@@ -331,7 +345,7 @@ export default class Selection extends React.Component {
                 <div style={{ height: "3px" }}>&nbsp;</div>
                 <Select
                   required={this.state.is_single_column}
-                  closeMenuOnSelect={false}
+                  closeMenuOnSelect={true}
                   components={{ ClearIndicator }}
                   styles={{ clearIndicator: ClearIndicatorStyles }}
                   defaultValue={[]}
@@ -361,7 +375,7 @@ export default class Selection extends React.Component {
               <span data-tip="Pick the columns you would like to be included in the analysis, or simply use all columns" className="ttip">
                     <strong>?</strong></span>
                   &nbsp;
-              <span data-tip="If you pick too many columns (i.e. more than 10 for a large dataset), some widgets such as association rules would take huge amount of time to finish computation" className="warningtip">
+              <span data-tip="If you pick many columns (i.e. more than 10 for a large dataset), we will sample rows when computing widgets such as association rules, as otherwise it takes huge amount of time" className="warningtip">
                     <strong>warning</strong></span>
                 </span>
                 
@@ -437,6 +451,28 @@ export default class Selection extends React.Component {
             <br />
 
             </div> : ""
+            }
+
+
+            {!this.state.is_manually_widgets ?
+            <div>
+              <Select
+                  required={!this.state.is_manually_widgets}
+                  closeMenuOnSelect={true}
+                  components={{ ClearIndicator }}
+                  styles={{ clearIndicator: ClearIndicatorStyles }}
+                  defaultValue={{ label: "Only show metadata", value: 0 }}
+                  
+                  onChange={(opt) => {
+                    let tmp = this.state;
+                    tmp.num_widgets = opt['value'];
+                    // console.log("protecte  d_currentValues");
+                    this.setState(tmp);
+                  }
+                  }
+                  simpleValue
+                  options={this.state.is_single_column? this.state.topk_options_single:this.state.topk_options_multi} />
+            </div>:""
             }
 
             {!this.state.is_single_column && this.state.is_manually_widgets ?

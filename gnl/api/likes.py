@@ -54,6 +54,7 @@ def get_sel():
         context["single_colname"]=sel['protected_currentValues'][0]["label"]
     context["labels"]=list(tmp.keys())
     context["values"]=[tmp[key] for key in tmp]
+    context['no_numeric']=gnl.app.config['no_numeric']
     return jsonify(**context)
 
 
@@ -114,12 +115,17 @@ def form_submit():
     with open(os.path.join(gnl.app.config["DATA_FOLDER"], "params.json")) as f:
         table = json.load(f)
 
+
+    num_widgets=int(sel['num_widgets'])
+
+
+    # ~
     if sel["is_manually_widgets"]:
 
         # Take in selection and perform profit table change
         # print("selected widgets", sel['widget_currentValues'])
         for item in sel['widget_currentValues']:
-            table[item["label"]][gnl.app.config['TASK']] += (1 / 2)
+            table[item["label"]][gnl.app.config['TASK']] += (1 / max(len(sel['widget_currentValues']),1))
 
         with open(os.path.join(gnl.app.config["DATA_FOLDER"], "params.json"), "w") as write_file2:
             json.dump(table, write_file2)
@@ -135,10 +141,21 @@ def form_submit():
     # pprint(table)
     if not sel["is_manually_widgets"]:
         tmp_dic = {key: table[key][gnl.app.config['TASK']] for key in table}
-        sorted_widgets = [k for k in sorted(tmp_dic, key=lambda k: tmp_dic[k], reverse=True)][:2]
-        sel['widget_currentValues'] = [{"label": k, "value": widget2value[k]} for k in sorted_widgets] if not sel[
-            'is_single_column'] else [{"label": "Correlations", "value": 1},
-                                      {"label": "Functional Dependencies", "value": 2}, ]
+
+        #~
+        sorted_widgets = [k for k in sorted(tmp_dic, key=lambda k: tmp_dic[k], reverse=True)][:num_widgets]
+
+        if not sel['is_single_column']:
+            sel['widget_currentValues'] = [{"label": k, "value": widget2value[k]} for k in sorted_widgets]
+        else:
+            if num_widgets==2:
+                sel['widget_currentValues']=[{"label": "Correlations", "value": 1}, {"label": "Functional Dependencies", "value": 2}, ]
+            elif num_widgets==1:
+                sel['widget_currentValues']=[{"label": "Correlations", "value": 1}] if table['Correlations'][gnl.app.config['TASK']]>table['Functional Dependencies'][gnl.app.config['TASK']] else [{"label": "Functional Dependencies", "value": 2}, ]
+            else: sel['widget_currentValues']=[]
+        # sel['widget_currentValues'] = [{"label": k, "value": widget2value[k]} for k in sorted_widgets] if not sel[
+        #     'is_single_column'] else [{"label": "Correlations", "value": 1},
+        #                               {"label": "Functional Dependencies", "value": 2}, ]
         # print("new sel['widget_currentValues']: ", sel['widget_currentValues'])
 
     # record previous selections
@@ -234,6 +251,12 @@ def form_submit():
 
     # print("s write numeric", datetime.datetime.now())
     gnl.app.config["CURRENT_DF"].to_csv(os.path.join(gnl.app.config["DATA_FOLDER"], "numeric.csv"), index=False)
+    print(list(gnl.app.config["CURRENT_DF"]))
+
+
+    if not list(gnl.app.config["CURRENT_DF"]):
+        gnl.app.config['no_numeric']=1
+    else: gnl.app.config['no_numeric']=0
     # print("e write numeric", datetime.datetime.now())
     gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].to_csv(
         os.path.join(gnl.app.config["DATA_FOLDER"], "complete.csv"), index=False)
@@ -253,6 +276,8 @@ def set_params():
 
     sel = request.json
 
+    sys_sel = gnl.app.config["CURRENT_SELECTION"]
+    num_widgets=sys_sel['num_widgets']
     # print("sel")
     # pprint(sel)
 
@@ -278,9 +303,9 @@ def set_params():
             if key in tmp_dict:
                 if sel[key] != prev_sel[key]:
                     if sel[key]:
-                        table[tmp_dict[key]][gnl.app.config['TASK']] += (1 / 2)
-                    else:
-                        table[tmp_dict[key]][gnl.app.config['TASK']] -= (1 / 2)
+                        table[tmp_dict[key]][gnl.app.config['TASK']] += (1 / num_widgets)
+                    # else:
+                    #     table[tmp_dict[key]][gnl.app.config['TASK']] -= (1 / num_widgets)
     else:
 
         widgets = set([item['label'] for item in prev_sel['widget_currentValues']])
@@ -294,9 +319,9 @@ def set_params():
         # pprint(dif)
         for key in dif:
             if key in new_widgets:
-                table[key][gnl.app.config['TASK']] += (1 / 2)
-            else:
-                table[key][gnl.app.config['TASK']] -= (1 / 2)
+                table[key][gnl.app.config['TASK']] += (1 / num_widgets)
+            # else:
+            #     table[key][gnl.app.config['TASK']] -= (1 / num_widgets)
     with open(os.path.join(gnl.app.config["DATA_FOLDER"], "params.json"), "w") as write_file2:
         json.dump(table, write_file2)
     with open(os.path.join(gnl.app.config["DATA_FOLDER"], "prev_sel.json"), "w") as write_file1:
@@ -495,8 +520,21 @@ def get_multi_basic():
 def get_multi_fd():
     print("\n***get_multi_fd\n")
     context = {}
-    df = gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"]
+    df = gnl.app.config["CURRENT_DF_WITH_IGNORED_COLUMNS"].copy()
     col_names = list(df)
+
+    # sampling
+    if df.shape[0] * (2**df.shape[1]) > 3584000:
+        df = df.sample(n=int(3584000 / (2**df.shape[1])), replace=False)
+
+    # too many columns
+    if df.empty:
+        nodes, links=[{"id": "TOO MANY COLUMNS"}],[]
+        context["nodes"] = nodes
+        context["links"] = links
+        return jsonify(**context)
+
+
 
     sel = gnl.app.config["CURRENT_SELECTION"]
     pattrs = [i['label'] for i in sel["protected_currentValues"]]
@@ -554,6 +592,18 @@ def get_multi_ar():
     # print("prev df", df)
     for j, colname in enumerate(list(df)):
         df[colname] = colname + ":" + df[colname].astype(str)
+
+    # sampling
+    if df.shape[0] * (2**df.shape[1]) > 3584000:
+        print("here")
+        df = df.sample(n=int(3584000 / (2**df.shape[1])), replace=False)
+
+    # too many columns
+    if df.empty:
+        nodes, links=[{"id": "TOO MANY COLUMNS"}],[]
+        context["nodes"] = nodes
+        context["links"] = links
+        return jsonify(**context)
 
     # drop the spaces and commas
     df.to_csv(gnl.app.config["CURRENT_TEMP_FILE"], index=False)

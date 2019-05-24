@@ -43,7 +43,8 @@ export default class Label extends React.Component {
       dataa:{},
       labels:[],
       values:[],
-      single_colname:"Column Name"
+      single_colname:"Column Name",
+      no_numeric:false
       //this.props["location"]["state"]['is_single_column']
     }
     // console.log("chose is ");
@@ -196,6 +197,12 @@ export default class Label extends React.Component {
           tmp["labels"]=data.labels
           tmp["single_colname"]=data.single_colname
         }
+        tmp['no_numeric']=data.no_numeric
+        console.log("Im here");
+        
+        console.log(data.no_numeric);
+        
+
 
         if (!this.props["location"]["state"]["is_manually_widgets"]) {
           tmp["has_Correlation"] = false
@@ -342,7 +349,6 @@ export default class Label extends React.Component {
                     if (tmp["widget_currentValues"][i]["label"] == "Correlations") {
                       tmp["widget_currentValues"].splice(i, 1);
                       break
-
                     }
                   }
                   fetch('/api/params/', {
@@ -355,7 +361,11 @@ export default class Label extends React.Component {
                   this.setState(tmp);
                 }}>X</button></div></div>
               <p>This shows correlation between selected <strong>ordinal</strong> attributes. Click on the squares to see scatterplot.</p>
+              
+              {this.state.no_numeric?<div>No numeric column selected</div>:""}
+              
               <div className="frame">
+                {this.state.no_numeric?<div>No numeric column selected</div>:""}
                 <div id="diagramCorrelations" className='diagram'> </div>
                 <h4 id="diagramScatterPlotName" className='diagram'></h4>
                 <div id="diagramScatterPlot" className='diagram'> </div>
@@ -427,7 +437,7 @@ export default class Label extends React.Component {
 
                   this.setState(tmp);
                 }}>X</button></div></div>
-              <p style={{ color: "red" }}>WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) </p>
+              <p style={{ color: "red" }}>WARNING: When there are many columns (i.e. >10 for large dataset), we will sample rows to reduce computation time</p>
               <p>Association rule of a dataset is a set of directed relations in between set A and set B such that values of set A determines the values of set B for over some predefined probability. You can drag the nodes around or magnify/diminish them by scrolling.</p>
 
               <div id="ars_vis" className="frame">
@@ -464,7 +474,7 @@ export default class Label extends React.Component {
                   this.setState(tmp);
                 }}>X</button></div>
               </div>
-              <p style={{ color: "red" }}>WARNING: This can take long time to run if you select many columns (i.e. >10 for large dataset) </p>
+              <p style={{ color: "red" }}>WARNING: When there are many columns (i.e. >10 for large dataset), we will sample rows to reduce computation time </p>
               <p>Functional dependency is a relationship that exists when combinaton of attributes uniquely determines another attribute. You can drag the nodes around or magnify/diminish them by scrolling.</p>
               <div id="fd_vis" className="frame">
                 <div>

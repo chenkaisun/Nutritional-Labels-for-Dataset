@@ -145,7 +145,7 @@ class Apriori:
         self.frequentItemsSupport = supports
         k = 2 # Second pass
         while (len(self.frequentItems[k-2]) > 0):
-            if time.clock()-start>80:
+            if time.clock()-start>20:
                 exceeded=True
                 break
             Ck = self.__createCk(self.frequentItems[k-2], k)
@@ -162,7 +162,7 @@ class Apriori:
         #step2
         threshold=0.8
         for each_len_sets in self.results:
-            if exceeded or time.clock()-start>100: break
+            if exceeded or time.clock()-start>30: break
             for item_set in each_len_sets:
                 temp_item_set=set(item_set)
                 frozen_item_set=frozenset(item_set)
