@@ -134,7 +134,7 @@ class Apriori:
             None
         ------------------------------------------------------------------
         """
-        start = time.clock()
+        start = time.time()
         exceeded=False
 
         #step1
@@ -145,7 +145,7 @@ class Apriori:
         self.frequentItemsSupport = supports
         k = 2 # Second pass
         while (len(self.frequentItems[k-2]) > 0):
-            if time.clock()-start>20:
+            if time.time()-start>20:
                 exceeded=True
                 break
             Ck = self.__createCk(self.frequentItems[k-2], k)
@@ -162,7 +162,7 @@ class Apriori:
         #step2
         threshold=0.8
         for each_len_sets in self.results:
-            if exceeded or time.clock()-start>30: break
+            if exceeded or time.time()-start>30: break
             for item_set in each_len_sets:
                 temp_item_set=set(item_set)
                 frozen_item_set=frozenset(item_set)
@@ -228,11 +228,11 @@ def runTest():
     for baskets in range(10000, 90000, 10000):
         for support in supports:
             print("Support: ", support, "Baskets: ", baskets)
-            start = time.clock()
+            start = time.time()
             a = Apriori("datasets/retail.dat", support/100, baskets)
             #a = Apriori("datasets/netflix.data", support/100, baskets)
             a.run()
-            totalTime = time.clock() - start
+            totalTime = time.time() - start
             print("Time(sec): ", totalTime)
             output.write(str(baskets)+','+str(support)+','+str(totalTime)+'\n')
     output.close()
