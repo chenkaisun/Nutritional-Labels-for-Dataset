@@ -22,7 +22,7 @@ nodeenv --python-virtualenv --node=12.14.0 --npm=6.13.4
 source env/bin/activate # again, after installing node
 npm install .
 npm install --save-dev node-sass
-Note: if it says connection error from git://, then change git to https:// in package_lock.json
+Note: if it says connection error from git://, then change git to https:// in package_lock.json for the erroneous package
 npm audit # to check whether package error due to deprecated packages
 npm audit fix # then, run npm install <package>@<version> to install the problematic packages
 node_modules/.bin/webpack
