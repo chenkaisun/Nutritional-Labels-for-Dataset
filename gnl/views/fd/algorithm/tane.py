@@ -79,7 +79,7 @@ class TANE(object):
         """
 
         # prevent from being too much time
-        start = time.clock()
+        start = time.time()
         #####
         # handle empty table
         if not self.table:
@@ -103,7 +103,7 @@ class TANE(object):
         # level-wise algorithm
         for size in range(2, column_count + 1):
             #
-            if self.exceeded or time.clock()-start>20:
+            if self.exceeded or time.time()-start>20:
                 self.exceeded=True
                 break
             # print('--------------------------------------------')
@@ -111,7 +111,7 @@ class TANE(object):
             # enumerate all subsets whose size equals size
             combs = [set(x) for x in list(combinations(range(column_count), size))]
             for comb in combs:
-                if time.clock() - start > 20:
+                if time.time() - start > 20:
                     self.exceeded = True
                     break
                 # print(comb)
