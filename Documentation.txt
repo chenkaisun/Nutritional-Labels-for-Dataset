@@ -11,23 +11,28 @@ bin/ contains convenience bash script
 
 #run & deploy (try sudo if some of them don't work)
 sudo apt-get install python3-venv
-cd project_repo_dir_name/
+cd Nutritional-Labels-for-Dataset/
 python3 -m venv env
 source env/bin/activate
 pip install --upgrade pip setuptools wheel
 pip install -e .
+pip install itsdangerous==1.1.0  Werkzeug==0.16.0 jinja2==2.10.3 MarkupSafe==1.1.1
 pip install nodeenv
-nodeenv --python-virtualenv
+nodeenv --python-virtualenv --node=12.14.0 --npm=6.13.4
 source env/bin/activate # again, after installing node
 npm install .
+npm install --save-dev node-sass
+Note: if it says connection error from git://, then change git to https:// in package_lock.json
+npm audit # to check whether package error due to deprecated packages
+npm audit fix # then, run npm install <package>@<version> to install the problematic packages
 node_modules/.bin/webpack
 optional (chmod +x bin/*) 
-python
-nltk.download('stopwords')
-ctrl+z
+python -c "import nltk; nltk.download('stopwords')"
 source env/bin/activate
-follow https://jpype.readthedocs.io/en/latest/
+follow https://jpype.readthedocs.io/en/latest/ to install JPype1
 ./bin/local_run
+enter http://127.0.0.1:8000/ in browser
+Note: if the index page is loading forever, try to run ./bin/local_run command in a new terminal
 
 #server run
 For deploy follow aws.pdf

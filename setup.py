@@ -16,14 +16,13 @@ setup(
         'pycodestyle==2.3.1',
         'pydocstyle==2.0.0',
         'pylint==1.8.1',
-        'nodeenv==1.2.0',
         'sh==1.12.14',
         'Flask-Testing==0.6.2',
         'selenium==3.6.0',
         'requests==2.18.4',
         'arrow==0.10.0',
-        'pandas==0.23.4',
+        'pandas',
         'nltk==3.4',
-        'numpy==1.15.4'
+        'numpy'
     ],
-)
+)#==0.23.4 ==1.15.4 'nodeenv==1.2.0',
